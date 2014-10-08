@@ -10,8 +10,6 @@
  * <http://www.gnu.org/licenses/lgpl.html>.
  */
 -->
-[![Build Status](https://travis-ci.org/codice/usng.js.png?branch=master)](https://travis-ci.org/codice/usng.js)
-
 
 AMD compatible version of usngs.js by Larry Moore with bug fixes and enhancements.
  
