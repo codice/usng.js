@@ -17,7 +17,6 @@ AMD compatible version of usngs.js by Larry Moore with bug fixes and enhancement
 git clone git://github.com/codice/usng.js.git
 ```
 
--- The Codice Team
 
 ## Copyright / License
 Copyright (c) Codice Foundation
