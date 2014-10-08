@@ -1,22 +1,6 @@
-/**
- * Copyright (c) Codice Foundation
- *
- * This is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either
- * version 3 of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU Lesser General Public License for more details. A copy of the GNU Lesser General Public License is distributed along with this program and can be found at
- * <http://www.gnu.org/licenses/lgpl.html>.
- *
- **/
-// ***************************************************************************
-// *  usng.js  (U.S. National Grid functions)
-// *  Module to calculate National Grid Coordinates
-// *
-// *  last changes or bug fixes: February 2009, minor bug fix June 2013
-// ****************************************************************************/
-//
 // Copyright (c) 2009 Larry Moore, larmoor@gmail.com
+//               2014 Mike Adair, Richard Greenwood, Didier Richard, Stephen Irons, Olivier Terral and Calvin Metcalf (proj4js)
+//               2014 Codice Foundation
 // Released under the MIT License; see
 // http://www.opensource.org/licenses/mit-license.php
 // or http://en.wikipedia.org/wiki/MIT_License
@@ -41,106 +25,6 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
-//
-//
-//*****************************************************************************
-//
-//    References and history of this code:
-//
-//    For detailed information on the U.S. National Grid coordinate system,
-//    see  http://www.fgdc.gov/usng
-//
-//    Reference ellipsoids derived from Peter H. Dana's website-
-//    http://www.utexas.edu/depts/grg/gcraft/notes/datum/elist.html
-//    Department of Geography, University of Texas at Austin
-//    Internet: pdana@mail.utexas.edu
-//
-//    Technical reference:
-//    Defense Mapping Agency. 1987b. DMA Technical Report: Supplement to
-//    Department of Defense World Geodetic System 1984 Technical Report. Part I
-//    and II. Washington, DC: Defense Mapping Agency
-//
-//    Originally based on C code written by Chuck Gantz for UTM calculations
-//    http://www.gpsy.com/gpsinfo/geotoutm/     -- chuck.gantz@globalstar.com
-//
-//    Converted from C to JavaScript by Grant Wong for use in the
-//    USGS National Map Project in August 2002
-//
-//    Modifications and developments continued by Doug Tallman from
-//    December 2002 through 2004 for the USGS National Map viewer
-//
-//    Adopted with modifications by Larry Moore, January 2007,
-//    for GoogleMaps application
-//
-//    Assumes a datum of NAD83 (or its international equivalent WGS84).
-//    If NAD27 is used, set IS_NAD83_DATUM to 'false'. (This does
-//    not do a datum conversion; it only allows either datum to
-//    be used for geographic-UTM/USNG calculations.  NAD27
-//    computations are irrelevant to Google Maps applications)
-//    NAD83 and WGS84 are equivalent for all practical purposes.
-//
-//
-//*************************************************************************
-// programmer interface summary
-//
-// 1) convert lat/lng decimal degrees to a USNG string
-// function LLtoUSNG(lat, lon, precision)
-//    inputs are in decimal degrees, west longitude negative, south latitude negative
-//    'precision' specifies the number of digits in output coordinates
-//         e.g. 5 specifies 1-meter precision (see USNG standard for explanation)
-//         One digit:    10 km precision      eg. "18S UJ 2 1"
-//         Two digits:   1 km precision       eg. "18S UJ 23 06"
-//         Three digits: 100 meters precision eg. "18S UJ 234 064"
-//         Four digits:  10 meters precision  eg. "18S UJ 2348 0647"
-//         Five digits:  1 meter precision    eg. "18S UJ 23480 06470"
-//    return value is a USNG coordinate as a text string
-//    the return value contains spaces to improve readability, as permitted by
-//        the USNG standard
-//        the form is NNC CC NNNNN NNNNN
-//        if a different format or precision is desired, the calling application
-//            must make the changes
-//
-// 2) convert a USNG string to lat/lng decimal degrees
-// function USNGtoLL(usng_string,latlng)
-//    the following formats of the input string are supported:
-//        NNCCCNNNNNNNNNN
-//        NNC CC NNNNNNNNNN
-//        NNC CC NNNNN NNNNN
-//        all precisions of the easting and northing coordinate values are also supported
-//             e.g. NNC CC NNN NNN
-//    output is a 2-element array latlng declared by the calling routine
-//        for example, calling routine contains the line var latlng=[]
-//        latlng[0] contains latitude, latlng[1] contains longitude
-//           both in decimal degrees, south negative, west negative
-//
-// 3) convert lat/lng decimal degrees to MGRS string (same as USNG string, but with
-//    no space delimeters)
-// function LLtoMGRS(lat, lon, precision)
-//   create a string of Military Grid Reference System coordinates
-//   Same as LLtoUSNG, except that output cannot contain space delimiters;
-//   NOTE: this is not a full implementation of MGRS.  It won't deal with numbers
-//         near the poles, but only in the UTM domain of 84N to 80S
-//
-// 4) wrapper for USNGtoLL to return an instance of GLatLng
-// function GUsngtoLL(usngstr)
-//   input is a USNG or MGRS string
-//   return value is an instance of GLatLng
-//   use this only with Google Maps applications; USNGtoLL is more generic
-//
-// 5) evaluates a string to see if it is a legal USNG coordinate; if so, returns
-//       the string modified to be all upper-case, non-delimited; if not, returns 0
-// function isUSNG(inputStr)
-//
-// for most purposes, these five function calls are the only things an application programmer
-// needs to know to use this module.
-//
-// Note regarding UTM coordinates: UTM calculations are an intermediate step in lat/lng-USNG
-// conversions, and can also be captured by applications, using functions below that are not
-// summarized in the above list.
-// The functions in this module use negative numbers for UTM Y values in the southern
-// hemisphere.  The calling application must check for this, and convert to correct
-// southern-hemisphere values by adding 10,000,000 meters.
-//
 
 /*global define,Math,parseInt,parseFloat*/
 
