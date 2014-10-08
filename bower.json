@@ -1,0 +1,9 @@
+{
+  "name": "usng.js",
+  "version": "0.0.1",
+  "main": "usng.js",
+  "private": false,
+  "dependencies": {
+    "underscore": ">=1.5.0"
+  }
+}
