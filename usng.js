@@ -174,9 +174,6 @@
             var southNum = parseFloat(south);
             var eastNum = parseFloat(east);
             var westNum = parseFloat(west);
-            //doesn't check vert distance yet
-            var vertDist = northNum + Math.abs(southNum);
-            var horizDist = Math.abs(Math.abs(eastNum) - Math.abs(westNum));
 
             var lat = (northNum + southNum) / 2;
             var lon = (eastNum + westNum) / 2;
@@ -190,6 +187,18 @@
                 lat = 89.9;
             } else if (lat <= -90) {
                 lat = -89.9;
+            }
+
+            //doesn't check vert distance yet
+            var vertDist = northNum + Math.abs(southNum);
+            var horizDist = 0;
+            if ((0 < eastNum && 0 < westNum) || (0 > eastNum && 0 > westNum)) {
+                horizDist = Math.abs(Math.abs(eastNum) - Math.abs(westNum));
+            } else {
+                horizDist = (180 - Math.abs(eastNum)) + (180 - Math.abs(westNum));
+                if (lon === 0 && (eastNum > 90 || eastNum < -90) && (westNum > 90 || westNum < -90)) {
+                    lon = 180;
+                }
             }
 
             var utmLetter = this.UTMLetterDesignator(lat);
@@ -212,6 +221,10 @@
                 result = this.LLtoUSNG(lat, lon, 1);
             } else if (horizDist >= 0.01) {
                 result = this.LLtoUSNG(lat, lon, 2);
+            } else {
+                result = this.LLtoUSNG(lat, lon, 0);
+                var truncate = result.indexOf(' ');
+                result = result.substring(0, truncate);
             }
 
             return result;
@@ -764,7 +777,6 @@
          ***********************************************************************************/
 
         USNGtoUTM: function (zone,letter,sq1,sq2,east,north,ret) {
-
             //Starts (southern edge) of N-S zones in millons of meters
             var zoneBase = [1.1,2.0,2.8,3.7,4.6,5.5,6.4,7.3,8.2,9.1,   0, 0.8, 1.7, 2.6, 3.5, 4.4, 5.3, 6.2, 7.0, 7.9];
 
@@ -888,7 +900,7 @@
                 // when 'n' is a wrong character
                 if (curRow > 'V'.charCodeAt(0)) {
                     if (rewindMarker) { // making sure that this loop ends
-                        throw("Bad character: " + n);
+                        throw("Bad character: " + String.fromCharCode(curRow));
                     }
                     curRow = 'A'.charCodeAt(0);
                     rewindMarker = true;
@@ -951,7 +963,12 @@
             }
 
             // break usng string into its component pieces
-            parts.zone = usngStr.charAt(j++)*10 + usngStr.charAt(j++)*1;
+            // if 2 digit zone
+            if(!isNaN(parseFloat(usngStr.charAt(1))) && isFinite(usngStr.charAt(1))) {
+                parts.zone = usngStr.charAt(j++)*10 + usngStr.charAt(j++)*1;
+            } else { // else single digit zone
+                parts.zone = usngStr.charAt(j++)*1;
+            }
             parts.let = usngStr.charAt(j++);
             parts.sq1 = usngStr.charAt(j++);
             parts.sq2 = usngStr.charAt(j++);
