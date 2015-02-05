@@ -1,0 +1,11 @@
+*.project
+*.settings
+*.classpath
+*.metadata
+*.iml
+*.idea
+*.checkstyle
+*.DS_Store
+node/
+node_modules/
+results.txt
