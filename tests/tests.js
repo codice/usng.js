@@ -1038,4 +1038,60 @@ describe('Convert Lat/Lon to UTM', function(){
       });
     });
   });
+  describe('Using test data from github issue', function(){
+    describe('washington monument', function(){
+      it('should return lat 38.8895 lat -77.0352', function(){
+        var lat = 38.8895;
+        var lon = -77.0352;
+        var utmNorthing = 4306483;
+        var utmEasting = 323486;
+        var usng = "18S UJ 23487 06483";
+
+        // Testing LL to UTM
+        var coords = [];
+        converter.LLtoUTM(lat, lon, coords);
+        console.log("UTM Coords: " + coords);
+        chai.assert.equal(utmEasting, parseInt(coords[0]));
+        chai.assert.equal(utmNorthing, parseInt(coords[1]));
+
+        // Testing LL to USNG
+        var usngString = converter.LLtoUSNG(lat, lon, 5);
+        chai.assert.equal(usng, usngString);
+        console.log("USNG String: " + usngString);
+
+        // Testing parse USNG
+        var parts = {};
+        converter.parseUSNG_str(usngString, parts);
+        console.log("USNG Parts: ");
+        console.log(parts);
+        chai.assert.equal(18, parts.zone);
+        chai.assert.equal('S', parts.let);
+        chai.assert.equal('U', parts.sq1);
+        chai.assert.equal('J', parts.sq2);
+        chai.assert.equal(5, parts.precision);
+        chai.assert.equal(06483, parts.north);
+        chai.assert.equal(23487, parts.east);
+
+        // Testing USNG to UTM
+        var ret = {};
+        converter.USNGtoUTM(parts.zone, parts.let, parts.sq1, parts.sq2, parts.east, parts.north, ret);
+        console.log("USNG to UTM: ");
+        console.log(ret);
+        chai.assert.equal(utmEasting+1, ret.E);
+        //chai.assert.equal(utmNorthing, ret.N);
+        chai.assert.equal(18, ret.zone);
+        chai.assert.equal('S', ret.letter);
+
+
+        // Testing UTM to LL
+        var utmToLL = converter.UTMtoLL(utmNorthing, utmEasting, 18);
+        console.log("UTM to LL: ");
+        console.log(utmToLL);
+        chai.assert.equal(Math.floor(lat), Math.floor(utmToLL.lat));
+        chai.assert.equal(Math.floor(lon), Math.floor(utmToLL.lon));
+
+        // Testing USNG to LL
+      });
+    });
+  });
 });
