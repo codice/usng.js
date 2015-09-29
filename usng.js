@@ -825,7 +825,7 @@
                     if (appxNorth > 0 && northingVal === 0) {
                         appxNorth += zoneStart - appxNorth + (zoneStartPlus1 - zoneStart) / 2;
                     } else if (appxNorth > 0) {
-                        appxNorth += vNorthing;
+                        appxNorth += 2;
                     } else {
                         appxNorth = zoneStart;
                         appxNorth += (zoneStartPlus1 - zoneStart) / 2;

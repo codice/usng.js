@@ -1078,7 +1078,7 @@ describe('Convert Lat/Lon to UTM', function(){
         console.log("USNG to UTM: ");
         console.log(ret);
         chai.assert.equal(utmEasting+1, ret.E);
-        //chai.assert.equal(utmNorthing, ret.N);
+        chai.assert.equal(utmNorthing, ret.N);
         chai.assert.equal(18, ret.zone);
         chai.assert.equal('S', ret.letter);
 
@@ -1091,6 +1091,11 @@ describe('Convert Lat/Lon to UTM', function(){
         chai.assert.equal(Math.floor(lon), Math.floor(utmToLL.lon));
 
         // Testing USNG to LL
+        var usngToLL =  converter.USNGtoLL(usng);
+        console.log("USNG to LL: ");
+        console.log(usngToLL);
+        chai.assert.equal(Math.floor(lon), Math.floor(usngToLL.east));
+        chai.assert.equal(Math.floor(lat), Math.floor(usngToLL.north));
       });
     });
   });
