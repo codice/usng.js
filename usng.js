@@ -166,10 +166,25 @@
             return zoneNumber;
         },
 
+        LLtoKM: function(lat1, lon1, lat2, lon2) {
+          var R = 6371000; // metres
+            var phi1 = lat1* this.DEG_2_RAD;
+            var phi2 = lat2* this.DEG_2_RAD;
+            var deltaPhi = (lat2-lat1)* this.DEG_2_RAD;
+            var deltaLlamda= (lon2-lon1)* this.DEG_2_RAD;
+
+
+            var a = Math.sin(deltaPhi/2) * Math.sin(deltaPhi/2) +
+                Math.cos(phi1) * Math.cos(phi2) *
+                Math.sin(deltaLlamda/2) * Math.sin(deltaLlamda/2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+            return R * c;
+        },
+
         //this function does a very rough "best fit" to the center point
         //this could definitely be improved
         LLBboxtoUSNG: function (north, south, east, west) {
-            var distances = [2,2,3,4,4.5,5,6,6,6,6,6,6,6,6,5,4.5,4,3,2,2];
             var northNum = parseFloat(north);
             var southNum = parseFloat(south);
             var eastNum = parseFloat(east);
@@ -191,42 +206,31 @@
 
             //doesn't check vert distance yet
             var vertDist = northNum + Math.abs(southNum);
-            var horizDist = 0;
-            if ((0 < eastNum && 0 < westNum) || (0 > eastNum && 0 > westNum)) {
-                horizDist = Math.abs(Math.abs(eastNum) - Math.abs(westNum));
-            } else {
-                horizDist = (180 - Math.abs(eastNum)) + (180 - Math.abs(westNum));
-                if (lon === 0 && (eastNum > 90 || eastNum < -90) && (westNum > 90 || westNum < -90)) {
-                    lon = 180;
-                }
-            }
+            var horizDist = this.LLtoKM(northNum, eastNum, southNum, westNum) * 0.621371;
 
-            var utmLetter = this.UTMLetterDesignator(lat);
-
-            var index = "CDEFGHJKLMNPQRSTUVWX".indexOf(utmLetter);
-            var distance = distances[index];
+            if (lon === 0 && (eastNum > 90 || eastNum < -90) && (westNum > 90 || westNum < -90)) {
+                lon = 180;
+              }
 
             var result;
-            if (horizDist >= distance) {
-                //we are at least the size of a zone, so just snap to the closest zone
-                result = this.LLtoUSNG(lat, lon, 0);
-                var truncate = result.indexOf(' ');
-                result = result.substring(0, truncate);
-            } else if (horizDist >= 1) {
-                result = this.LLtoUSNG(lat, lon, 0);
-                if(result.length > 7) {
-                    result = result.substring(0, result.length - 3);
-                }
-            } else if (horizDist >= 0.1) {
-                result = this.LLtoUSNG(lat, lon, 1);
-            } else if (horizDist >= 0.01) {
-                result = this.LLtoUSNG(lat, lon, 2);
+
+            if (horizDist <= 1) {
+              result = this.LLtoUSNG(lat, lon, 5);
+            } else if (horizDist <= 10) {
+              result = this.LLtoUSNG(lat, lon, 4);
+            } else if (horizDist <= 100) {
+              result = this.LLtoUSNG(lat, lon, 3);
+            } else if (horizDist <= 1000) {
+              result = this.LLtoUSNG(lat, lon, 2);
+            } else if (horizDist <= 10000) {
+              result = this.LLtoUSNG(lat, lon, 1);
             } else {
-                result = this.LLtoUSNG(lat, lon, 0);
-                var truncate = result.indexOf(' ');
-                result = result.substring(0, truncate);
+              result = this.LLtoUSNG(lat, lon, 0);
+              var truncate = result.indexOf(' ');
+              result = result.substring(0, truncate);
             }
 
+            console.log("Lat: " + lat + " Lon:" + lon);
             return result;
         },
 
