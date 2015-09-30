@@ -1055,7 +1055,7 @@ describe('Get Zone number from lat/lon', function(){
         chai.assert.equal(utmNorthing, parseInt(coords[1]));
 
         // Testing LL to USNG
-        var usngString = converter.LLtoUSNG(lat, lon, 5);
+        var usngString = converter.LLtoUSNG(lat, lon, 6);
         chai.assert.equal(usng, usngString);
         //console.log("USNG String: " + usngString);
 
@@ -1107,45 +1107,53 @@ describe('Get Zone number from lat/lon', function(){
         chai.assert.equal(usng, converter.LLBboxtoUSNG(lat, lat, lon, lon));
       });
 
-      it('should return 18S UJ 2349 0648', function(){
+      it('should return 18S UJ 2348 0648', function(){
         var usng = "18S UJ 2349 0648";
+        var lat = 38.8895;
+        var lon = -77.0352;
+        var lon2 = -77.0351;
+        chai.assert.equal(usng, converter.LLBboxtoUSNG(lat, lat, lon, lon2));
+      });
+
+      it('should return 18S UJ 234 064', function(){
+        var usng = "18S UJ 234 064";
         var lat = 38.8895;
         var lon = -77.0352;
         var lon2 = -77.035;
         chai.assert.equal(usng, converter.LLBboxtoUSNG(lat, lat, lon, lon2));
       });
 
-      it('should return 18S UJ 235 064', function(){
-        var usng = "18S UJ 235 064";
+      it('should return 18S UJ 23 06', function(){
+        var usng = "18S UJ 23 06";
         var lat = 38.8895;
         var lon = -77.0352;
         var lon2 = -77.033;
         chai.assert.equal(usng, converter.LLBboxtoUSNG(lat, lat, lon, lon2));
       });
 
-      it('should return 18S UJ 22 06', function(){
-        var usng = "18S UJ 22 06";
+      it('should return 18S UJ 2 0', function(){
+        var usng = "18S UJ 2 0";
         var lat = 38.8895;
         var lon = -77.0352;
         var lon2 = -77.05;
         chai.assert.equal(usng, converter.LLBboxtoUSNG(lat, lat, lon, lon2));
       });
 
-      // it('should return 18S UJ 2 0', function(){
-      //   var usng = "18S UJ 2 0";
-      //   var lat = 38.8895;
-      //   var lon = -77.0352;
-      //   var lon2 = -77.2;
-      //   chai.assert.equal(usng, converter.LLBboxtoUSNG(lat, lat, lon, lon2));
-      // });
+      it('should return 18S UJ', function(){
+        var usng = "18S UJ";
+        var lat = 38.8895;
+        var lon = -77.0352;
+        var lon2 = -77.2;
+        chai.assert.equal(usng, converter.LLBboxtoUSNG(lat, lat, lon, lon2));
+      });
 
-      // it('should return 18S UJ', function(){
-      //   var usng = "18S UJ";
-      //   var lat = 38.8895;
-      //   var lon = -77.0352;
-      //   var lon2 = -80;
-      //   chai.assert.equal(usng, converter.LLBboxtoUSNG(lat, lat, lon, lon2));
-      // });
+      it('should return 17S', function(){
+        var usng = "17S";
+        var lat = 38.8895;
+        var lon = -77.0352;
+        var lon2 = -80;
+        chai.assert.equal(usng, converter.LLBboxtoUSNG(lat, lat, lon, lon2));
+      });
 
     });
   });
