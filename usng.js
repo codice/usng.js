@@ -225,19 +225,21 @@
               }
 
             var result;
-            if (horizDist >= 100000) {
+            if (horizDist > 100000) {
               result = this.LLtoUSNG(lat, lon, 0);
-            } else if (horizDist >= 10000) {
+            } else if (horizDist > 10000) {
               console.log("you can run but you can't hide, bitch!");
               result = this.LLtoUSNG(lat, lon, 1);
-            } else if (horizDist >= 1000) {
+            } else if (horizDist > 1000) {
               result = this.LLtoUSNG(lat, lon, 2);
-            } else if (horizDist >= 100) {
+            } else if (horizDist > 100) {
               result = this.LLtoUSNG(lat, lon, 3);
-            } else if (horizDist >= 10) {
+            } else if (horizDist > 10) {
               result = this.LLtoUSNG(lat, lon, 4);
-            } else {
+            } else if (horizDist > 1) {
               result = this.LLtoUSNG(lat, lon, 5);
+            } else if (horizDist >=0) {
+                result = this.LLtoUSNG(lat, lon, 6);
             }
             console.log("North: " + north);
             console.log("South: " + south);
@@ -348,6 +350,12 @@
          "18S UJ 2286 0705" locates Washington Monument in Washington, D.C.
          to a 10-meter precision.
 
+         Precision refers to levels of USNG precision. Ie a precision of 
+         0 returns a string in the form DDL
+         1 returns a string in the form DDL LL
+         2 returns a string in the form DDL LL D D
+         etc
+
          ***************************************************************************/
 
         LLtoUSNG: function (lat, lon, precision) {
@@ -380,30 +388,35 @@
             if (typeof precision === 'undefined' || precision < 0) {
                 precision = 0;
             }
-            if (precision > 5) {
-                precision = 5;
+            // a variable to account for just the numerical portion of the USNG string - the last 0-10 characters
+            var digitPrecision = 0;
+            if (precision > 0) {
+                digitPrecision = precision-1;
+            }
+            if (digitPrecision > 5) {
+                digitPrecision = 5;
             }
             // added... truncate digits to achieve specified precision
-            USNGNorthing = Math.floor(USNGNorthing / Math.pow(10,(5-precision)));
-            USNGEasting = Math.floor(USNGEasting / Math.pow(10,(5-precision)));
+            USNGNorthing = Math.floor(USNGNorthing / Math.pow(10,(5-digitPrecision)));
+            USNGEasting = Math.floor(USNGEasting / Math.pow(10,(5-digitPrecision)));
 
             var USNG = zoneNumber + this.UTMLetterDesignator(lat);
-            if (precision > 0) {
+            if (precision >= 1) {
              USNG += " " + USNGLetters;
             }
 
 
             // REVISIT: Modify to incorporate dynamic precision ?
-            if (precision > 1) {
+            if (digitPrecision >= 1) {
                 USNG += " "
-                for (var i = String(USNGEasting).length; i < precision; i++) {
+                for (var i = String(USNGEasting).length; i < digitPrecision; i++) {
                         USNG += "0";
                 }
                 USNG += USNGEasting + " ";
             }
 
-            if (precision > 1) {
-                for (i = String(USNGNorthing).length; i < precision; i++) {
+            if (digitPrecision >= 1) {
+                for (i = String(USNGNorthing).length; i < digitPrecision; i++) {
                         USNG += "0";
                 }
                 USNG += USNGNorthing;
