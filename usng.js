@@ -204,33 +204,48 @@
                 lat = -89.9;
             }
 
+            var R = 6371000; // metres
+            var phi1 = northNum* this.DEG_2_RAD;
+            var phi2 = southNum* this.DEG_2_RAD;
+            var deltaPhi = (southNum-northNum)* this.DEG_2_RAD;
+            var deltaLlamda= (westNum-eastNum)* this.DEG_2_RAD;
+
+
+            var a = Math.sin(deltaPhi/2) * Math.sin(deltaPhi/2) +
+                Math.cos(phi1) * Math.cos(phi2) *
+                Math.sin(deltaLlamda/2) * Math.sin(deltaLlamda/2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
             //doesn't check vert distance yet
             var vertDist = northNum + Math.abs(southNum);
-            var horizDist = this.LLtoKM(northNum, eastNum, southNum, westNum) * 0.621371;
+            var horizDist = R*c;
 
             if (lon === 0 && (eastNum > 90 || eastNum < -90) && (westNum > 90 || westNum < -90)) {
                 lon = 180;
               }
 
             var result;
-
-            if (horizDist <= 1) {
-              result = this.LLtoUSNG(lat, lon, 5);
-            } else if (horizDist <= 10) {
-              result = this.LLtoUSNG(lat, lon, 4);
-            } else if (horizDist <= 100) {
-              result = this.LLtoUSNG(lat, lon, 3);
-            } else if (horizDist <= 1000) {
-              result = this.LLtoUSNG(lat, lon, 2);
-            } else if (horizDist <= 10000) {
-              result = this.LLtoUSNG(lat, lon, 1);
-            } else {
+            if (horizDist >= 100000) {
               result = this.LLtoUSNG(lat, lon, 0);
-              var truncate = result.indexOf(' ');
-              result = result.substring(0, truncate);
+            } else if (horizDist >= 10000) {
+              console.log("you can run but you can't hide, bitch!");
+              result = this.LLtoUSNG(lat, lon, 1);
+            } else if (horizDist >= 1000) {
+              result = this.LLtoUSNG(lat, lon, 2);
+            } else if (horizDist >= 100) {
+              result = this.LLtoUSNG(lat, lon, 3);
+            } else if (horizDist >= 10) {
+              result = this.LLtoUSNG(lat, lon, 4);
+            } else {
+              result = this.LLtoUSNG(lat, lon, 5);
             }
+            console.log("North: " + north);
+            console.log("South: " + south);
+            console.log("East: " + east);
+            console.log("West: " + west);
 
-            console.log("Lat: " + lat + " Lon:" + lon);
+            console.log("Distance: " + horizDist);
+            console.log("Result: " + result);
             return result;
         },
 
@@ -371,20 +386,28 @@
             // added... truncate digits to achieve specified precision
             USNGNorthing = Math.floor(USNGNorthing / Math.pow(10,(5-precision)));
             USNGEasting = Math.floor(USNGEasting / Math.pow(10,(5-precision)));
-            var USNG = zoneNumber +  this.UTMLetterDesignator(lat) + " " + USNGLetters + " ";
+
+            var USNG = zoneNumber + this.UTMLetterDesignator(lat);
+            if (precision > 0) {
+             USNG += " " + USNGLetters;
+            }
+
 
             // REVISIT: Modify to incorporate dynamic precision ?
-            for (var i = String(USNGEasting).length; i < precision; i++) {
-                USNG += "0";
+            if (precision > 1) {
+                USNG += " "
+                for (var i = String(USNGEasting).length; i < precision; i++) {
+                        USNG += "0";
+                }
+                USNG += USNGEasting + " ";
             }
 
-            USNG += USNGEasting + " ";
-
-            for (i = String(USNGNorthing).length; i < precision; i++) {
-                USNG += "0";
+            if (precision > 1) {
+                for (i = String(USNGNorthing).length; i < precision; i++) {
+                        USNG += "0";
+                }
+                USNG += USNGNorthing;
             }
-
-            USNG += USNGNorthing;
 
             return USNG;
 
