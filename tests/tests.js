@@ -1058,62 +1058,302 @@ describe('Convert Lat/Lon to UTM', function(){
   });
   describe('Using test data from github issue', function(){
     describe('washington monument', function(){
-      it('should return lat 38.8895 lat -77.0352', function(){
+      it('should return lat 38.8895 long -77.0352', function(){
         var lat = 38.8895;
         var lon = -77.0352;
         var utmNorthing = 4306483;
         var utmEasting = 323486;
+        var zoneNum = 18;
         var usng = "18S UJ 23487 06483";
 
-        // Testing LL to UTM
         var coords = [];
         converter.LLtoUTM(lat, lon, coords);
-        //console.log("UTM Coords: " + coords);
+
         chai.assert.equal(utmEasting, parseInt(coords[0]));
         chai.assert.equal(utmNorthing, parseInt(coords[1]));
+        chai.assert.equal(zoneNum, parseInt(coords[2]));
 
-        // Testing LL to USNG
-        var usngString = converter.LLtoUSNG(lat, lon, 6);
-        chai.assert.equal(usng, usngString);
-        //console.log("USNG String: " + usngString);
+        var utmToLL = converter.UTMtoLL(utmNorthing, utmEasting, zoneNum);
 
-        // Testing parse USNG
-        var parts = {};
-        converter.parseUSNG_str(usngString, parts);
-        //console.log("USNG Parts: ");
-        //console.log(parts);
-        chai.assert.equal(18, parts.zone);
-        chai.assert.equal('S', parts.let);
-        chai.assert.equal('U', parts.sq1);
-        chai.assert.equal('J', parts.sq2);
-        chai.assert.equal(5, parts.precision);
-        chai.assert.equal(06483, parts.north);
-        chai.assert.equal(23487, parts.east);
+        chai.assert.equal(Math.round(lat * 10000), Math.round(utmToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(utmToLL.lon * 10000));
 
-        // Testing USNG to UTM
-        var ret = {};
-        converter.USNGtoUTM(parts.zone, parts.let, parts.sq1, parts.sq2, parts.east, parts.north, ret);
-        //console.log("USNG to UTM: ");
-        //console.log(ret);
-        chai.assert.equal(utmEasting+1, ret.E);
-        chai.assert.equal(utmNorthing, ret.N);
-        chai.assert.equal(18, ret.zone);
-        chai.assert.equal('S', ret.letter);
+        chai.assert.equal(usng, converter.LLtoUSNG(lat, lon, 6));
 
+        var usngToLL = converter.USNGtoLL(usng, true);
 
-        // Testing UTM to LL
-        var utmToLL = converter.UTMtoLL(utmNorthing, utmEasting, 18);
-        //console.log("UTM to LL: ");
-        //console.log(utmToLL);
-        chai.assert.equal(Math.floor(lat), Math.floor(utmToLL.lat));
-        chai.assert.equal(Math.floor(lon), Math.floor(utmToLL.lon));
+        chai.assert.equal(Math.round(lat * 10000), Math.round(usngToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(usngToLL.lon * 10000));
+      });
+    });
 
-        // Testing USNG to LL
-        var usngToLL =  converter.USNGtoLL(usng);
-        //console.log("USNG to LL: ");
-        //console.log(usngToLL);
-        chai.assert.equal(Math.floor(lon), Math.floor(usngToLL.east));
-        chai.assert.equal(Math.floor(lat), Math.floor(usngToLL.north));
+    describe('white house', function(){
+      it('should return lat 38.8977 lon -77.0366', function(){
+        var lat = 38.8977;
+        var lon = -77.0366;
+        var utmNorthing = 4307395;
+        var utmEasting = 323385;
+        var zoneNum = 18;
+        var usng = "18S UJ 23386 07396";
+
+        var coords = [];
+        converter.LLtoUTM(lat, lon, coords);
+
+        chai.assert.equal(utmEasting, parseInt(coords[0]));
+        chai.assert.equal(utmNorthing, parseInt(coords[1]));
+        chai.assert.equal(zoneNum, parseInt(coords[2]));
+
+        var utmToLL = converter.UTMtoLL(utmNorthing, utmEasting, zoneNum);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(utmToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(utmToLL.lon * 10000));
+
+        chai.assert.equal(usng, converter.LLtoUSNG(lat, lon, 6));
+
+        var usngToLL = converter.USNGtoLL(usng, true);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(usngToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(usngToLL.lon * 10000));
+      });
+    });
+
+    describe('mount everest', function(){
+      it('should return lat 27.9881 lon 86.9253', function(){
+        var lat = 27.9881;
+        var lon = 86.9253;
+        var utmNorthing = 3095886;
+        var utmEasting = 492654;
+        var zoneNum = 45;
+        var usng = "45R VL 92654 95886";
+
+        var coords = [];
+        converter.LLtoUTM(lat, lon, coords);
+
+        chai.assert.equal(utmEasting, parseInt(coords[0]));
+        chai.assert.equal(utmNorthing, parseInt(coords[1]));
+        chai.assert.equal(zoneNum, parseInt(coords[2]));
+
+        var utmToLL = converter.UTMtoLL(utmNorthing, utmEasting, zoneNum);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(utmToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(utmToLL.lon * 10000));
+
+        chai.assert.equal(usng, converter.LLtoUSNG(lat, lon, 6));
+
+        var usngToLL = converter.USNGtoLL(usng, true);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(usngToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(usngToLL.lon * 10000));
+      });
+    });
+
+    describe('hollywood sign', function(){
+      it('should return lat 34.1341 lon -118.3217', function(){
+        var lat = 34.1341;
+        var lon = -118.3217;
+        var utmNorthing = 3777813;
+        var utmEasting = 378131;
+        var zoneNum = 11;
+        var usng = "11S LT 78132 77814";
+
+        var coords = [];
+        converter.LLtoUTM(lat, lon, coords);
+
+        chai.assert.equal(utmEasting, parseInt(coords[0]));
+        chai.assert.equal(utmNorthing, parseInt(coords[1]));
+        chai.assert.equal(zoneNum, parseInt(coords[2]));
+
+        var utmToLL = converter.UTMtoLL(utmNorthing, utmEasting, zoneNum);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(utmToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(utmToLL.lon * 10000));
+
+        chai.assert.equal(usng, converter.LLtoUSNG(lat, lon, 6));
+
+        var usngToLL = converter.USNGtoLL(usng, true);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(usngToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(usngToLL.lon * 10000));
+      });
+    });
+
+    describe('empire state building', function(){
+      it('should return lat 40.7484 lon -73.9857', function(){
+        var lat = 40.7484;
+        var lon = -73.9857;
+        var utmNorthing = 4511322;
+        var utmEasting = 585628;
+        var zoneNum = 18;
+        var usng = "18T WL 85628 11322";
+
+        var coords = [];
+        converter.LLtoUTM(lat, lon, coords);
+
+        chai.assert.equal(utmEasting, parseInt(coords[0]));
+        chai.assert.equal(utmNorthing, parseInt(coords[1]));
+        chai.assert.equal(zoneNum, parseInt(coords[2]));
+
+        var utmToLL = converter.UTMtoLL(utmNorthing, utmEasting, zoneNum);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(utmToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(utmToLL.lon * 10000));
+
+        chai.assert.equal(usng, converter.LLtoUSNG(lat, lon, 6));
+
+        var usngToLL = converter.USNGtoLL(usng, true);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(usngToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(usngToLL.lon * 10000));
+      });
+    });
+
+    describe('arlington cemetery', function(){
+      it('should return lat 38.88 lon -77.07', function(){
+        var lat = 38.88;
+        var lon = -77.07;
+        var utmNorthing = 4305496;
+        var utmEasting = 320444;
+        var zoneNum = 18;
+        var usng = "18S UJ 20444 05497";
+
+        var coords = [];
+        converter.LLtoUTM(lat, lon, coords);
+
+        chai.assert.equal(utmEasting, parseInt(coords[0]));
+        chai.assert.equal(utmNorthing, parseInt(coords[1]));
+        chai.assert.equal(zoneNum, parseInt(coords[2]));
+
+        var utmToLL = converter.UTMtoLL(utmNorthing, utmEasting, zoneNum);
+
+        chai.assert.equal(Math.round(lat * 100), Math.round(utmToLL.lat * 100));
+        chai.assert.equal(Math.round(lon * 100), Math.round(utmToLL.lon * 100));
+
+        chai.assert.equal(usng, converter.LLtoUSNG(lat, lon, 6));
+
+        var usngToLL = converter.USNGtoLL(usng, true);
+
+        chai.assert.equal(Math.round(lat * 100), Math.round(usngToLL.lat * 100));
+        chai.assert.equal(Math.round(lon * 100), Math.round(usngToLL.lon * 100));
+      });
+    });
+
+    describe('raven\'s stadium', function(){
+      it('should return lat 39.277881 lon -76.622639', function(){
+        var lat = 39.277881;
+        var lon = -76.622639;
+        var utmNorthing = 4348868;
+        var utmEasting = 360040;
+        var zoneNum = 18;
+        var usng = "18S UJ 60040 48869";
+
+        var coords = [];
+        converter.LLtoUTM(lat, lon, coords);
+
+        chai.assert.equal(utmEasting, parseInt(coords[0]));
+        chai.assert.equal(utmNorthing, parseInt(coords[1]));
+        chai.assert.equal(zoneNum, parseInt(coords[2]));
+
+        var utmToLL = converter.UTMtoLL(utmNorthing, utmEasting, zoneNum);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(utmToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(utmToLL.lon * 10000));
+
+        chai.assert.equal(usng, converter.LLtoUSNG(lat, lon, 6));
+
+        var usngToLL = converter.USNGtoLL(usng, true);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(usngToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(usngToLL.lon * 10000));
+      });
+    });
+
+    describe('independence hall', function(){
+      it('should return lat 39.9489 lon -75.15', function(){
+        var lat = 39.9489;
+        var lon = -75.15;
+        var utmNorthing = 4422096;
+        var utmEasting = 487186;
+        var zoneNum = 18;
+        var usng = "18S VK 87187 22096";
+
+        var coords = [];
+        converter.LLtoUTM(lat, lon, coords);
+
+        chai.assert.equal(utmEasting, parseInt(coords[0]));
+        chai.assert.equal(utmNorthing, parseInt(coords[1]));
+        chai.assert.equal(zoneNum, parseInt(coords[2]));
+
+        var utmToLL = converter.UTMtoLL(utmNorthing, utmEasting, zoneNum);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(utmToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 100), Math.round(utmToLL.lon * 100));
+
+        chai.assert.equal(usng, converter.LLtoUSNG(lat, lon, 6));
+
+        var usngToLL = converter.USNGtoLL(usng, true);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(usngToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 100), Math.round(usngToLL.lon * 100));
+      });
+    });
+
+    describe('naval air station oceana', function(){
+      it('should return lat 36.8206 lon -76.0333', function(){
+        var lat = 36.8206;
+        var lon = -76.0333;
+        var utmNorthing = 4075469;
+        var utmEasting = 407844;
+        var zoneNum = 18;
+        var usng = "18S VF 07844 75469";
+
+        var coords = [];
+        converter.LLtoUTM(lat, lon, coords);
+
+        chai.assert.equal(utmEasting, parseInt(coords[0]));
+        chai.assert.equal(utmNorthing, parseInt(coords[1]));
+        chai.assert.equal(zoneNum, parseInt(coords[2]));
+
+        var utmToLL = converter.UTMtoLL(utmNorthing, utmEasting, zoneNum);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(utmToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(utmToLL.lon * 10000));
+
+        chai.assert.equal(usng, converter.LLtoUSNG(lat, lon, 6));
+
+        var usngToLL = converter.USNGtoLL(usng, true);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(usngToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(usngToLL.lon * 10000));
+      });
+    });
+
+    describe('uss north carolina', function(){
+      it('should return lat 34.2364 lon -77.9542', function(){
+        var lat = 34.2364;
+        var lon = -77.9542;
+        var utmNorthing = 3792316;
+        var utmEasting = 227899;
+        var zoneNum = 18;
+        var usng = "18S TC 27900 92317";
+
+        var coords = [];
+        converter.LLtoUTM(lat, lon, coords);
+
+        chai.assert.equal(utmEasting, parseInt(coords[0]));
+        chai.assert.equal(utmNorthing, parseInt(coords[1]));
+        chai.assert.equal(zoneNum, parseInt(coords[2]));
+
+        var utmToLL = converter.UTMtoLL(utmNorthing, utmEasting, zoneNum);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(utmToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(utmToLL.lon * 10000));
+
+        chai.assert.equal(usng, converter.LLtoUSNG(lat, lon, 6));
+
+        var usngToLL = converter.USNGtoLL(usng, true);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(usngToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(usngToLL.lon * 10000));
       });
     });
 

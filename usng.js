@@ -220,7 +220,7 @@
                 Math.cos(phi1) * Math.cos(phi2) *
                 Math.sin(deltaLlamda/2) * Math.sin(deltaLlamda/2);
             var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
- 
+
             var dist = R*c;
 
             if (lon === 0 && (eastNum > 90 || eastNum < -90) && (westNum > 90 || westNum < -90)) {
@@ -245,9 +245,10 @@
             } else if (dist >=0) {
                 result = this.LLtoUSNG(lat, lon, 6);
             }
+
             // result is a USNG string of the form DDL LL DDDDD DDDDD
             // length of string will be based on the precision variable
-            return result;
+          return result;
         },
 
         /***************** convert latitude, longitude to UTM  *******************
@@ -349,7 +350,7 @@
          "18S UJ 2286 0705" locates Washington Monument in Washington, D.C.
          to a 10-meter precision.
 
-         Precision refers to levels of USNG precision. Ie a precision of 
+         Precision refers to levels of USNG precision. Ie a precision of
          0 returns a string in the form DDL
          1 returns a string in the form DDL LL
          2 returns a string in the form DDL LL D D
@@ -394,7 +395,7 @@
                 precision = 0;
             }
 
-            // digitPrecision is to account for just the numerical portion of the USNG string 
+            // digitPrecision is to account for just the numerical portion of the USNG string
             // the last 0-10 characters of the USNG string
             var digitPrecision = 0;
 
@@ -879,15 +880,16 @@
                 zoneStartMinus1 = zoneBase[letNorth - 1];
             }
             var appxNorth = Number(segBase[letNorth])+northingVal;
+
             if (letNorth > 9 && appxNorth < zoneStart) {
                 if (zoneStartPlus1) {
                     if (appxNorth > 0 && northingVal === 0) {
-                        appxNorth += zoneStart - appxNorth + (zoneStartPlus1 - zoneStart) / 2;
+                        appxNorth += zoneStart - appxNorth + (zoneStartPlus1 - zoneStart) / 2 + .05;
                     } else if (appxNorth > 0) {
                         appxNorth += 2;
                     } else {
                         appxNorth = zoneStart;
-                        appxNorth += (zoneStartPlus1 - zoneStart) / 2;
+                        appxNorth += (zoneStartPlus1 - zoneStart) / 2 +.05;
                     }
                 } else {
                     appxNorth += 2.5; // this is just for the special case of X
@@ -897,9 +899,9 @@
             if (letNorth < 10 && appxNorth < zoneStart) {
                 if (zoneStartMinus1) {
                     if(appxNorth > 0 && northingVal === 0) {
-                        appxNorth += zoneStart - appxNorth + (zoneStart - zoneStartMinus1) / 2;
+                        appxNorth += zoneStart - appxNorth + (zoneStart - zoneStartMinus1) / 2 + .05;
                     } else if (appxNorth > 0) {
-                        appxNorth += vNorthing;
+                        appxNorth += 2;
                     }
                 } else {
                     appxNorth += 1.5; // this is just for the special case of C
@@ -918,6 +920,7 @@
             } else {
                 east = 0;
             }
+
             ret.N=appxNorth*1000000+Number(north)*Math.pow(10,5-northPrecision);
             ret.E=appxEast*100000+Number(east)*Math.pow(10,5-eastPrecision);
             ret.zone=zone;
@@ -933,7 +936,6 @@
         },
 
         getNorthingFromChar: function (letter, setVal) {
-
             if (letter === '' || typeof letter === 'undefined') {
                 return 0;
             }
