@@ -190,39 +190,45 @@
             var eastNum = parseFloat(east);
             var westNum = parseFloat(west);
 
+            // calculate midpoints for use in USNG string calculation
             var lat = (northNum + southNum) / 2;
             var lon = (eastNum + westNum) / 2;
+
+            // round down edge cases
             if (lon >= 180) {
                 lon = 179.9;
             } else if (lon <= -180) {
                 lon = -179.9;
             }
 
+            // round down edge cases
             if (lat >= 90) {
                 lat = 89.9;
             } else if (lat <= -90) {
                 lat = -89.9;
             }
 
+            // calculate distance between two points (North, West) and (South, East)
             var R = 6371000; // metres
             var phi1 = northNum* this.DEG_2_RAD;
             var phi2 = southNum* this.DEG_2_RAD;
             var deltaPhi = (southNum-northNum)* this.DEG_2_RAD;
             var deltaLlamda= (westNum-eastNum)* this.DEG_2_RAD;
 
-
+            // trigonometry calculate distance
             var a = Math.sin(deltaPhi/2) * Math.sin(deltaPhi/2) +
                 Math.cos(phi1) * Math.cos(phi2) *
                 Math.sin(deltaLlamda/2) * Math.sin(deltaLlamda/2);
             var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-
-            //doesn't check vert distance yet
+ 
             var dist = R*c;
 
             if (lon === 0 && (eastNum > 90 || eastNum < -90) && (westNum > 90 || westNum < -90)) {
                 lon = 180;
               }
 
+            // calculate a USNG string with a precision based on distance
+            // precision is defined in LLtoUSNG declaration
             var result;
             if (dist > 100000) {
               result = this.LLtoUSNG(lat, lon, 0);
@@ -239,13 +245,8 @@
             } else if (dist >=0) {
                 result = this.LLtoUSNG(lat, lon, 6);
             }
-            console.log("North: " + north);
-            console.log("South: " + south);
-            console.log("East: " + east);
-            console.log("West: " + west);
-
-            console.log("Distance: " + dist);
-            console.log("Result: " + result);
+            // result is a USNG string of the form DDL LL DDDDD DDDDD
+            // length of string will be based on the precision variable
             return result;
         },
 
@@ -358,9 +359,11 @@
 
         LLtoUSNG: function (lat, lon, precision) {
 
+            // make lon between -180 & 180
             if (lon < -180) { lon += 360;}
             else if (lon > 180) { lon -= 360;}
 
+            // parse lat & long parameters to floats
             lat = parseFloat(lat);
             lon = parseFloat(lon);
 
@@ -380,31 +383,47 @@
 
             var zoneNumber = this.getZoneNumber(lat, lon);
             var USNGLetters  = this.findGridLetters(zoneNumber, UTMNorthing, UTMEasting);
+
+            // UTM northing and easting is the analogue of USNG letters + USNG northing and easting
+            // so remove the component of UTM northing and easting that corresponds with the USNG letters
             var USNGNorthing = Math.round(UTMNorthing) % this.BLOCK_SIZE;
             var USNGEasting  = Math.round(UTMEasting)  % this.BLOCK_SIZE;
 
+            // parse precision to something we understand
             if (typeof precision === 'undefined' || precision < 0) {
                 precision = 0;
             }
-            // a variable to account for just the numerical portion of the USNG string - the last 0-10 characters
+
+            // digitPrecision is to account for just the numerical portion of the USNG string 
+            // the last 0-10 characters of the USNG string
             var digitPrecision = 0;
+
+            // ensure that digitPrecision is between 0-5 because USNG is specified to up to 5 digits
             if (precision > 0) {
                 digitPrecision = precision-1;
             }
             if (digitPrecision > 5) {
                 digitPrecision = 5;
             }
-            // added... truncate digits to achieve specified precision
+            // truncate USNG string digits to achieve specified precision
             USNGNorthing = Math.floor(USNGNorthing / Math.pow(10,(5-digitPrecision)));
             USNGEasting = Math.floor(USNGEasting / Math.pow(10,(5-digitPrecision)));
 
+            // begin building USNG string "DDL"
             var USNG = zoneNumber + this.UTMLetterDesignator(lat);
+
+            // add 100k meter grid letters to USNG string "DDL LL"
             if (precision >= 1) {
              USNG += " " + USNGLetters;
             }
 
 
             // REVISIT: Modify to incorporate dynamic precision ?
+
+            // if requested precision is higher than USNG northing or easting, pad front
+            // with zeros
+
+            // add easting and northing to USNG string "DDL LL D+ D+"
             if (digitPrecision >= 1) {
                 USNG += " "
                 for (var i = String(USNGEasting).length; i < digitPrecision; i++) {
@@ -420,6 +439,8 @@
                 USNG += USNGNorthing;
             }
 
+            // return USNG string of the form "DDL LL DDDDD DDDDD"
+            // length of string depends on precision specified
             return USNG;
 
         },

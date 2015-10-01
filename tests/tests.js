@@ -475,7 +475,7 @@ describe('Convert Lat/Lon Bounding Box to USNG', function(){
   });
   describe('around Toliara city center in Madagascar', function(){
     it('should return 38K LV 64 17', function(){
-      chai.assert.equal("38K LV 64 17", converter.LLBboxtoUSNG(-23.39, -23.39, 43.7, 43.69));
+      chai.assert.equal("38K LV 66 12", converter.LLBboxtoUSNG(-23.395, -23.39, 43.70, 43.695));
     });
   });
   describe('around Central Japan', function(){
@@ -483,121 +483,121 @@ describe('Convert Lat/Lon Bounding Box to USNG', function(){
       chai.assert.equal("54S", converter.LLBboxtoUSNG(41, 33, 143, 138));
     });
   });
-//   describe('around Tokyo city in Japan', function(){
-//     it('should return 54S UE', function(){
-//       chai.assert.equal("54S UE ", converter.LLBboxtoUSNG(36, 35, 140, 139));
-//     });
-//   });
-//   describe('around Tokyo city center in Japan', function(){
-//     it('should return 54S UE 41 63', function(){
-//       chai.assert.equal("54S UE 88 50", converter.LLBboxtoUSNG(35.71, 35.67, 139.80, 139.74));
-//     });
-//   });
-//   describe('around the international date line', function(){
-//     describe('to the immediate west', function(){
-//       it('should return 60R', function(){
-//         chai.assert.equal("60R", converter.LLBboxtoUSNG(34, 23, 179, 172));
-//       });
-//     });
-//     describe('to the immediate east', function(){
-//       it('should return 1R', function(){
-//         chai.assert.equal("1R", converter.LLBboxtoUSNG(34, 23, -179, -172));
-//       });
-//     });
-//     describe('with date line crossing the middle', function(){
-//       it('should return 1R', function(){
-//         chai.assert.equal("1R BM ", converter.LLBboxtoUSNG(34, 23, 179, -179));
-//       });
-//     });
-//   });
-//   describe('around the equator', function(){
-//     describe('to the immediate north', function(){
-//       it('should return 58N', function(){
-//         chai.assert.equal("58N", converter.LLBboxtoUSNG(8, 1, 166, 159));
-//       });
-//     });
-//     describe('to the immediate south', function(){
-//       it('should return 58M', function(){
-//         chai.assert.equal("58M", converter.LLBboxtoUSNG(-1, -8, 166, 159));
-//       });
-//     });
-//     describe('with equator crossing the middle', function(){
-//       it('should return 58N', function(){
-//         chai.assert.equal("58N", converter.LLBboxtoUSNG(8, -8, 166, 159));
-//       });
-//     });
-//   });
-//   describe('around the international date line and equator', function(){
-//     describe('to the immediate west and north', function(){
-//       it('should return 60N', function(){
-//         chai.assert.equal("60N", converter.LLBboxtoUSNG(8, 1, 179, 172));
-//       });
-//     });
-//     describe('to the immediate west and south', function(){
-//       it('should return 60M', function(){
-//         chai.assert.equal("60M", converter.LLBboxtoUSNG(-1, -8, 179, 172));
-//       });
-//     });
-//     describe('to the immediate east and north', function(){
-//       it('should return 1N', function(){
-//         chai.assert.equal("1N", converter.LLBboxtoUSNG(8, 1, -179, -172));
-//       });
-//     });
-//     describe('to the immediate east and south', function(){
-//       it('should return 1M', function(){
-//         chai.assert.equal("1M", converter.LLBboxtoUSNG(-1, -8, -179, -172));
-//       });
-//     });
-//     describe('with crossing of date line and equator at center point', function(){
-//       it('should return 1N', function(){
-//         chai.assert.equal("1N AA ", converter.LLBboxtoUSNG(8, -8, -179, 179));
-//       });
-//     });
-//   });
-//   describe('around the prime meridian', function(){
-//     describe('to the immediate west', function(){
-//       it('should return 30R', function(){
-//         chai.assert.equal("30R", converter.LLBboxtoUSNG(34, 23, -1, -8));
-//       });
-//     });
-//     describe('to the immediate east', function(){
-//       it('should return 31R', function(){
-//         chai.assert.equal("31R", converter.LLBboxtoUSNG(34, 23, 1, 8));
-//       });
-//     });
-//     describe('with date line crossing the middle', function(){
-//       it('should return 31R', function(){
-//         chai.assert.equal("31R", converter.LLBboxtoUSNG(34, 23, -1, 1));
-//       });
-//     });
-//   });
-//   describe('around the prime meridian and equator', function(){
-//     describe('to the immediate west and north', function(){
-//       it('should return 30N', function(){
-//         chai.assert.equal("30N", converter.LLBboxtoUSNG(8, 1, -1, -8));
-//       });
-//     });
-//     describe('to the immediate west and south', function(){
-//       it('should return 30M', function(){
-//         chai.assert.equal("30M", converter.LLBboxtoUSNG(-1, -8, -1, -8));
-//       });
-//     });
-//     describe('to the immediate east and north', function(){
-//       it('should return 31N', function(){
-//         chai.assert.equal("31N", converter.LLBboxtoUSNG(8, 1, 8, 1));
-//       });
-//     });
-//     describe('to the immediate east and south', function(){
-//       it('should return 31M', function(){
-//         chai.assert.equal("31M", converter.LLBboxtoUSNG(-1, -8, 8, 1));
-//       });
-//     });
-//     describe('with crossing of prime meridian and equator at center point', function(){
-//       it('should return 31N', function(){
-//         chai.assert.equal("31N", converter.LLBboxtoUSNG(8, -8, 1, -1));
-//       });
-//     });
-//   });
+  describe('around Tokyo city in Japan', function(){
+    it('should return 54S UD', function(){
+      chai.assert.equal("54S UD", converter.LLBboxtoUSNG(35, 35, 140, 139));
+    });
+  });
+  describe('around Tokyo city center in Japan', function(){
+    it('should return 54S UE 41 63', function(){
+      chai.assert.equal("54S UE 86 51", converter.LLBboxtoUSNG(35.7, 35.7, 139.75, 139.745));
+    });
+  });
+  describe('around the international date line', function(){
+    describe('to the immediate west', function(){
+      it('should return 60R', function(){
+        chai.assert.equal("60R", converter.LLBboxtoUSNG(34, 23, 179, 172));
+      });
+    });
+    describe('to the immediate east', function(){
+      it('should return 1R', function(){
+        chai.assert.equal("1R", converter.LLBboxtoUSNG(34, 23, -179, -172));
+      });
+    });
+    describe('with date line crossing the middle', function(){
+      it('should return 1R BM', function(){
+        chai.assert.equal("1R BM ", converter.LLBboxtoUSNG(34, 23, 179.9, -179.9));
+      });
+    });
+  });
+  describe('around the equator', function(){
+    describe('to the immediate north', function(){
+      it('should return 58N', function(){
+        chai.assert.equal("58N", converter.LLBboxtoUSNG(8, 1, 166, 159));
+      });
+    });
+    describe('to the immediate south', function(){
+      it('should return 58M', function(){
+        chai.assert.equal("58M", converter.LLBboxtoUSNG(-1, -8, 166, 159));
+      });
+    });
+    describe('with equator crossing the middle', function(){
+      it('should return 58N', function(){
+        chai.assert.equal("58N", converter.LLBboxtoUSNG(8, -8, 166, 159));
+      });
+    });
+  });
+  describe('around the international date line and equator', function(){
+    describe('to the immediate west and north', function(){
+      it('should return 60N', function(){
+        chai.assert.equal("60N", converter.LLBboxtoUSNG(8, 1, 179, 172));
+      });
+    });
+    describe('to the immediate west and south', function(){
+      it('should return 60M', function(){
+        chai.assert.equal("60M", converter.LLBboxtoUSNG(-1, -8, 179, 172));
+      });
+    });
+    describe('to the immediate east and north', function(){
+      it('should return 1N', function(){
+        chai.assert.equal("1N", converter.LLBboxtoUSNG(8, 1, -179, -172));
+      });
+    });
+    describe('to the immediate east and south', function(){
+      it('should return 1M', function(){
+        chai.assert.equal("1M", converter.LLBboxtoUSNG(-1, -8, -179, -172));
+      });
+    });
+    describe('with crossing of date line and equator at center point', function(){
+      it('should return 1N AA', function(){
+        chai.assert.equal("1N AA ", converter.LLBboxtoUSNG(4, -4, -179, 179));
+      });
+    });
+  });
+  describe('around the prime meridian', function(){
+    describe('to the immediate west', function(){
+      it('should return 30R', function(){
+        chai.assert.equal("30R", converter.LLBboxtoUSNG(34, 23, -1, -8));
+      });
+    });
+    describe('to the immediate east', function(){
+      it('should return 31R', function(){
+        chai.assert.equal("31R", converter.LLBboxtoUSNG(34, 23, 1, 8));
+      });
+    });
+    describe('with date line crossing the middle', function(){
+      it('should return 31R', function(){
+        chai.assert.equal("31R", converter.LLBboxtoUSNG(34, 23, -1, 1));
+      });
+    });
+  });
+  describe('around the prime meridian and equator', function(){
+    describe('to the immediate west and north', function(){
+      it('should return 30N', function(){
+        chai.assert.equal("30N", converter.LLBboxtoUSNG(8, 1, -1, -8));
+      });
+    });
+    describe('to the immediate west and south', function(){
+      it('should return 30M', function(){
+        chai.assert.equal("30M", converter.LLBboxtoUSNG(-1, -8, -1, -8));
+      });
+    });
+    describe('to the immediate east and north', function(){
+      it('should return 31N', function(){
+        chai.assert.equal("31N", converter.LLBboxtoUSNG(8, 1, 8, 1));
+      });
+    });
+    describe('to the immediate east and south', function(){
+      it('should return 31M', function(){
+        chai.assert.equal("31M", converter.LLBboxtoUSNG(-1, -8, 8, 1));
+      });
+    });
+    describe('with crossing of prime meridian and equator at center point', function(){
+      it('should return 31N', function(){
+        chai.assert.equal("31N", converter.LLBboxtoUSNG(8, -8, 1, -1));
+      });
+    });
+  });
 // });
 // describe('Convert Lat/Lon to USNG', function(){
 //   describe('around Arizona in the United States', function(){
