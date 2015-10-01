@@ -239,13 +239,7 @@
             } else if (dist >=0) {
                 result = this.LLtoUSNG(lat, lon, 6);
             }
-            console.log("North: " + north);
-            console.log("South: " + south);
-            console.log("East: " + east);
-            console.log("West: " + west);
 
-            console.log("Distance: " + dist);
-            console.log("Result: " + result);
             return result;
         },
 
@@ -858,15 +852,16 @@
                 zoneStartMinus1 = zoneBase[letNorth - 1];
             }
             var appxNorth = Number(segBase[letNorth])+northingVal;
+
             if (letNorth > 9 && appxNorth < zoneStart) {
                 if (zoneStartPlus1) {
                     if (appxNorth > 0 && northingVal === 0) {
-                        appxNorth += zoneStart - appxNorth + (zoneStartPlus1 - zoneStart) / 2;
+                        appxNorth += zoneStart - appxNorth + (zoneStartPlus1 - zoneStart) / 2 + .05;
                     } else if (appxNorth > 0) {
                         appxNorth += 2;
                     } else {
                         appxNorth = zoneStart;
-                        appxNorth += (zoneStartPlus1 - zoneStart) / 2;
+                        appxNorth += (zoneStartPlus1 - zoneStart) / 2 +.05;
                     }
                 } else {
                     appxNorth += 2.5; // this is just for the special case of X
@@ -876,9 +871,9 @@
             if (letNorth < 10 && appxNorth < zoneStart) {
                 if (zoneStartMinus1) {
                     if(appxNorth > 0 && northingVal === 0) {
-                        appxNorth += zoneStart - appxNorth + (zoneStart - zoneStartMinus1) / 2;
+                        appxNorth += zoneStart - appxNorth + (zoneStart - zoneStartMinus1) / 2 + .05;
                     } else if (appxNorth > 0) {
-                        appxNorth += vNorthing;
+                        appxNorth += 2;
                     }
                 } else {
                     appxNorth += 1.5; // this is just for the special case of C
@@ -897,6 +892,7 @@
             } else {
                 east = 0;
             }
+
             ret.N=appxNorth*1000000+Number(north)*Math.pow(10,5-northPrecision);
             ret.E=appxEast*100000+Number(east)*Math.pow(10,5-eastPrecision);
             ret.zone=zone;
@@ -912,7 +908,6 @@
         },
 
         getNorthingFromChar: function (letter, setVal) {
-
             if (letter === '' || typeof letter === 'undefined') {
                 return 0;
             }
