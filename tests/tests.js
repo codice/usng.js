@@ -506,7 +506,7 @@ describe('Convert Lat/Lon Bounding Box to USNG', function(){
     });
     describe('with date line crossing the middle', function(){
       it('should return 1R BM', function(){
-        chai.assert.equal("1R BM ", converter.LLBboxtoUSNG(34, 23, 179.9, -179.9));
+        chai.assert.equal("1R BM", converter.LLBboxtoUSNG(28, 28, 179.9, -179.9));
       });
     });
   });
@@ -550,7 +550,7 @@ describe('Convert Lat/Lon Bounding Box to USNG', function(){
     });
     describe('with crossing of date line and equator at center point', function(){
       it('should return 1N AA', function(){
-        chai.assert.equal("1N AA ", converter.LLBboxtoUSNG(4, -4, -179, 179));
+        chai.assert.equal("1N AA", converter.LLBboxtoUSNG(0, 0, -179.9, 179.9));
       });
     });
   });
@@ -598,464 +598,464 @@ describe('Convert Lat/Lon Bounding Box to USNG', function(){
       });
     });
   });
-// });
-// describe('Convert Lat/Lon to USNG', function(){
-//   describe('around Arizona in the United States', function(){
-//     it('should return 12S WC 0 0', function(){
-//       chai.assert.equal("12S WC 0 0", converter.LLtoUSNG(34, -111, 0));
-//     });
-//   });
-//   describe('around Prescott/Chino Valley in Arizona', function(){
-//     it('should return 12S UD 0 0', function(){
-//       chai.assert.equal("12S UD 0 0", converter.LLtoUSNG(34.5, -112.5, 0));
-//     });
-//   });
-//   describe('immediately around Prescott city in Arizona', function(){
-//     it('should return 12S UD 65 23', function(){
-//       chai.assert.equal("12S UD 65 23", converter.LLtoUSNG(34.545, -112.465, 2));
-//     });
-//   });
-//   describe('around Uruguay', function(){
-//     it('should return 21H XE 0 0', function(){
-//       chai.assert.equal("21H XE 0 0", converter.LLtoUSNG(-32.5, -55.5, 0));
-//     });
-//   });
-//   describe('around Buenos Aires city in Argentina', function(){
-//     it('should return 21H UB 0 0', function(){
-//       chai.assert.equal("21H UB 0 0", converter.LLtoUSNG(-34.5, -58.5, 0));
-//     });
-//   });
-//   describe('around Merlo town in Buenos Aires', function(){
-//     it('should return 21H UB 41 63', function(){
-//       chai.assert.equal("21H UB 41 63", converter.LLtoUSNG(-34.66, -58.73, 2));
-//     });
-//   });
-//   describe('around Madagascar', function(){
-//     it('should return 38K PE 0 0', function(){
-//       chai.assert.equal("38K PE 0 0", converter.LLtoUSNG(-18.5, 46.5, 0));
-//     });
-//   });
-//   describe('around Toliara city in Madagascar', function(){
-//     it('should return 38K LA 0 0', function(){
-//       chai.assert.equal("38K LA 0 0", converter.LLtoUSNG(-22.5, 43.5, 0));
-//     });
-//   });
-//   describe('around Toliara city center in Madagascar', function(){
-//     it('should return 38K LA 64 17', function(){
-//       chai.assert.equal("38K LA 45 11", converter.LLtoUSNG(-22.5, 43.5, 2));
-//     });
-//   });
-//   describe('around Central Japan', function(){
-//     it('should return 54S VF 0 0', function(){
-//       chai.assert.equal("54S VF 0 0", converter.LLtoUSNG(37, 140.5, 0));
-//     });
-//   });
-//   describe('around Tokyo city in Japan', function(){
-//     it('should return 54S UE 0 0', function(){
-//       chai.assert.equal("54S UE 0 0", converter.LLtoUSNG(35.5, 139.5, 0));
-//     });
-//   });
-//   describe('around Tokyo city center in Japan', function(){
-//     it('should return 54S UE 41 63', function(){
-//       chai.assert.equal("54S UE 88 50", converter.LLtoUSNG(35.69, 139.77, 2));
-//     });
-//   });
-//   describe('around the international date line', function(){
-//     describe('to the immediate west', function(){
-//       it('should return 60R US 0 0', function(){
-//         chai.assert.equal("60R US 0 0", converter.LLtoUSNG(28.5, 175.5, 0));
-//       });
-//     });
-//     describe('to the immediate east', function(){
-//       it('should return 1R FM 0 0', function(){
-//         chai.assert.equal("1R FM 0 0", converter.LLtoUSNG(28.5, -175.5, 0));
-//       });
-//     });
-//     describe('with date line crossing the middle', function(){
-//       it('should return 1R BM 0 0', function(){
-//         chai.assert.equal("1R BM 0 0", converter.LLtoUSNG(28.5, 180, 0));
-//       });
-//     });
-//   });
-//   describe('around the equator', function(){
-//     describe('to the immediate north', function(){
-//       it('should return 58N BK 0 0', function(){
-//         chai.assert.equal("58N BK 0 0", converter.LLtoUSNG(4.5, 162.5, 0));
-//       });
-//     });
-//     describe('to the immediate south', function(){
-//       it('should return 58M BA 0 0', function(){
-//         chai.assert.equal("58M BA 0 0", converter.LLtoUSNG(-4.5, 162.5, 0));
-//       });
-//     });
-//     describe('with equator crossing the middle', function(){
-//       it('should return 58N BF 0 0', function(){
-//         chai.assert.equal("58N BF 0 0", converter.LLtoUSNG(0, 162.5, 0));
-//       });
-//     });
-//   });
-//   describe('around the international date line and equator', function(){
-//     describe('to the immediate west and north', function(){
-//       it('should return 60N UK 0 0', function(){
-//         chai.assert.equal("60N UK 0 0", converter.LLtoUSNG(4.5, 175.5, 0));
-//       });
-//     });
-//     describe('to the immediate west and south', function(){
-//       it('should return 60M UA 0 0', function(){
-//         chai.assert.equal("60M UA 0 0", converter.LLtoUSNG(-4.5, 175.5, 0));
-//       });
-//     });
-//     describe('to the immediate east and north', function(){
-//       it('should return 1N FE 0 0', function(){
-//         chai.assert.equal("1N FE 0 0", converter.LLtoUSNG(4.5, -175.5, 0));
-//       });
-//     });
-//     describe('to the immediate east and south', function(){
-//       it('should return 1M FR 0 0', function(){
-//         chai.assert.equal("1M FR 0 0", converter.LLtoUSNG(-4.5, -175.5, 0));
-//       });
-//     });
-//     describe('with crossing of date line and equator at center point', function(){
-//       it('should return 1N AA 0 0', function(){
-//         chai.assert.equal("1N AA 0 0", converter.LLtoUSNG(0, 180, 0));
-//       });
-//     });
-//   });
-//   describe('around the prime meridian', function(){
-//     describe('to the immediate west', function(){
-//       it('should return 30R US 0 0', function(){
-//         chai.assert.equal("30R US 0 0", converter.LLtoUSNG(28.5, -4.5, 0));
-//       });
-//     });
-//     describe('to the immediate east', function(){
-//       it('should return 31R FM 0 0', function(){
-//         chai.assert.equal("31R FM 0 0", converter.LLtoUSNG(28.5, 4.5, 0));
-//       });
-//     });
-//     describe('with date line crossing the middle', function(){
-//       it('should return 31R BM 0 0', function(){
-//         chai.assert.equal("31R BM 0 0", converter.LLtoUSNG(28.5, 0, 0));
-//       });
-//     });
-//   });
-//   describe('around the prime meridian and equator', function(){
-//     describe('to the immediate west and north', function(){
-//       it('should return 30N UK 0 0', function(){
-//         chai.assert.equal("30N UK 0 0", converter.LLtoUSNG(4.5, -4.5, 0));
-//       });
-//     });
-//     describe('to the immediate west and south', function(){
-//       it('should return 30M UA 0 0', function(){
-//         chai.assert.equal("30M UA 0 0", converter.LLtoUSNG(-4.5, -4.5, 0));
-//       });
-//     });
-//     describe('to the immediate east and north', function(){
-//       it('should return 31N FE 0 0', function(){
-//         chai.assert.equal("31N FE 0 0", converter.LLtoUSNG(4.5, 4.5, 0));
-//       });
-//     });
-//     describe('to the immediate east and south', function(){
-//       it('should return 31M FR 0 0', function(){
-//         chai.assert.equal("31M FR 0 0", converter.LLtoUSNG(-4.5, 4.5, 0));
-//       });
-//     });
-//     describe('with crossing of prime meridian and equator at center point', function(){
-//       it('should return 31N AA 0 0', function(){
-//         chai.assert.equal("31N AA 0 0", converter.LLtoUSNG(0, 0, 0));
-//       });
-//     });
-//   });
-// });
-// describe('Convert Lat/Lon to UTM', function(){
-//   describe('around Arizona in the United States', function(){
-//     it('should return easting=500000; northing=3762155; zone=12', function(){
-//       var coords = [];
-//       converter.LLtoUTM(34, -111, coords);
-//       chai.assert.equal(500000, parseInt(coords[0]));
-//       chai.assert.equal(3762155, parseInt(coords[1]));
-//       chai.assert.equal(12, coords[2]);
-//     });
-//   });
-//   describe('around Prescott/Chino Valley in Arizona', function(){
-//     it('should return easting=362289; northing=3818618; zone=12', function(){
-//       var coords = [];
-//       converter.LLtoUTM(34.5, -112.5, coords);
-//       chai.assert.equal(362289, parseInt(coords[0]));
-//       chai.assert.equal(3818618, parseInt(coords[1]));
-//       chai.assert.equal(12, coords[2]);
-//     });
-//   });
-//   describe('immediately around Prescott city in Arizona', function(){
-//     it('should return easting=365575; northing=3823561; zone=12', function(){
-//       var coords = [];
-//       converter.LLtoUTM(34.545, -112.465, coords);
-//       chai.assert.equal(365575, parseInt(coords[0]));
-//       chai.assert.equal(3823561, parseInt(coords[1]));
-//       chai.assert.equal(12, coords[2]);
-//     });
-//   });
-//   describe('around Uruguay', function(){
-//     it('should return easting=640915; northing=-3596850; zone=21', function(){
-//       var coords = [];
-//       converter.LLtoUTM(-32.5, -55.5, coords);
-//       chai.assert.equal(640915, parseInt(coords[0]));
-//       chai.assert.equal(-3596850, parseInt(coords[1]));
-//       chai.assert.equal(21, coords[2]);
-//     });
-//   });
-//   describe('around Buenos Aires city in Argentina', function(){
-//     it('should return easting=362289; northing=-3818618; zone=21', function(){
-//       var coords = [];
-//       converter.LLtoUTM(-34.5, -58.5, coords);
-//       chai.assert.equal(362289, parseInt(coords[0]));
-//       chai.assert.equal(-3818618, parseInt(coords[1]));
-//       chai.assert.equal(21, coords[2]);
-//     });
-//   });
-//   describe('around Merlo town in Buenos Aires', function(){
-//     it('should return easting=341475; northing=-3836700; zone=21', function(){
-//       var coords = [];
-//       converter.LLtoUTM(-34.66, -58.73, coords);
-//       chai.assert.equal(341475, parseInt(coords[0]));
-//       chai.assert.equal(-3836700, parseInt(coords[1]));
-//       chai.assert.equal(21, coords[2]);
-//     });
-//   });
-//   describe('around Madagascar', function(){
-//     it('should return easting=658354; northing=-2046162; zone=38', function(){
-//       var coords = [];
-//       converter.LLtoUTM(-18.5, 46.5, coords);
-//       chai.assert.equal(658354, parseInt(coords[0]));
-//       chai.assert.equal(-2046162, parseInt(coords[1]));
-//       chai.assert.equal(38, coords[2]);
-//     });
-//   });
-//   describe('around Toliara city in Madagascar', function(){
-//     it('should return easting=345704; northing=-2488944; zone=38', function(){
-//       var coords = [];
-//       converter.LLtoUTM(-22.5, 43.5, coords);
-//       chai.assert.equal(345704, parseInt(coords[0]));
-//       chai.assert.equal(-2488944, parseInt(coords[1]));
-//       chai.assert.equal(38, coords[2]);
-//     });
-//   });
-//   describe('around Toliara city center in Madagascar', function(){
-//     it('should return easting=364050; northing=-2583444; zone=38', function(){
-//       var coords = [];
-//       converter.LLtoUTM(-23.355, 43.67, coords);
-//       chai.assert.equal(364050, parseInt(coords[0]));
-//       chai.assert.equal(-2583444, parseInt(coords[1]));
-//       chai.assert.equal(38, coords[2]);
-//     });
-//   });
-//   describe('around Central Japan', function(){
-//     it('should return easting=455511; northing=4094989; zone=54', function(){
-//       var coords = [];
-//       converter.LLtoUTM(37, 140.5, coords);
-//       chai.assert.equal(455511, parseInt(coords[0]));
-//       chai.assert.equal(4094989, parseInt(coords[1]));
-//       chai.assert.equal(54, coords[2]);
-//     });
-//   });
-//   describe('around Tokyo city in Japan', function(){
-//     it('should return easting=363955; northing=3929527; zone=54', function(){
-//       var coords = [];
-//       converter.LLtoUTM(35.5, 139.5, coords);
-//       chai.assert.equal(363955, parseInt(coords[0]));
-//       chai.assert.equal(3929527, parseInt(coords[1]));
-//       chai.assert.equal(54, coords[2]);
-//     });
-//   });
-//   describe('around Tokyo city center in Japan', function(){
-//     it('should return easting=388708; northing=3950262; zone=54', function(){
-//       var coords = [];
-//       converter.LLtoUTM(35.69, 139.77, coords);
-//       chai.assert.equal(388708, parseInt(coords[0]));
-//       chai.assert.equal(3950262, parseInt(coords[1]));
-//       chai.assert.equal(54, coords[2]);
-//     });
-//   });
-//   describe('around the international date line', function(){
-//     describe('to the immediate west', function(){
-//       it('should return easting=353193; northing=3153509; zone=60', function(){
-//       	var coords = [];
-//       	converter.LLtoUTM(28.5, 175.5, coords);
-//         chai.assert.equal(353193, parseInt(coords[0]));
-//         chai.assert.equal(3153509, parseInt(coords[1]));
-//         chai.assert.equal(60, coords[2]);
-//       });
-//     });
-//     describe('to the immediate east', function(){
-//       it('should return easting=646806; northing=3153509; zone=1', function(){
-//       	var coords = [];
-//       	converter.LLtoUTM(28.5, -175.5, coords);
-//         chai.assert.equal(646806, parseInt(coords[0]));
-//         chai.assert.equal(3153509, parseInt(coords[1]));
-//         chai.assert.equal(1, coords[2]);
-//       });
-//     });
-//     describe('with date line crossing the middle', function(){
-//       it('should return easting=206331; northing=3156262; zone=1', function(){
-//       	var coords = [];
-//       	converter.LLtoUTM(28.5, 180, coords);
-//         chai.assert.equal(206331, parseInt(coords[0]));
-//         chai.assert.equal(3156262, parseInt(coords[1]));
-//         chai.assert.equal(1, coords[2]);
-//       });
-//     });
-//   });
-//   describe('around the equator', function(){
-//     describe('to the immediate north', function(){
-//       it('should return easting=222576; northing=497870; zone=58', function(){
-//       	var coords = [];
-//       	converter.LLtoUTM(4.5, 162.5, coords);
-//         chai.assert.equal(222576, parseInt(coords[0]));
-//         chai.assert.equal(497870, parseInt(coords[1]));
-//         chai.assert.equal(58, coords[2]);
-//       });
-//     });
-//     describe('to the immediate south', function(){
-//       it('should return easting=222576; northing=-497870; zone=58', function(){
-//       	var coords = [];
-//       	converter.LLtoUTM(-4.5, 162.5, coords);
-//         chai.assert.equal(222576, parseInt(coords[0]));
-//         chai.assert.equal(-497870, parseInt(coords[1]));
-//         chai.assert.equal(58, coords[2]);
-//       });
-//     });
-//     describe('with equator crossing the middle', function(){
-//       it('should return easting=221723; northing=0; zone=58', function(){
-//       	var coords = [];
-//       	converter.LLtoUTM(0, 162.5, coords);
-//         chai.assert.equal(221723, parseInt(coords[0]));
-//         chai.assert.equal(0, parseInt(coords[1]));
-//         chai.assert.equal(58, coords[2]);
-//       });
-//     });
-//   });
-//   describe('around the international date line and equator', function(){
-//     describe('to the immediate west and north', function(){
-//       it('should return easting=333579; northing=497566; zone=60', function(){
-//       	var coords = [];
-//       	converter.LLtoUTM(4.5, 175.5, coords);
-//         chai.assert.equal(333579, parseInt(coords[0]));
-//         chai.assert.equal(497566, parseInt(coords[1]));
-//         chai.assert.equal(60, coords[2]);
-//       });
-//     });
-//     describe('to the immediate west and south', function(){
-//       it('should return easting=333579; northing=-497566; zone=60', function(){
-//       	var coords = [];
-//       	converter.LLtoUTM(-4.5, 175.5, coords);
-//         chai.assert.equal(333579, parseInt(coords[0]));
-//         chai.assert.equal(-497566, parseInt(coords[1]));
-//         chai.assert.equal(60, coords[2]);
-//       });
-//     });
-//     describe('to the immediate east and north', function(){
-//       it('should return easting=666420; northing=497566; zone=1', function(){
-//       	var coords = [];
-//       	converter.LLtoUTM(4.5, -175.5, coords);
-//         chai.assert.equal(666420, parseInt(coords[0]));
-//         chai.assert.equal(497566, parseInt(coords[1]));
-//         chai.assert.equal(1, coords[2]);
-//       });
-//     });
-//     describe('to the immediate east and south', function(){
-//       it('should return easting=666420; northing=666420; zone=1', function(){
-//       	var coords = [];
-//       	converter.LLtoUTM(-4.5, -175.5, coords);
-//         chai.assert.equal(666420, parseInt(coords[0]));
-//         chai.assert.equal(666420, parseInt(coords[0]));
-//         chai.assert.equal(1, coords[2]);
-//       });
-//     });
-//     describe('with crossing of date line and equator at center point', function(){
-//       it('should return easting=166021; northing=0; zone=1', function(){
-//       	var coords = [];
-//       	converter.LLtoUTM(0, 180, coords);
-//         chai.assert.equal(166021, parseInt(coords[0]));
-//         chai.assert.equal(0, parseInt(coords[1]));
-//         chai.assert.equal(1, coords[2]);
-//       });
-//     });
-//   });
-//   describe('around the prime meridian', function(){
-//     describe('to the immediate west', function(){
-//       it('should return easting=353193; northing=3153509; zone=30', function(){
-//       	var coords = [];
-//       	converter.LLtoUTM(28.5, -4.5, coords);
-//         chai.assert.equal(353193, parseInt(coords[0]));
-//         chai.assert.equal(3153509, parseInt(coords[1]));
-//         chai.assert.equal(30, coords[2]);
-//       });
-//     });
-//     describe('to the immediate east', function(){
-//       it('should return easting=646806; northing=3153509; zone=31', function(){
-//       	var coords = [];
-//       	converter.LLtoUTM(28.5, 4.5, coords);
-//         chai.assert.equal(646806, parseInt(coords[0]));
-//         chai.assert.equal(3153509, parseInt(coords[1]));
-//         chai.assert.equal(31, coords[2]);
-//       });
-//     });
-//     describe('with date line crossing the middle', function(){
-//       it('should return easting=206331; northing=3156262; zone=31', function(){
-//       	var coords = [];
-//       	converter.LLtoUTM(28.5, 0, coords);
-//         chai.assert.equal(206331, parseInt(coords[0]));
-//         chai.assert.equal(3156262, parseInt(coords[1]));
-//         chai.assert.equal(31, coords[2]);
-//       });
-//     });
-//   });
-//   describe('around the prime meridian and equator', function(){
-//     describe('to the immediate west and north', function(){
-//       it('should return easting=333579; northing=497566; zone=30', function(){
-//       	var coords = [];
-//       	converter.LLtoUTM(4.5, -4.5, coords);
-//         chai.assert.equal(333579, parseInt(coords[0]));
-//         chai.assert.equal(497566, parseInt(coords[1]));
-//         chai.assert.equal(30, coords[2]);
-//       });
-//     });
-//     describe('to the immediate west and south', function(){
-//       it('should return easting=333579; northing=-497566; zone=30', function(){
-//       	var coords = [];
-//       	converter.LLtoUTM(-4.5, -4.5, coords);
-//         chai.assert.equal(333579, parseInt(coords[0]));
-//         chai.assert.equal(-497566, parseInt(coords[1]));
-//         chai.assert.equal(30, coords[2]);
-//       });
-//     });
-//     describe('to the immediate east and north', function(){
-//       it('should return easting=666420; northing=497566; zone=31', function(){
-//       	var coords = [];
-//       	converter.LLtoUTM(4.5, 4.5, coords);
-//         chai.assert.equal(666420, parseInt(coords[0]));
-//         chai.assert.equal(497566, parseInt(coords[1]));
-//         chai.assert.equal(31, coords[2]);
-//       });
-//     });
-//     describe('to the immediate east and south', function(){
-//       it('should return easting=666420; northing=-497566; zone=31', function(){
-//       	var coords = [];
-//       	converter.LLtoUTM(-4.5, 4.5, coords);
-//         chai.assert.equal(666420, parseInt(coords[0]));
-//         chai.assert.equal(-497566, parseInt(coords[1]));
-//         chai.assert.equal(31, coords[2]);
-//       });
-//     });
-//     describe('with crossing of prime meridian and equator at center point', function(){
-//       it('should return easting=166021; northing=0; zone=31', function(){
-//       	var coords = [];
-//       	converter.LLtoUTM(0, 0, coords);
-//         chai.assert.equal(166021, parseInt(coords[0]));
-//         chai.assert.equal(0, parseInt(coords[1]));
-//         chai.assert.equal(31, coords[2]);
-//       });
-//     });
-//   });
+});
+describe('Convert Lat/Lon to USNG', function(){
+  describe('around Arizona in the United States', function(){
+    it('should return 12S WC 0 6', function(){
+      chai.assert.equal("12S WC 0 6", converter.LLtoUSNG(34, -111, 2));
+    });
+  });
+  describe('around Prescott/Chino Valley in Arizona', function(){
+    it('should return 12S UD 0 0', function(){
+      chai.assert.equal("12S UD 6 1", converter.LLtoUSNG(34.5, -112.5, 2));
+    });
+  });
+  describe('immediately around Prescott city in Arizona', function(){
+    it('should return 12S UD 65 23', function(){
+      chai.assert.equal("12S UD 65 23", converter.LLtoUSNG(34.545, -112.465, 3));
+    });
+  });
+  describe('around Uruguay', function(){
+    it('should return 21H XE 4 0', function(){
+      chai.assert.equal("21H XE 4 0", converter.LLtoUSNG(-32.5, -55.5, 2));
+    });
+  });
+  describe('around Buenos Aires city in Argentina', function(){
+    it('should return 21H UB 6 8', function(){
+      chai.assert.equal("21H UB 6 8", converter.LLtoUSNG(-34.5, -58.5, 2));
+    });
+  });
+  describe('around Merlo town in Buenos Aires', function(){
+    it('should return 21H UB 41 63', function(){
+      chai.assert.equal("21H UB 41 63", converter.LLtoUSNG(-34.66, -58.73, 3));
+    });
+  });
+  describe('around Madagascar', function(){
+    it('should return 38K PE 5 5', function(){
+      chai.assert.equal("38K PE 5 5", converter.LLtoUSNG(-18.5, 46.5, 2));
+    });
+  });
+  describe('around Toliara city in Madagascar', function(){
+    it('should return 38K LA 4 1', function(){
+      chai.assert.equal("38K LA 4 1", converter.LLtoUSNG(-22.5, 43.5, 2));
+    });
+  });
+  describe('around Toliara city center in Madagascar', function(){
+    it('should return 38K LA 64 17', function(){
+      chai.assert.equal("38K LA 45 11", converter.LLtoUSNG(-22.5, 43.5, 3));
+    });
+  });
+  describe('around Central Japan', function(){
+    it('should return 54S VF 5 9', function(){
+      chai.assert.equal("54S VF 5 9", converter.LLtoUSNG(37, 140.5, 2));
+    });
+  });
+  describe('around Tokyo city in Japan', function(){
+    it('should return 54S UE 6 2', function(){
+      chai.assert.equal("54S UE 6 2", converter.LLtoUSNG(35.5, 139.5, 2));
+    });
+  });
+  describe('around Tokyo city center in Japan', function(){
+    it('should return 54S UE 41 63', function(){
+      chai.assert.equal("54S UE 88 50", converter.LLtoUSNG(35.69, 139.77, 3));
+    });
+  });
+  describe('around the international date line', function(){
+    describe('to the immediate west', function(){
+      it('should return 60R US 5 5', function(){
+        chai.assert.equal("60R US 5 5", converter.LLtoUSNG(28.5, 175.5, 2));
+      });
+    });
+    describe('to the immediate east', function(){
+      it('should return 1R FM 4 5', function(){
+        chai.assert.equal("1R FM 4 5", converter.LLtoUSNG(28.5, -175.5, 2));
+      });
+    });
+    describe('with date line crossing the middle', function(){
+      it('should return 1R BM 0 5', function(){
+        chai.assert.equal("1R BM 0 5", converter.LLtoUSNG(28.5, 180, 2));
+      });
+    });
+  });
+  describe('around the equator', function(){
+    describe('to the immediate north', function(){
+      it('should return 58N BK 2 9', function(){
+        chai.assert.equal("58N BK 2 9", converter.LLtoUSNG(4.5, 162.5, 2));
+      });
+    });
+    describe('to the immediate south', function(){
+      it('should return 58M BA 2 0', function(){
+        chai.assert.equal("58M BA 2 0", converter.LLtoUSNG(-4.5, 162.5, 2));
+      });
+    });
+    describe('with equator crossing the middle', function(){
+      it('should return 58N BF 2 0', function(){
+        chai.assert.equal("58N BF 2 0", converter.LLtoUSNG(0, 162.5, 2));
+      });
+    });
+  });
+  describe('around the international date line and equator', function(){
+    describe('to the immediate west and north', function(){
+      it('should return 60N UK 3 9', function(){
+        chai.assert.equal("60N UK 3 9", converter.LLtoUSNG(4.5, 175.5, 2));
+      });
+    });
+    describe('to the immediate west and south', function(){
+      it('should return 60M UA 3 0', function(){
+        chai.assert.equal("60M UA 3 0", converter.LLtoUSNG(-4.5, 175.5, 2));
+      });
+    });
+    describe('to the immediate east and north', function(){
+      it('should return 1N FE 6 9', function(){
+        chai.assert.equal("1N FE 6 9", converter.LLtoUSNG(4.5, -175.5, 2));
+      });
+    });
+    describe('to the immediate east and south', function(){
+      it('should return 1M FR 6 0', function(){
+        chai.assert.equal("1M FR 6 0", converter.LLtoUSNG(-4.5, -175.5, 2));
+      });
+    });
+    describe('with crossing of date line and equator at center point', function(){
+      it('should return 1N AA 6 0', function(){
+        chai.assert.equal("1N AA 6 0", converter.LLtoUSNG(0, 180, 2));
+      });
+    });
+  });
+  describe('around the prime meridian', function(){
+    describe('to the immediate west', function(){
+      it('should return 30R US 5 5', function(){
+        chai.assert.equal("30R US 5 5", converter.LLtoUSNG(28.5, -4.5, 2));
+      });
+    });
+    describe('to the immediate east', function(){
+      it('should return 31R FM 4 5', function(){
+        chai.assert.equal("31R FM 4 5", converter.LLtoUSNG(28.5, 4.5, 2));
+      });
+    });
+    describe('with date line crossing the middle', function(){
+      it('should return 31R BM 0 5', function(){
+        chai.assert.equal("31R BM 0 5", converter.LLtoUSNG(28.5, 0, 2));
+      });
+    });
+  });
+  describe('around the prime meridian and equator', function(){
+    describe('to the immediate west and north', function(){
+      it('should return 30N UK 3 9', function(){
+        chai.assert.equal("30N UK 3 9", converter.LLtoUSNG(4.5, -4.5, 2));
+      });
+    });
+    describe('to the immediate west and south', function(){
+      it('should return 30M UA 3 0', function(){
+        chai.assert.equal("30M UA 3 0", converter.LLtoUSNG(-4.5, -4.5, 2));
+      });
+    });
+    describe('to the immediate east and north', function(){
+      it('should return 31N FE 6 9', function(){
+        chai.assert.equal("31N FE 6 9", converter.LLtoUSNG(4.5, 4.5, 2));
+      });
+    });
+    describe('to the immediate east and south', function(){
+      it('should return 31M FR 6 0', function(){
+        chai.assert.equal("31M FR 6 0", converter.LLtoUSNG(-4.5, 4.5, 2));
+      });
+    });
+    describe('with crossing of prime meridian and equator at center point', function(){
+      it('should return 31N AA 6 0', function(){
+        chai.assert.equal("31N AA 6 0", converter.LLtoUSNG(0, 0, 2));
+      });
+    });
+  });
+});
+describe('Convert Lat/Lon to UTM', function(){
+  describe('around Arizona in the United States', function(){
+    it('should return easting=500000; northing=3762155; zone=12', function(){
+      var coords = [];
+      converter.LLtoUTM(34, -111, coords);
+      chai.assert.equal(500000, parseInt(coords[0]));
+      chai.assert.equal(3762155, parseInt(coords[1]));
+      chai.assert.equal(12, coords[2]);
+    });
+  });
+  describe('around Prescott/Chino Valley in Arizona', function(){
+    it('should return easting=362289; northing=3818618; zone=12', function(){
+      var coords = [];
+      converter.LLtoUTM(34.5, -112.5, coords);
+      chai.assert.equal(362289, parseInt(coords[0]));
+      chai.assert.equal(3818618, parseInt(coords[1]));
+      chai.assert.equal(12, coords[2]);
+    });
+  });
+  describe('immediately around Prescott city in Arizona', function(){
+    it('should return easting=365575; northing=3823561; zone=12', function(){
+      var coords = [];
+      converter.LLtoUTM(34.545, -112.465, coords);
+      chai.assert.equal(365575, parseInt(coords[0]));
+      chai.assert.equal(3823561, parseInt(coords[1]));
+      chai.assert.equal(12, coords[2]);
+    });
+  });
+  describe('around Uruguay', function(){
+    it('should return easting=640915; northing=-3596850; zone=21', function(){
+      var coords = [];
+      converter.LLtoUTM(-32.5, -55.5, coords);
+      chai.assert.equal(640915, parseInt(coords[0]));
+      chai.assert.equal(-3596850, parseInt(coords[1]));
+      chai.assert.equal(21, coords[2]);
+    });
+  });
+  describe('around Buenos Aires city in Argentina', function(){
+    it('should return easting=362289; northing=-3818618; zone=21', function(){
+      var coords = [];
+      converter.LLtoUTM(-34.5, -58.5, coords);
+      chai.assert.equal(362289, parseInt(coords[0]));
+      chai.assert.equal(-3818618, parseInt(coords[1]));
+      chai.assert.equal(21, coords[2]);
+    });
+  });
+  describe('around Merlo town in Buenos Aires', function(){
+    it('should return easting=341475; northing=-3836700; zone=21', function(){
+      var coords = [];
+      converter.LLtoUTM(-34.66, -58.73, coords);
+      chai.assert.equal(341475, parseInt(coords[0]));
+      chai.assert.equal(-3836700, parseInt(coords[1]));
+      chai.assert.equal(21, coords[2]);
+    });
+  });
+  describe('around Madagascar', function(){
+    it('should return easting=658354; northing=-2046162; zone=38', function(){
+      var coords = [];
+      converter.LLtoUTM(-18.5, 46.5, coords);
+      chai.assert.equal(658354, parseInt(coords[0]));
+      chai.assert.equal(-2046162, parseInt(coords[1]));
+      chai.assert.equal(38, coords[2]);
+    });
+  });
+  describe('around Toliara city in Madagascar', function(){
+    it('should return easting=345704; northing=-2488944; zone=38', function(){
+      var coords = [];
+      converter.LLtoUTM(-22.5, 43.5, coords);
+      chai.assert.equal(345704, parseInt(coords[0]));
+      chai.assert.equal(-2488944, parseInt(coords[1]));
+      chai.assert.equal(38, coords[2]);
+    });
+  });
+  describe('around Toliara city center in Madagascar', function(){
+    it('should return easting=364050; northing=-2583444; zone=38', function(){
+      var coords = [];
+      converter.LLtoUTM(-23.355, 43.67, coords);
+      chai.assert.equal(364050, parseInt(coords[0]));
+      chai.assert.equal(-2583444, parseInt(coords[1]));
+      chai.assert.equal(38, coords[2]);
+    });
+  });
+  describe('around Central Japan', function(){
+    it('should return easting=455511; northing=4094989; zone=54', function(){
+      var coords = [];
+      converter.LLtoUTM(37, 140.5, coords);
+      chai.assert.equal(455511, parseInt(coords[0]));
+      chai.assert.equal(4094989, parseInt(coords[1]));
+      chai.assert.equal(54, coords[2]);
+    });
+  });
+  describe('around Tokyo city in Japan', function(){
+    it('should return easting=363955; northing=3929527; zone=54', function(){
+      var coords = [];
+      converter.LLtoUTM(35.5, 139.5, coords);
+      chai.assert.equal(363955, parseInt(coords[0]));
+      chai.assert.equal(3929527, parseInt(coords[1]));
+      chai.assert.equal(54, coords[2]);
+    });
+  });
+  describe('around Tokyo city center in Japan', function(){
+    it('should return easting=388708; northing=3950262; zone=54', function(){
+      var coords = [];
+      converter.LLtoUTM(35.69, 139.77, coords);
+      chai.assert.equal(388708, parseInt(coords[0]));
+      chai.assert.equal(3950262, parseInt(coords[1]));
+      chai.assert.equal(54, coords[2]);
+    });
+  });
+  describe('around the international date line', function(){
+    describe('to the immediate west', function(){
+      it('should return easting=353193; northing=3153509; zone=60', function(){
+      	var coords = [];
+      	converter.LLtoUTM(28.5, 175.5, coords);
+        chai.assert.equal(353193, parseInt(coords[0]));
+        chai.assert.equal(3153509, parseInt(coords[1]));
+        chai.assert.equal(60, coords[2]);
+      });
+    });
+    describe('to the immediate east', function(){
+      it('should return easting=646806; northing=3153509; zone=1', function(){
+      	var coords = [];
+      	converter.LLtoUTM(28.5, -175.5, coords);
+        chai.assert.equal(646806, parseInt(coords[0]));
+        chai.assert.equal(3153509, parseInt(coords[1]));
+        chai.assert.equal(1, coords[2]);
+      });
+    });
+    describe('with date line crossing the middle', function(){
+      it('should return easting=206331; northing=3156262; zone=1', function(){
+      	var coords = [];
+      	converter.LLtoUTM(28.5, 180, coords);
+        chai.assert.equal(206331, parseInt(coords[0]));
+        chai.assert.equal(3156262, parseInt(coords[1]));
+        chai.assert.equal(1, coords[2]);
+      });
+    });
+  });
+  describe('around the equator', function(){
+    describe('to the immediate north', function(){
+      it('should return easting=222576; northing=497870; zone=58', function(){
+      	var coords = [];
+      	converter.LLtoUTM(4.5, 162.5, coords);
+        chai.assert.equal(222576, parseInt(coords[0]));
+        chai.assert.equal(497870, parseInt(coords[1]));
+        chai.assert.equal(58, coords[2]);
+      });
+    });
+    describe('to the immediate south', function(){
+      it('should return easting=222576; northing=-497870; zone=58', function(){
+      	var coords = [];
+      	converter.LLtoUTM(-4.5, 162.5, coords);
+        chai.assert.equal(222576, parseInt(coords[0]));
+        chai.assert.equal(-497870, parseInt(coords[1]));
+        chai.assert.equal(58, coords[2]);
+      });
+    });
+    describe('with equator crossing the middle', function(){
+      it('should return easting=221723; northing=0; zone=58', function(){
+      	var coords = [];
+      	converter.LLtoUTM(0, 162.5, coords);
+        chai.assert.equal(221723, parseInt(coords[0]));
+        chai.assert.equal(0, parseInt(coords[1]));
+        chai.assert.equal(58, coords[2]);
+      });
+    });
+  });
+  describe('around the international date line and equator', function(){
+    describe('to the immediate west and north', function(){
+      it('should return easting=333579; northing=497566; zone=60', function(){
+      	var coords = [];
+      	converter.LLtoUTM(4.5, 175.5, coords);
+        chai.assert.equal(333579, parseInt(coords[0]));
+        chai.assert.equal(497566, parseInt(coords[1]));
+        chai.assert.equal(60, coords[2]);
+      });
+    });
+    describe('to the immediate west and south', function(){
+      it('should return easting=333579; northing=-497566; zone=60', function(){
+      	var coords = [];
+      	converter.LLtoUTM(-4.5, 175.5, coords);
+        chai.assert.equal(333579, parseInt(coords[0]));
+        chai.assert.equal(-497566, parseInt(coords[1]));
+        chai.assert.equal(60, coords[2]);
+      });
+    });
+    describe('to the immediate east and north', function(){
+      it('should return easting=666420; northing=497566; zone=1', function(){
+      	var coords = [];
+      	converter.LLtoUTM(4.5, -175.5, coords);
+        chai.assert.equal(666420, parseInt(coords[0]));
+        chai.assert.equal(497566, parseInt(coords[1]));
+        chai.assert.equal(1, coords[2]);
+      });
+    });
+    describe('to the immediate east and south', function(){
+      it('should return easting=666420; northing=666420; zone=1', function(){
+      	var coords = [];
+      	converter.LLtoUTM(-4.5, -175.5, coords);
+        chai.assert.equal(666420, parseInt(coords[0]));
+        chai.assert.equal(666420, parseInt(coords[0]));
+        chai.assert.equal(1, coords[2]);
+      });
+    });
+    describe('with crossing of date line and equator at center point', function(){
+      it('should return easting=166021; northing=0; zone=1', function(){
+      	var coords = [];
+      	converter.LLtoUTM(0, 180, coords);
+        chai.assert.equal(166021, parseInt(coords[0]));
+        chai.assert.equal(0, parseInt(coords[1]));
+        chai.assert.equal(1, coords[2]);
+      });
+    });
+  });
+  describe('around the prime meridian', function(){
+    describe('to the immediate west', function(){
+      it('should return easting=353193; northing=3153509; zone=30', function(){
+      	var coords = [];
+      	converter.LLtoUTM(28.5, -4.5, coords);
+        chai.assert.equal(353193, parseInt(coords[0]));
+        chai.assert.equal(3153509, parseInt(coords[1]));
+        chai.assert.equal(30, coords[2]);
+      });
+    });
+    describe('to the immediate east', function(){
+      it('should return easting=646806; northing=3153509; zone=31', function(){
+      	var coords = [];
+      	converter.LLtoUTM(28.5, 4.5, coords);
+        chai.assert.equal(646806, parseInt(coords[0]));
+        chai.assert.equal(3153509, parseInt(coords[1]));
+        chai.assert.equal(31, coords[2]);
+      });
+    });
+    describe('with date line crossing the middle', function(){
+      it('should return easting=206331; northing=3156262; zone=31', function(){
+      	var coords = [];
+      	converter.LLtoUTM(28.5, 0, coords);
+        chai.assert.equal(206331, parseInt(coords[0]));
+        chai.assert.equal(3156262, parseInt(coords[1]));
+        chai.assert.equal(31, coords[2]);
+      });
+    });
+  });
+  describe('around the prime meridian and equator', function(){
+    describe('to the immediate west and north', function(){
+      it('should return easting=333579; northing=497566; zone=30', function(){
+      	var coords = [];
+      	converter.LLtoUTM(4.5, -4.5, coords);
+        chai.assert.equal(333579, parseInt(coords[0]));
+        chai.assert.equal(497566, parseInt(coords[1]));
+        chai.assert.equal(30, coords[2]);
+      });
+    });
+    describe('to the immediate west and south', function(){
+      it('should return easting=333579; northing=-497566; zone=30', function(){
+      	var coords = [];
+      	converter.LLtoUTM(-4.5, -4.5, coords);
+        chai.assert.equal(333579, parseInt(coords[0]));
+        chai.assert.equal(-497566, parseInt(coords[1]));
+        chai.assert.equal(30, coords[2]);
+      });
+    });
+    describe('to the immediate east and north', function(){
+      it('should return easting=666420; northing=497566; zone=31', function(){
+      	var coords = [];
+      	converter.LLtoUTM(4.5, 4.5, coords);
+        chai.assert.equal(666420, parseInt(coords[0]));
+        chai.assert.equal(497566, parseInt(coords[1]));
+        chai.assert.equal(31, coords[2]);
+      });
+    });
+    describe('to the immediate east and south', function(){
+      it('should return easting=666420; northing=-497566; zone=31', function(){
+      	var coords = [];
+      	converter.LLtoUTM(-4.5, 4.5, coords);
+        chai.assert.equal(666420, parseInt(coords[0]));
+        chai.assert.equal(-497566, parseInt(coords[1]));
+        chai.assert.equal(31, coords[2]);
+      });
+    });
+    describe('with crossing of prime meridian and equator at center point', function(){
+      it('should return easting=166021; northing=0; zone=31', function(){
+      	var coords = [];
+      	converter.LLtoUTM(0, 0, coords);
+        chai.assert.equal(166021, parseInt(coords[0]));
+        chai.assert.equal(0, parseInt(coords[1]));
+        chai.assert.equal(31, coords[2]);
+      });
+    });
+  });
   describe('Using test data from github issue', function(){
     describe('washington monument', function(){
       it('should return lat 38.8895 lat -77.0352', function(){
