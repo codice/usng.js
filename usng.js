@@ -217,28 +217,26 @@
             var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
             //doesn't check vert distance yet
-            var vertDist = northNum + Math.abs(southNum);
-            var horizDist = R*c;
+            var dist = R*c;
 
             if (lon === 0 && (eastNum > 90 || eastNum < -90) && (westNum > 90 || westNum < -90)) {
                 lon = 180;
               }
 
             var result;
-            if (horizDist > 100000) {
+            if (dist > 100000) {
               result = this.LLtoUSNG(lat, lon, 0);
-            } else if (horizDist > 10000) {
-              console.log("you can run but you can't hide, bitch!");
+            } else if (dist > 10000) {
               result = this.LLtoUSNG(lat, lon, 1);
-            } else if (horizDist > 1000) {
+            } else if (dist > 1000) {
               result = this.LLtoUSNG(lat, lon, 2);
-            } else if (horizDist > 100) {
+            } else if (dist > 100) {
               result = this.LLtoUSNG(lat, lon, 3);
-            } else if (horizDist > 10) {
+            } else if (dist > 10) {
               result = this.LLtoUSNG(lat, lon, 4);
-            } else if (horizDist > 1) {
+            } else if (dist > 1) {
               result = this.LLtoUSNG(lat, lon, 5);
-            } else if (horizDist >=0) {
+            } else if (dist >=0) {
                 result = this.LLtoUSNG(lat, lon, 6);
             }
             console.log("North: " + north);
@@ -246,7 +244,7 @@
             console.log("East: " + east);
             console.log("West: " + west);
 
-            console.log("Distance: " + horizDist);
+            console.log("Distance: " + dist);
             console.log("Result: " + result);
             return result;
         },

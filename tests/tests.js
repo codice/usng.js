@@ -3,468 +3,486 @@ var usngs = require('../usng');
 var converter = new usngs.Converter();
 
 describe('Get Zone number from lat/lon', function(){
-//   describe('around Arizona in the United States', function(){
-//     it('should return 12', function(){
-//       chai.assert.equal(12, converter.getZoneNumber(34, -111));
-//     });
-//   });
-//   describe('around Prescott/Chino Valley in Arizona', function(){
-//     it('should return 12', function(){
-//       chai.assert.equal(12, converter.getZoneNumber(34.5, -112.5));
-//     });
-//   });
-//   describe('immediately around Prescott city in Arizona', function(){
-//     it('should return 12', function(){
-//       chai.assert.equal(12, converter.getZoneNumber(34.545, -112.465));
-//     });
-//   });
-//   describe('around Uruguay', function(){
-//     it('should return 21', function(){
-//       chai.assert.equal(21, converter.getZoneNumber(-32.5, -55.5));
-//     });
-//   });
-//   describe('around Buenos Aires city in Argentina', function(){
-//     it('should return 21', function(){
-//       chai.assert.equal(21, converter.getZoneNumber(-34.5, -58.5));
-//     });
-//   });
-//   describe('around Merlo town in Buenos Aires', function(){
-//     it('should return 21', function(){
-//       chai.assert.equal(21, converter.getZoneNumber(-34.66, -58.73));
-//     });
-//   });
-//   describe('around Madagascar', function(){
-//     it('should return 38', function(){
-//       chai.assert.equal(38, converter.getZoneNumber(-18.5, 46.5));
-//     });
-//   });
-//   describe('around Toliara city in Madagascar', function(){
-//     it('should return 38', function(){
-//       chai.assert.equal(38, converter.getZoneNumber(-22.5, 43.5));
-//     });
-//   });
-//   describe('around Toliara city center in Madagascar', function(){
-//     it('should return 38', function(){
-//       chai.assert.equal(38, converter.getZoneNumber(-23.355, 43.67));
-//     });
-//   });
-//   describe('around Central Japan', function(){
-//     it('should return 54', function(){
-//       chai.assert.equal(54, converter.getZoneNumber(37, 140.5));
-//     });
-//   });
-//   describe('around Tokyo city in Japan', function(){
-//     it('should return 54', function(){
-//       chai.assert.equal(54, converter.getZoneNumber(35.5, 139.5));
-//     });
-//   });
-//   describe('around Tokyo city center in Japan', function(){
-//     it('should return 54', function(){
-//       chai.assert.equal(54, converter.getZoneNumber(35.69, 139.77));
-//     });
-//   });
-//   describe('around the international date line', function(){
-//     describe('to the immediate west', function(){
-//       it('should return 60', function(){
-//         chai.assert.equal(60, converter.getZoneNumber(28, 179));
-//       });
-//     });
-//     describe('to the immediate east', function(){
-//       it('should return 1', function(){
-//         chai.assert.equal(1, converter.getZoneNumber(28, -179));
-//       });
-//     });
-//     describe('with midpoint directly on it (-180)', function(){
-//       it('should return 1', function(){
-//         chai.assert.equal(1, converter.getZoneNumber(28, -180));
-//       });
-//     });
-//     describe('with midpoint directly on it (+180)', function(){
-//       it('should return 1', function(){
-//         chai.assert.equal(1, converter.getZoneNumber(28, 180));
-//       });
-//     });
-//   });
-//   describe('around the equator', function(){
-//     describe('to the immediate north', function(){
-//       it('should return 54', function(){
-//         chai.assert.equal(54, converter.getZoneNumber(1, 141));
-//       });
-//     });
-//     describe('to the immediate south', function(){
-//       it('should return 54', function(){
-//         chai.assert.equal(54, converter.getZoneNumber(-1, 141));
-//       });
-//     });
-//     describe('with midpoint directly on it', function(){
-//       it('should return 54', function(){
-//         chai.assert.equal(54, converter.getZoneNumber(0, 141));
-//       });
-//     });
-//   });
-//   describe('around the international date line and equator', function(){
-//     describe('to the immediate west and north', function(){
-//       it('should return 60', function(){
-//         chai.assert.equal(60, converter.getZoneNumber(1, 179));
-//       });
-//     });
-//     describe('to the immediate west and south', function(){
-//       it('should return 1', function(){
-//         chai.assert.equal(60, converter.getZoneNumber(-1, 179));
-//       });
-//     });
-//     describe('to the immediate east and north', function(){
-//       it('should return 60', function(){
-//         chai.assert.equal(1, converter.getZoneNumber(1, -179));
-//       });
-//     });
-//     describe('to the immediate east and south', function(){
-//       it('should return 1', function(){
-//         chai.assert.equal(1, converter.getZoneNumber(-1, -179));
-//       });
-//     });
-//     describe('with midpoint directly on it (0, -180)', function(){
-//       it('should return 1', function(){
-//         chai.assert.equal(1, converter.getZoneNumber(0, -180));
-//       });
-//     });
-//     describe('with midpoint directly on it (0, +180)', function(){
-//       it('should return 1', function(){
-//         chai.assert.equal(1, converter.getZoneNumber(0, 180));
-//       });
-//     });
-//   });
-// });
-// describe('Get Zone letter from lat', function(){
-//   describe('around Arizona in the United States', function(){
-//     it('should return S', function(){
-//       chai.assert.equal("S", converter.UTMLetterDesignator(34));
-//     });
-//   });
-//   describe('around Prescott/Chino Valley in Arizona', function(){
-//     it('should return S', function(){
-//       chai.assert.equal("S", converter.UTMLetterDesignator(34.5));
-//     });
-//   });
-//   describe('immediately around Prescott city in Arizona', function(){
-//     it('should return S', function(){
-//       chai.assert.equal("S", converter.UTMLetterDesignator(34.545));
-//     });
-//   });
-//   describe('around Uruguay', function(){
-//     it('should return H', function(){
-//       chai.assert.equal("H", converter.UTMLetterDesignator(-32.5));
-//     });
-//   });
-//   describe('around Buenos Aires city in Argentina', function(){
-//     it('should return H', function(){
-//       chai.assert.equal("H", converter.UTMLetterDesignator(-34.5));
-//     });
-//   });
-//   describe('around Merlo town in Buenos Aires', function(){
-//     it('should return H', function(){
-//       chai.assert.equal("H", converter.UTMLetterDesignator(-34.66));
-//     });
-//   });
-//   describe('around Madagascar', function(){
-//     it('should return K', function(){
-//       chai.assert.equal("K", converter.UTMLetterDesignator(-18.5));
-//     });
-//   });
-//   describe('around Toliara city in Madagascar', function(){
-//     it('should return K', function(){
-//       chai.assert.equal("K", converter.UTMLetterDesignator(-22.5));
-//     });
-//   });
-//   describe('around Toliara city center in Madagascar', function(){
-//     it('should return K', function(){
-//       chai.assert.equal("K", converter.UTMLetterDesignator(-23.355));
-//     });
-//   });
-//   describe('around Central Japan', function(){
-//     it('should return S', function(){
-//       chai.assert.equal("S", converter.UTMLetterDesignator(37));
-//     });
-//   });
-//   describe('around Tokyo city in Japan', function(){
-//     it('should return S', function(){
-//       chai.assert.equal("S", converter.UTMLetterDesignator(35.5));
-//     });
-//   });
-//   describe('around Tokyo city center in Japan', function(){
-//     it('should return S', function(){
-//       chai.assert.equal("S", converter.UTMLetterDesignator(35.69));
-//     });
-//   });
-//   describe('around the equator', function(){
-//     describe('to the immediate north', function(){
-//       it('should return N', function(){
-//         chai.assert.equal('N', converter.UTMLetterDesignator(1));
-//       });
-//     });
-//     describe('to the immediate south', function(){
-//       it('should return M', function(){
-//         chai.assert.equal('M', converter.UTMLetterDesignator(-1));
-//       });
-//     });
-//     describe('with midpoint directly on it', function(){
-//       it('should return N', function(){
-//         chai.assert.equal('N', converter.UTMLetterDesignator(0));
-//       });
-//     });
-//     describe('imediately south of north polar maximum', function(){
-//       it('should return X', function(){
-//         chai.assert.equal('X', converter.UTMLetterDesignator(83));
-//       });
-//     });
-//     describe('imediately north of north polar maximum', function(){
-//       it('should return Z (invalid designator)', function(){
-//         chai.assert.equal('Z', converter.UTMLetterDesignator(85));
-//       });
-//     });
-//     describe('directly on north polar maximum', function(){
-//       it('should return X (invalid designator)', function(){
-//         chai.assert.equal('X', converter.UTMLetterDesignator(84));
-//       });
-//     });
-//     describe('imediately north of south polar minimum', function(){
-//       it('should return C', function(){
-//         chai.assert.equal('C', converter.UTMLetterDesignator(-79));
-//       });
-//     });
-//     describe('imediately south of south polar minimum', function(){
-//       it('should return Z (invalid designator)', function(){
-//         chai.assert.equal('Z', converter.UTMLetterDesignator(-81));
-//       });
-//     });
-//     describe('directly on south polar minimum', function(){
-//       it('should return C (invalid designator)', function(){
-//         chai.assert.equal('C', converter.UTMLetterDesignator(-80));
-//       });
-//     });
-//   });
-// });
-// describe('Parse USNG', function(){
-//   describe('with single digit zone', function(){
-//     it('should return zone=5; letter=Q', function(){
-//       var parts = {};
-//       converter.parseUSNG_str("5Q", parts);
-//       chai.assert.equal(5, parts.zone);
-//       chai.assert.equal('Q', parts.let);
-//     });
-//   });
-//   describe('with two digit zone', function(){
-//     it('should return zone=12; letter=S', function(){
-//       var parts = {};
-//       converter.parseUSNG_str("12S", parts);
-//       chai.assert.equal(12, parts.zone);
-//       chai.assert.equal('S', parts.let);
-//     });
-//   });
-//   describe('with single digit zone and squares', function(){
-//     it('should return zone=5; letter=Q; square1=K; square2=B', function(){
-//       var parts = {};
-//       converter.parseUSNG_str("5Q KB", parts);
-//       chai.assert.equal(5, parts.zone);
-//       chai.assert.equal('Q', parts.let);
-//       chai.assert.equal('K', parts.sq1);
-//       chai.assert.equal('B', parts.sq2);
-//     });
-//   });
-//   describe('with two digit zone and squares', function(){
-//     it('should return zone=12; letter=S; square1=V; square2=C', function(){
-//       var parts = {};
-//       converter.parseUSNG_str("12S VC", parts);
-//       chai.assert.equal(12, parts.zone);
-//       chai.assert.equal('S', parts.let);
-//       chai.assert.equal('V', parts.sq1);
-//       chai.assert.equal('C', parts.sq2);
-//     });
-//   });
-//   describe('with single digit zone, squares and 5 digit meters', function(){
-//     it('should return zone=5; letter=Q; square1=K; square2=B; easting=42785; northing=31517', function(){
-//       var parts = {};
-//       converter.parseUSNG_str("5Q KB 42785 31517", parts);
-//       chai.assert.equal(5, parts.zone);
-//       chai.assert.equal('Q', parts.let);
-//       chai.assert.equal('K', parts.sq1);
-//       chai.assert.equal('B', parts.sq2);
-//       chai.assert.equal(5, parts.precision);
-//       chai.assert.equal('42785', parts.east);
-//       chai.assert.equal('31517', parts.north);
-//     });
-//   });
-//   describe('with two digit zone, squares and 5 digit meters', function(){
-//     it('should return zone=12; letter=S; square1=V; square2=C; easting=12900; northing=43292', function(){
-//       var parts = {};
-//       converter.parseUSNG_str("12S VC 12900 43292", parts);
-//       chai.assert.equal(12, parts.zone);
-//       chai.assert.equal('S', parts.let);
-//       chai.assert.equal('V', parts.sq1);
-//       chai.assert.equal('C', parts.sq2);
-//       chai.assert.equal(5, parts.precision);
-//       chai.assert.equal('12900', parts.east);
-//       chai.assert.equal('43292', parts.north);
-//     });
-//   });
-// });
-// describe('Convert USNG to UTM', function(){
-//   describe('with single digit zone', function(){
-//     it('should return north=2131517; east=242785; zone=5; letter=Q', function(){
-//       var usng = "5Q KB 42785 31517";
-//       var zone = 5;
-//       var letter = "Q";
-//       var sq1 = "K";
-//       var sq2 = "B";
-//       var easting = "42785";
-//       var northing = "31517";
-//       var coords = {};
-//       converter.USNGtoUTM(zone, letter, sq1, sq2, easting, northing, coords);
-//       chai.assert.equal(2131517, Math.floor(coords.N));
-//       chai.assert.equal(242785, Math.floor(coords.E));
-//       chai.assert.equal(5, coords.zone);
-//       chai.assert.equal("Q", coords.letter);
-//     });
-//   });
-//   describe('with two digit zone', function(){
-//     it('should return north=43292; east=12900; zone=12; letter=S', function(){
-//       var usng = "12S VC 12900 43292";
-//       var zone = 12;
-//       var letter = "S";
-//       var sq1 = "V";
-//       var sq2 = "C";
-//       var easting = "12900";
-//       var northing = "43292";
-//       var coords = {};
-//       converter.USNGtoUTM(zone, letter, sq1, sq2, easting, northing, coords);
-//       chai.assert.equal(3743292, Math.floor(coords.N));
-//       chai.assert.equal(412900, Math.floor(coords.E));
-//       chai.assert.equal(12, coords.zone);
-//       chai.assert.equal("S", coords.letter);
-//     });
-//   });
-// });
-// describe('Convert UTM to Lat/Lon', function(){
-//   describe('with single digit zone and specifying accuracy', function(){
-//     it('should return north=1; east=-157; south=0; west=-158', function(){
-//       var northing = 42785;
-//       var easting = 31517;
-//       var zone = 5;
-//       var accuracy = 100000;
-//       var latLon = converter.UTMtoLL(northing, easting, zone, accuracy);
-//       chai.assert.equal(1, Math.floor(latLon.north));
-//       chai.assert.equal(-157, Math.floor(latLon.east));
-//       chai.assert.equal(0, Math.floor(latLon.south));
-//       chai.assert.equal(-158, Math.floor(latLon.west));
-//     });
-//   });
-//   describe('with single digit zone and not specifying accuracy', function(){
-//     it('should return lat=0; east=-158', function(){
-//       var northing = 42785;
-//       var easting = 31517;
-//       var zone = 5;
-//       var latLon = converter.UTMtoLL(northing, easting, zone);
-//       chai.assert.equal(0, Math.floor(latLon.lat));
-//       chai.assert.equal(-158, Math.floor(latLon.lon));
-//     });
-//   });
-//   describe('with two digit zone and specifying accuracy', function(){
-//     it('should return north=1; east=-115; south=0; west=-116', function(){
-//       var northing = 12900;
-//       var easting = 43292;
-//       var zone = 12;
-//       var accuracy = 100000;
-//       var latLon = converter.UTMtoLL(northing, easting, zone, accuracy);
-//       chai.assert.equal(1, Math.floor(latLon.north));
-//       chai.assert.equal(-115, Math.floor(latLon.east));
-//       chai.assert.equal(0, Math.floor(latLon.south));
-//       chai.assert.equal(-116, Math.floor(latLon.west));
-//     });
-//   });
-//   describe('with two digit zone and not specifying accuracy', function(){
-//     it('should return lat=0; lon=-116', function(){
-//       var northing = 12900;
-//       var easting = 43292;
-//       var zone = 12;
-//       var latLon = converter.UTMtoLL(northing, easting, zone);
-//       chai.assert.equal(0, Math.floor(latLon.lat));
-//       chai.assert.equal(-116, Math.floor(latLon.lon));
-//     });
-//   });
-// });
-// describe('Convert USNG to Lat/Lon', function(){
-//   describe('with single digit zone', function(){
-//     it('should return north=19; east=-155; south=19; west=-155', function(){
-//       var usng = "5Q KB 42785 31517";
-//       var latLon = converter.USNGtoLL(usng);
-//       chai.assert.equal(19, Math.floor(latLon.north));
-//       chai.assert.equal(-156, Math.floor(latLon.east));
-//       chai.assert.equal(19, Math.floor(latLon.south));
-//       chai.assert.equal(-156, Math.floor(latLon.west));
-//     });
-//   });
-//   describe('with two digit zone', function(){
-//     it('should return north=33; east=-111; south=33; west=-111', function(){
-//       var usng = "12S VC 12900 43292";
-//       var latLon = converter.USNGtoLL(usng);
-//       chai.assert.equal(33, Math.floor(latLon.north));
-//       chai.assert.equal(-112, Math.floor(latLon.east));
-//       chai.assert.equal(33, Math.floor(latLon.south));
-//       chai.assert.equal(-112, Math.floor(latLon.west));
-//     });
-//   });
-// });
-// describe('Convert Lat/Lon Bounding Box to USNG', function(){
-//   describe('around Arizona in the United States', function(){
-//     it('should return 12S', function(){
-//       chai.assert.equal("12S", converter.LLBboxtoUSNG(37, 31, -108, -114));
-//     });
-//   });
-//   describe('around Prescott/Chino Valley in Arizona', function(){
-//     it('should return 12S UD', function(){
-//       chai.assert.equal("12S UD ", converter.LLBboxtoUSNG(35, 34, -112, -113));
-//     });
-//   });
-//   describe('immediately around Prescott city in Arizona', function(){
-//     it('should return 12S UD 65 23', function(){
-//       chai.assert.equal("12S UD 65 23", converter.LLBboxtoUSNG(34.55, 34.54, -112.46, -112.47));
-//     });
-//   });
-//   describe('around Uruguay', function(){
-//     it('should return 21H', function(){
-//       chai.assert.equal("21H", converter.LLBboxtoUSNG(-30, -35, -53, -58));
-//     });
-//   });
-//   describe('around Buenos Aires city in Argentina', function(){
-//     it('should return 21H UB', function(){
-//       chai.assert.equal("21H UB ", converter.LLBboxtoUSNG(-34, -35, -58, -59));
-//     });
-//   });
-//   describe('around Merlo town in Buenos Aires', function(){
-//     it('should return 21H UB 41 63', function(){
-//       chai.assert.equal("21H UB 41 63", converter.LLBboxtoUSNG(-34.65, -34.67, -58.72, -58.74));
-//     });
-//   });
-//   describe('around Madagascar', function(){
-//     it('should return 38K', function(){
-//       chai.assert.equal("38K", converter.LLBboxtoUSNG(-11, -26, 51, 42));
-//     });
-//   });
-//   describe('around Toliara city in Madagascar', function(){
-//     it('should return 38K LA', function(){
-//       chai.assert.equal("38K LA ", converter.LLBboxtoUSNG(-22, -23, 44, 43));
-//     });
-//   });
-//   describe('around Toliara city center in Madagascar', function(){
-//     it('should return 38K LV 64 17', function(){
-//       chai.assert.equal("38K LV 64 17", converter.LLBboxtoUSNG(-23.31, -23.39, 43.71, 43.63));
-//     });
-//   });
-//   describe('around Central Japan', function(){
-//     it('should return 54S', function(){
-//       chai.assert.equal("54S", converter.LLBboxtoUSNG(41, 33, 143, 138));
-//     });
-//   });
+  describe('around Arizona in the United States', function(){
+    it('should return 12', function(){
+      chai.assert.equal(12, converter.getZoneNumber(34, -111));
+    });
+  });
+  describe('around Prescott/Chino Valley in Arizona', function(){
+    it('should return 12', function(){
+      chai.assert.equal(12, converter.getZoneNumber(34.5, -112.5));
+    });
+  });
+  describe('immediately around Prescott city in Arizona', function(){
+    it('should return 12', function(){
+      chai.assert.equal(12, converter.getZoneNumber(34.545, -112.465));
+    });
+  });
+  describe('around Uruguay', function(){
+    it('should return 21', function(){
+      chai.assert.equal(21, converter.getZoneNumber(-32.5, -55.5));
+    });
+  });
+  describe('around Buenos Aires city in Argentina', function(){
+    it('should return 21', function(){
+      chai.assert.equal(21, converter.getZoneNumber(-34.5, -58.5));
+    });
+  });
+  describe('around Merlo town in Buenos Aires', function(){
+    it('should return 21', function(){
+      chai.assert.equal(21, converter.getZoneNumber(-34.66, -58.73));
+    });
+  });
+  describe('around Madagascar', function(){
+    it('should return 38', function(){
+      chai.assert.equal(38, converter.getZoneNumber(-18.5, 46.5));
+    });
+  });
+  describe('around Toliara city in Madagascar', function(){
+    it('should return 38', function(){
+      chai.assert.equal(38, converter.getZoneNumber(-22.5, 43.5));
+    });
+  });
+  describe('around Toliara city center in Madagascar', function(){
+    it('should return 38', function(){
+      chai.assert.equal(38, converter.getZoneNumber(-23.355, 43.67));
+    });
+  });
+  describe('around Central Japan', function(){
+    it('should return 54', function(){
+      chai.assert.equal(54, converter.getZoneNumber(37, 140.5));
+    });
+  });
+  describe('around Tokyo city in Japan', function(){
+    it('should return 54', function(){
+      chai.assert.equal(54, converter.getZoneNumber(35.5, 139.5));
+    });
+  });
+  describe('around Tokyo city center in Japan', function(){
+    it('should return 54', function(){
+      chai.assert.equal(54, converter.getZoneNumber(35.69, 139.77));
+    });
+  });
+  describe('around the international date line', function(){
+    describe('to the immediate west', function(){
+      it('should return 60', function(){
+        chai.assert.equal(60, converter.getZoneNumber(28, 179));
+      });
+    });
+    describe('to the immediate east', function(){
+      it('should return 1', function(){
+        chai.assert.equal(1, converter.getZoneNumber(28, -179));
+      });
+    });
+    describe('with midpoint directly on it (-180)', function(){
+      it('should return 1', function(){
+        chai.assert.equal(1, converter.getZoneNumber(28, -180));
+      });
+    });
+    describe('with midpoint directly on it (+180)', function(){
+      it('should return 1', function(){
+        chai.assert.equal(1, converter.getZoneNumber(28, 180));
+      });
+    });
+  });
+  describe('around the equator', function(){
+    describe('to the immediate north', function(){
+      it('should return 54', function(){
+        chai.assert.equal(54, converter.getZoneNumber(1, 141));
+      });
+    });
+    describe('to the immediate south', function(){
+      it('should return 54', function(){
+        chai.assert.equal(54, converter.getZoneNumber(-1, 141));
+      });
+    });
+    describe('with midpoint directly on it', function(){
+      it('should return 54', function(){
+        chai.assert.equal(54, converter.getZoneNumber(0, 141));
+      });
+    });
+  });
+  describe('around the international date line and equator', function(){
+    describe('to the immediate west and north', function(){
+      it('should return 60', function(){
+        chai.assert.equal(60, converter.getZoneNumber(1, 179));
+      });
+    });
+    describe('to the immediate west and south', function(){
+      it('should return 1', function(){
+        chai.assert.equal(60, converter.getZoneNumber(-1, 179));
+      });
+    });
+    describe('to the immediate east and north', function(){
+      it('should return 60', function(){
+        chai.assert.equal(1, converter.getZoneNumber(1, -179));
+      });
+    });
+    describe('to the immediate east and south', function(){
+      it('should return 1', function(){
+        chai.assert.equal(1, converter.getZoneNumber(-1, -179));
+      });
+    });
+    describe('with midpoint directly on it (0, -180)', function(){
+      it('should return 1', function(){
+        chai.assert.equal(1, converter.getZoneNumber(0, -180));
+      });
+    });
+    describe('with midpoint directly on it (0, +180)', function(){
+      it('should return 1', function(){
+        chai.assert.equal(1, converter.getZoneNumber(0, 180));
+      });
+    });
+  });
+});
+describe('Get Zone letter from lat', function(){
+  describe('around Arizona in the United States', function(){
+    it('should return S', function(){
+      chai.assert.equal("S", converter.UTMLetterDesignator(34));
+    });
+  });
+  describe('around Prescott/Chino Valley in Arizona', function(){
+    it('should return S', function(){
+      chai.assert.equal("S", converter.UTMLetterDesignator(34.5));
+    });
+  });
+  describe('immediately around Prescott city in Arizona', function(){
+    it('should return S', function(){
+      chai.assert.equal("S", converter.UTMLetterDesignator(34.545));
+    });
+  });
+  describe('around Uruguay', function(){
+    it('should return H', function(){
+      chai.assert.equal("H", converter.UTMLetterDesignator(-32.5));
+    });
+  });
+  describe('around Buenos Aires city in Argentina', function(){
+    it('should return H', function(){
+      chai.assert.equal("H", converter.UTMLetterDesignator(-34.5));
+    });
+  });
+  describe('around Merlo town in Buenos Aires', function(){
+    it('should return H', function(){
+      chai.assert.equal("H", converter.UTMLetterDesignator(-34.66));
+    });
+  });
+  describe('around Madagascar', function(){
+    it('should return K', function(){
+      chai.assert.equal("K", converter.UTMLetterDesignator(-18.5));
+    });
+  });
+  describe('around Toliara city in Madagascar', function(){
+    it('should return K', function(){
+      chai.assert.equal("K", converter.UTMLetterDesignator(-22.5));
+    });
+  });
+  describe('around Toliara city center in Madagascar', function(){
+    it('should return K', function(){
+      chai.assert.equal("K", converter.UTMLetterDesignator(-23.355));
+    });
+  });
+  describe('around Central Japan', function(){
+    it('should return S', function(){
+      chai.assert.equal("S", converter.UTMLetterDesignator(37));
+    });
+  });
+  describe('around Tokyo city in Japan', function(){
+    it('should return S', function(){
+      chai.assert.equal("S", converter.UTMLetterDesignator(35.5));
+    });
+  });
+  describe('around Tokyo city center in Japan', function(){
+    it('should return S', function(){
+      chai.assert.equal("S", converter.UTMLetterDesignator(35.69));
+    });
+  });
+  describe('around the equator', function(){
+    describe('to the immediate north', function(){
+      it('should return N', function(){
+        chai.assert.equal('N', converter.UTMLetterDesignator(1));
+      });
+    });
+    describe('to the immediate south', function(){
+      it('should return M', function(){
+        chai.assert.equal('M', converter.UTMLetterDesignator(-1));
+      });
+    });
+    describe('with midpoint directly on it', function(){
+      it('should return N', function(){
+        chai.assert.equal('N', converter.UTMLetterDesignator(0));
+      });
+    });
+    describe('imediately south of north polar maximum', function(){
+      it('should return X', function(){
+        chai.assert.equal('X', converter.UTMLetterDesignator(83));
+      });
+    });
+    describe('imediately north of north polar maximum', function(){
+      it('should return Z (invalid designator)', function(){
+        chai.assert.equal('Z', converter.UTMLetterDesignator(85));
+      });
+    });
+    describe('directly on north polar maximum', function(){
+      it('should return X (invalid designator)', function(){
+        chai.assert.equal('X', converter.UTMLetterDesignator(84));
+      });
+    });
+    describe('imediately north of south polar minimum', function(){
+      it('should return C', function(){
+        chai.assert.equal('C', converter.UTMLetterDesignator(-79));
+      });
+    });
+    describe('imediately south of south polar minimum', function(){
+      it('should return Z (invalid designator)', function(){
+        chai.assert.equal('Z', converter.UTMLetterDesignator(-81));
+      });
+    });
+    describe('directly on south polar minimum', function(){
+      it('should return C (invalid designator)', function(){
+        chai.assert.equal('C', converter.UTMLetterDesignator(-80));
+      });
+    });
+  });
+});
+describe('Parse USNG', function(){
+  describe('with single digit zone', function(){
+    it('should return zone=5; letter=Q', function(){
+      var parts = {};
+      converter.parseUSNG_str("5Q", parts);
+      chai.assert.equal(5, parts.zone);
+      chai.assert.equal('Q', parts.let);
+    });
+  });
+  describe('with two digit zone', function(){
+    it('should return zone=12; letter=S', function(){
+      var parts = {};
+      converter.parseUSNG_str("12S", parts);
+      chai.assert.equal(12, parts.zone);
+      chai.assert.equal('S', parts.let);
+    });
+  });
+  describe('with single digit zone and squares', function(){
+    it('should return zone=5; letter=Q; square1=K; square2=B', function(){
+      var parts = {};
+      converter.parseUSNG_str("5Q KB", parts);
+      chai.assert.equal(5, parts.zone);
+      chai.assert.equal('Q', parts.let);
+      chai.assert.equal('K', parts.sq1);
+      chai.assert.equal('B', parts.sq2);
+    });
+  });
+  describe('with two digit zone and squares', function(){
+    it('should return zone=12; letter=S; square1=V; square2=C', function(){
+      var parts = {};
+      converter.parseUSNG_str("12S VC", parts);
+      chai.assert.equal(12, parts.zone);
+      chai.assert.equal('S', parts.let);
+      chai.assert.equal('V', parts.sq1);
+      chai.assert.equal('C', parts.sq2);
+    });
+  });
+  describe('with single digit zone, squares and 5 digit meters', function(){
+    it('should return zone=5; letter=Q; square1=K; square2=B; easting=42785; northing=31517', function(){
+      var parts = {};
+      converter.parseUSNG_str("5Q KB 42785 31517", parts);
+      chai.assert.equal(5, parts.zone);
+      chai.assert.equal('Q', parts.let);
+      chai.assert.equal('K', parts.sq1);
+      chai.assert.equal('B', parts.sq2);
+      chai.assert.equal(5, parts.precision);
+      chai.assert.equal('42785', parts.east);
+      chai.assert.equal('31517', parts.north);
+    });
+  });
+  describe('with two digit zone, squares and 5 digit meters', function(){
+    it('should return zone=12; letter=S; square1=V; square2=C; easting=12900; northing=43292', function(){
+      var parts = {};
+      converter.parseUSNG_str("12S VC 12900 43292", parts);
+      chai.assert.equal(12, parts.zone);
+      chai.assert.equal('S', parts.let);
+      chai.assert.equal('V', parts.sq1);
+      chai.assert.equal('C', parts.sq2);
+      chai.assert.equal(5, parts.precision);
+      chai.assert.equal('12900', parts.east);
+      chai.assert.equal('43292', parts.north);
+    });
+  });
+});
+describe('Convert USNG to UTM', function(){
+  describe('with single digit zone', function(){
+    it('should return north=2131517; east=242785; zone=5; letter=Q', function(){
+      var usng = "5Q KB 42785 31517";
+      var zone = 5;
+      var letter = "Q";
+      var sq1 = "K";
+      var sq2 = "B";
+      var easting = "42785";
+      var northing = "31517";
+      var coords = {};
+      converter.USNGtoUTM(zone, letter, sq1, sq2, easting, northing, coords);
+      chai.assert.equal(2131517, Math.floor(coords.N));
+      chai.assert.equal(242785, Math.floor(coords.E));
+      chai.assert.equal(5, coords.zone);
+      chai.assert.equal("Q", coords.letter);
+    });
+  });
+  describe('with two digit zone', function(){
+    it('should return north=43292; east=12900; zone=12; letter=S', function(){
+      var usng = "12S VC 12900 43292";
+      var zone = 12;
+      var letter = "S";
+      var sq1 = "V";
+      var sq2 = "C";
+      var easting = "12900";
+      var northing = "43292";
+      var coords = {};
+      converter.USNGtoUTM(zone, letter, sq1, sq2, easting, northing, coords);
+      chai.assert.equal(3743292, Math.floor(coords.N));
+      chai.assert.equal(412900, Math.floor(coords.E));
+      chai.assert.equal(12, coords.zone);
+      chai.assert.equal("S", coords.letter);
+    });
+  });
+});
+describe('Convert UTM to Lat/Lon', function(){
+  describe('with single digit zone and specifying accuracy', function(){
+    it('should return north=1; east=-157; south=0; west=-158', function(){
+      var northing = 42785;
+      var easting = 31517;
+      var zone = 5;
+      var accuracy = 100000;
+      var latLon = converter.UTMtoLL(northing, easting, zone, accuracy);
+      chai.assert.equal(1, Math.floor(latLon.north));
+      chai.assert.equal(-157, Math.floor(latLon.east));
+      chai.assert.equal(0, Math.floor(latLon.south));
+      chai.assert.equal(-158, Math.floor(latLon.west));
+    });
+  });
+  describe('with single digit zone and not specifying accuracy', function(){
+    it('should return lat=0; east=-158', function(){
+      var northing = 42785;
+      var easting = 31517;
+      var zone = 5;
+      var latLon = converter.UTMtoLL(northing, easting, zone);
+      chai.assert.equal(0, Math.floor(latLon.lat));
+      chai.assert.equal(-158, Math.floor(latLon.lon));
+    });
+  });
+  describe('with two digit zone and specifying accuracy', function(){
+    it('should return north=1; east=-115; south=0; west=-116', function(){
+      var northing = 12900;
+      var easting = 43292;
+      var zone = 12;
+      var accuracy = 100000;
+      var latLon = converter.UTMtoLL(northing, easting, zone, accuracy);
+      chai.assert.equal(1, Math.floor(latLon.north));
+      chai.assert.equal(-115, Math.floor(latLon.east));
+      chai.assert.equal(0, Math.floor(latLon.south));
+      chai.assert.equal(-116, Math.floor(latLon.west));
+    });
+  });
+  describe('with two digit zone and not specifying accuracy', function(){
+    it('should return lat=0; lon=-116', function(){
+      var northing = 12900;
+      var easting = 43292;
+      var zone = 12;
+      var latLon = converter.UTMtoLL(northing, easting, zone);
+      chai.assert.equal(0, Math.floor(latLon.lat));
+      chai.assert.equal(-116, Math.floor(latLon.lon));
+    });
+  });
+});
+describe('Convert USNG to Lat/Lon', function(){
+  describe('with single digit zone', function(){
+    it('should return north=19; east=-155; south=19; west=-155', function(){
+      var usng = "5Q KB 42785 31517";
+      var latLon = converter.USNGtoLL(usng);
+      chai.assert.equal(19, Math.floor(latLon.north));
+      chai.assert.equal(-156, Math.floor(latLon.east));
+      chai.assert.equal(19, Math.floor(latLon.south));
+      chai.assert.equal(-156, Math.floor(latLon.west));
+    });
+  });
+  describe('with two digit zone', function(){
+    it('should return north=33; east=-111; south=33; west=-111', function(){
+      var usng = "12S VC 12900 43292";
+      var latLon = converter.USNGtoLL(usng);
+      chai.assert.equal(33, Math.floor(latLon.north));
+      chai.assert.equal(-112, Math.floor(latLon.east));
+      chai.assert.equal(33, Math.floor(latLon.south));
+      chai.assert.equal(-112, Math.floor(latLon.west));
+    });
+  });
+});
+describe('Convert Lat/Lon Bounding Box to USNG', function(){
+  describe('around Arizona in the United States', function(){
+    it('should return 12S', function(){
+      chai.assert.equal("12S", converter.LLBboxtoUSNG(37, 31, -108, -114));
+    });
+  });
+  describe('around Prescott/Chino Valley in Arizona', function(){
+    it('should return 12S UD', function(){
+      chai.assert.equal("12S UD", converter.LLBboxtoUSNG(34.55, 34.45, -112.4, -112.4));
+    });
+  });
+  describe('immediately around Prescott city in Arizona', function(){
+    it('should return 12S UD 65 24', function(){
+      chai.assert.equal("12S UD 65 24", converter.LLBboxtoUSNG(34.55, 34.55, -112.465, -112.47));
+    });
+  });
+  // *********
+  describe('immediately around Prescott city in Arizona', function(){
+    it('should return 12S UD 649 241', function(){
+      chai.assert.equal("12S UD 649 241", converter.LLBboxtoUSNG(34.55, 34.55, -112.471, -112.472));
+    });
+  });
+  // *********
+  describe('immediately around Prescott city in Arizona', function(){
+    it('should return 12S UD 6494 2412', function(){
+      chai.assert.equal("12S UD 6494 2412", converter.LLBboxtoUSNG(34.55, 34.55, -112.47200, -112.47190));
+    });
+  });
+  // *********
+  describe('immediately around Prescott city in Arizona', function(){
+    it('should return 12S UD 649 241', function(){
+      chai.assert.equal("12S UD 64941 24126", converter.LLBboxtoUSNG(34.55, 34.55, -112.47200, -112.47199));
+    });
+  });
+  describe('around Uruguay', function(){
+    it('should return 21H', function(){
+      chai.assert.equal("21H", converter.LLBboxtoUSNG(-30, -35, -53, -58));
+    });
+  });
+  describe('around Buenos Aires city in Argentina', function(){
+    it('should return 21H UB', function(){
+      chai.assert.equal("21H UB", converter.LLBboxtoUSNG(-34.5, -35, -58.5, -58.5));
+    });
+  });
+  describe('around Merlo town in Buenos Aires', function(){
+    it('should return 21H UB 41 63', function(){
+      chai.assert.equal("21H UB 41 63", converter.LLBboxtoUSNG(-34.665, -34.66, -58.73, -58.73));
+    });
+  });
+  describe('around Madagascar', function(){
+    it('should return 38K', function(){
+      chai.assert.equal("38K", converter.LLBboxtoUSNG(-11, -26, 51, 42));
+    });
+  });
+  describe('around Toliara city in Madagascar', function(){
+    it('should return 38K LA', function(){
+      chai.assert.equal("38K LA", converter.LLBboxtoUSNG(-22, -22, 43.7, 43.6));
+    });
+  });
+  describe('around Toliara city center in Madagascar', function(){
+    it('should return 38K LV 64 17', function(){
+      chai.assert.equal("38K LV 64 17", converter.LLBboxtoUSNG(-23.39, -23.39, 43.7, 43.69));
+    });
+  });
+  describe('around Central Japan', function(){
+    it('should return 54S', function(){
+      chai.assert.equal("54S", converter.LLBboxtoUSNG(41, 33, 143, 138));
+    });
+  });
 //   describe('around Tokyo city in Japan', function(){
 //     it('should return 54S UE', function(){
 //       chai.assert.equal("54S UE ", converter.LLBboxtoUSNG(36, 35, 140, 139));
