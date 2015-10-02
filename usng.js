@@ -850,7 +850,9 @@
                 
                 if ( eastingArray[i].indexOf(sq1) != -1) {
                     easting = i*100000;
-                    easting = easting + Number(east)*Math.pow(10,5-east.length);
+                    if (east) {
+                        easting = easting + Number(east)*Math.pow(10,5-east.length);
+                    }
                     break;
                 }
             }
@@ -864,7 +866,10 @@
             while (northing < zoneBase["CDEFGHJKLMNPQRSTUVWX".indexOf(letter)]) {
                 northing = northing + 2000000;
                 }
-            var northing = northing+Number(north)*Math.pow(10,5-north.length);
+
+            if (north) {
+                northing = northing+Number(north)*Math.pow(10,5-north.length);
+            }
             ret.N = parseInt(northing);
             ret.E = parseInt(easting);
             ret.zone = zone;
