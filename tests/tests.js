@@ -2,6 +2,11 @@ var chai = require('chai');
 var usngs = require('../usng');
 var converter = new usngs.Converter();
 
+function essentiallyEqual(/* float */ a, /* float */ b, /* float */ epsilon) {
+  var A = Math.abs(a), B = Math.abs(b);
+  return Math.abs(A - B) < epsilon;
+}
+
 describe('Get Zone number from lat/lon', function(){
   describe('around Arizona in the United States', function(){
     it('should return 12', function(){
@@ -1413,6 +1418,93 @@ describe('Convert Lat/Lon to UTM', function(){
         chai.assert.equal(usng, converter.LLBboxtoUSNG(lat, lat, lon, lon2));
       });
 
+    });
+    describe('USNGtoLL', function(){
+      it('should return 38.8895 -77.0352', function(){
+        var usng = "18S UJ 23487 06483";
+        var lat = 38.8895;
+        var lon = -77.0352;
+        var result = converter.USNGtoLL(usng, true);
+        chai.assert.equal(true, essentiallyEqual(lat, result.lat, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(lon, result.lon, 0.0001));
+      });
+
+      it('should return 38.8895 -77.0352 -77.0351', function(){
+        var usng = "18S UJ 2349 0648";
+        var north = 38.8895;
+        var west = -77.0352;
+        var east = -77.0351;
+        var result = converter.USNGtoLL(usng, false);
+        chai.assert.equal(true, essentiallyEqual(north, result.north, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(north, result.south, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(east, result.east, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(west, result.west, 0.0001));
+      });
+
+      it('should return 38.8895 -77.0350 -77.0361', function(){
+        var usng = "18S UJ 234 064";
+        var north = 38.8896;
+        var west = -77.0361;
+        var east = -77.0350;
+        var south = 38.8887;
+        var result = converter.USNGtoLL(usng, false);
+        chai.assert.equal(true, essentiallyEqual(north, result.north, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(south, result.south, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(east, result.east, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(west, result.west, 0.0001));
+      });
+
+      it('should return 38.8942 -77.0406 38.8850 -77.0294', function(){
+        var usng = "18S UJ 23 06";
+        var north = 38.8942;
+        var west = -77.0406;
+        var east = -77.0294;
+        var south = 38.8850;
+        var result = converter.USNGtoLL(usng, false);
+        chai.assert.equal(true, essentiallyEqual(north, result.north, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(south, result.south, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(east, result.east, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(west, result.west, 0.0001));
+      });
+
+      it('should return 38.9224 -77.0736 38.8304 -76.9610', function(){
+        var usng = "18S UJ 2 0";
+        var north = 38.9224;
+        var west = -77.0736;
+        var east = -76.9610;
+        var south = 38.8304;
+        var result = converter.USNGtoLL(usng, false);
+        chai.assert.equal(true, essentiallyEqual(north, result.north, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(south, result.south, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(east, result.east, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(west, result.west, 0.0001));
+      });
+
+      it('should return 39.7440 -77.3039 38.8260 -76.1671', function(){
+        var usng = "18S UJ";
+        var north = 39.7440;
+        var west = -77.3039;
+        var east = -76.1671;
+        var south = 38.8260;
+        var result = converter.USNGtoLL(usng, false);
+        chai.assert.equal(true, essentiallyEqual(north, result.north, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(south, result.south, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(east, result.east, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(west, result.west, 0.0001));
+      });
+
+      it('should return 17S', function(){
+        var usng = "17S";
+        var north = 40;
+        var west = -84;
+        var east = -78;
+        var south = 32;
+        var result = converter.USNGtoLL(usng, false);
+        chai.assert.equal(true, essentiallyEqual(north, result.north, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(south, result.south, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(east, result.east, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(west, result.west, 0.0001));
+      });
     });
   });
 });
