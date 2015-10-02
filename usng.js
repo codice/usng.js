@@ -837,39 +837,69 @@
          ***********************************************************************************/
 
         USNGtoUTM: function(zone,letter,sq1,sq2,east,north,ret)  {
+
+            // easting goes from 100,000 - 800,000 and repeats across zones
+            // A,J,S correspond with 100,000, B,K,T correspond with 200,000 etc
             var eastingArray = ["","AJS","BKT","CLU","DMV","ENW","FPX","GQY","HRZ"];
+
             // zoneBase - southern edge of N-S zones of millions of meters
             var zoneBase = [1.1,2.0,2.8,3.7,4.6,5.5,6.4,7.3,8.2,9.1,   0, 0.8, 1.7, 2.6, 3.5, 4.4, 5.3, 6.2, 7.0, 7.9];
+            
+            // multiply zone bases by 1 million to get the proper length for each
             for (var i = 0; i < zoneBase.length; i++) {
                 zoneBase[i] = zoneBase[i] * 1000000;
             }
+
+            // northing goes from 0 - 1,900,000. A corresponds with 0, B corresponds with 200,000, V corresponds with 1,900,000
             var northingArrayOdd = "ABCDEFGHJKLMNPQRSTUV";
+
+            // even numbered zones have the northing letters offset from the odd northing. So, F corresponds with 0, G corresponds
+            // with 100,000 and E corresponds with 1,900,000
             var northingArrayEven = "FGHJKLMNPQRSTUVABCDE";
+
             var easting = -1;
+
             for (var i = 0; i < eastingArray.length; i++) {
                 
+                // loop through eastingArray until sq1 is found
+                // the index of the string the letter is in will be the base easting, as explained in the declaration
+                // of eastingArray 
                 if ( eastingArray[i].indexOf(sq1) != -1) {
+
+                    // multiply by 100,000 to get the proper base easting
                     easting = i*100000;
+
+                    // add the east parameter to get the total easting
                     if (east) {
                         easting = easting + Number(east)*Math.pow(10,5-east.length);
                     }
                     break;
                 }
             }
+
             var northing = 0;
+
+            // if zone number is even, use northingArrayEven, if odd, use northingArrayOdd
+            // similar to finding easting, the index of sq2 corresponds with the base easting
             if (zone%2 == 0) {
-                console.log("Zone " + zone + " northingLetter " + sq2);
                 northing = northingArrayEven.indexOf(sq2)*100000;
                 } else if (zone %2 == 1) {
                 northing = northingArrayOdd.indexOf(sq2)*100000;
                 }
+
+            // we can exploit the repeating behavior of northing to find what the total northing should be
+            // iterate through the horizontal zone bands until our northing is greater than the zoneBase of our zone
             while (northing < zoneBase["CDEFGHJKLMNPQRSTUVWX".indexOf(letter)]) {
                 northing = northing + 2000000;
                 }
 
             if (north) {
+
+                // add the north parameter to get the total northing
                 northing = northing+Number(north)*Math.pow(10,5-north.length);
             }
+
+            // set return object
             ret.N = parseInt(northing);
             ret.E = parseInt(easting);
             ret.zone = zone;
