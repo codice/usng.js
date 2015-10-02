@@ -836,95 +836,41 @@
 
          ***********************************************************************************/
 
-        USNGtoUTM: function (zone,letter,sq1,sq2,east,north,ret) {
-            //Starts (southern edge) of N-S zones in millons of meters
+        USNGtoUTM: function(zone,letter,sq1,sq2,east,north,ret)  {
+            var eastingArray = ["","AJS","BKT","CLU","DMV","ENW","FPX","GQY","HRZ"];
+            // zoneBase - southern edge of N-S zones of millions of meters
             var zoneBase = [1.1,2.0,2.8,3.7,4.6,5.5,6.4,7.3,8.2,9.1,   0, 0.8, 1.7, 2.6, 3.5, 4.4, 5.3, 6.2, 7.0, 7.9];
-
-            var segBase = [0,2,2,2,4,4,6,6,8,8,   0,0,0,2,2,4,4,6,6,6];  //Starts of 2 million meter segments, indexed by zone
-
-            // convert easting to UTM
-            var eSqrs = this.USNGSqEast.indexOf(sq1);
-            var appxEast = 1+eSqrs%8;
-
-            // convert northing to UTM
-            var letNorth = "CDEFGHJKLMNPQRSTUVWX".indexOf(letter);
-            var oddFlips = 'FHKQSU';
-            var evenFlips = 'CEGKMPRUW';
-            var hasFlip;
-            if (zone % 2) {  //odd number zone
-                hasFlip = oddFlips.indexOf(letter) !== -1;
-            } else { //even number zone
-                hasFlip = evenFlips.indexOf(letter) !== -1;
+            for (var i = 0; i < zoneBase.length; i++) {
+                zoneBase[i] = zoneBase[i] * 1000000;
             }
-
-            var setVal = this.get100kSetForZone(zone);
-            var northingVal = this.getNorthingFromChar(sq2, setVal);
-            var vNorthing = this.getNorthingFromChar('V', setVal);
-
-            if (hasFlip && sq2.charCodeAt(0) <= 'H'.charCodeAt(0)) {
-                if (sq2 === 'A') {
-                    northingVal = vNorthing + 0.1;
-                } else {
-                    var charVal = sq2.charCodeAt(0) - 'A'.charCodeAt(0);
-                    northingVal = vNorthing + 0.1 + (0.1 * charVal);
+            var northingArrayOdd = "ABCDEFGHJKLMNPQRSTUV";
+            var northingArrayEven = "FGHJKLMNPQRSTUVABCDE";
+            var easting = -1;
+            for (var i = 0; i < eastingArray.length; i++) {
+                
+                if ( eastingArray[i].indexOf(sq1) != -1) {
+                    easting = i*100000;
+                    easting = easting + Number(east)*Math.pow(10,5-east.length);
+                    break;
                 }
             }
-
-            var zoneStart = zoneBase[letNorth];
-            var zoneStartPlus1;
-            var zoneStartMinus1;
-            if (letNorth <= zoneBase.length - 1) {
-                zoneStartPlus1 = zoneBase[letNorth + 1];
-            }
-            if (letNorth !== 0) {
-                zoneStartMinus1 = zoneBase[letNorth - 1];
-            }
-            var appxNorth = Number(segBase[letNorth])+northingVal;
-
-            if (letNorth > 9 && appxNorth < zoneStart) {
-                if (zoneStartPlus1) {
-                    if (appxNorth > 0 && northingVal === 0) {
-                        appxNorth += zoneStart - appxNorth + (zoneStartPlus1 - zoneStart) / 2 + .05;
-                    } else if (appxNorth > 0) {
-                        appxNorth += 2;
-                    } else {
-                        appxNorth = zoneStart;
-                        appxNorth += (zoneStartPlus1 - zoneStart) / 2 +.05;
-                    }
-                } else {
-                    appxNorth += 2.5; // this is just for the special case of X
+            var northing = 0;
+            if (zone%2 == 0) {
+                console.log("Zone " + zone + " northingLetter " + sq2);
+                northing = northingArrayEven.indexOf(sq2)*100000;
+                } else if (zone %2 == 1) {
+                northing = northingArrayOdd.indexOf(sq2)*100000;
                 }
-            }
-
-            if (letNorth < 10 && appxNorth < zoneStart) {
-                if (zoneStartMinus1) {
-                    if(appxNorth > 0 && northingVal === 0) {
-                        appxNorth += zoneStart - appxNorth + (zoneStart - zoneStartMinus1) / 2 + .05;
-                    } else if (appxNorth > 0) {
-                        appxNorth += 2;
-                    }
-                } else {
-                    appxNorth += 1.5; // this is just for the special case of C
+            while (northing < zoneBase["CDEFGHJKLMNPQRSTUVWX".indexOf(letter)]) {
+                northing = northing + 2000000;
                 }
-            }
+            var northing = northing+Number(north)*Math.pow(10,5-north.length);
+            ret.N = parseInt(northing);
+            ret.E = parseInt(easting);
+            ret.zone = zone;
+            ret.letter = letter;
+            
 
-            var northPrecision = 0;
-            var eastPrecision = 0;
-            if (north) {
-                northPrecision = north.length;
-            } else {
-                north = 0;
-            }
-            if (east) {
-                eastPrecision = east.length;
-            } else {
-                east = 0;
-            }
-
-            ret.N=appxNorth*1000000+Number(north)*Math.pow(10,5-northPrecision);
-            ret.E=appxEast*100000+Number(east)*Math.pow(10,5-eastPrecision);
-            ret.zone=zone;
-            ret.letter=letter;
         },
 
         get100kSetForZone: function(zoneNumber) {
@@ -971,6 +917,7 @@
 
             return northingValue;
         },
+
 
         // parse a USNG string and feed results to USNGtoUTM, then the results of that to UTMtoLL
 
