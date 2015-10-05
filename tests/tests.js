@@ -478,19 +478,11 @@ describe('Convert Lat/Lon Bounding Box to USNG', function(){
       chai.assert.equal("38K LA", converter.LLBboxtoUSNG(-22, -22, 43.7, 43.6));
     });
   });
-<<<<<<< HEAD
   describe('around Toliara city center in Madagascar', function(){
     it('should return 38K LV 64 17', function(){
       chai.assert.equal("38K LV 66 12", converter.LLBboxtoUSNG(-23.395, -23.39, 43.70, 43.695));
     });
   });
-=======
-//  describe('around Toliara city center in Madagascar', function(){
-//    it('should return 38K LV 64 17', function(){
-//      chai.assert.equal("38K LV 64 17", converter.LLBboxtoUSNG(-23.39, -23.39, 43.7, 43.69));
-//    });
-//  });
->>>>>>> cb11fcd... #3 Added additional unit tests and fixed an issue around naval base oceana
   describe('around Central Japan', function(){
     it('should return 54S', function(){
       chai.assert.equal("54S", converter.LLBboxtoUSNG(41, 33, 143, 138));
