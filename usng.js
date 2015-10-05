@@ -226,7 +226,6 @@
             if (lon === 0 && (eastNum > 90 || eastNum < -90) && (westNum > 90 || westNum < -90)) {
                 lon = 180;
               }
-
             // calculate a USNG string with a precision based on distance
             // precision is defined in LLtoUSNG declaration
             var result;
@@ -248,7 +247,7 @@
 
             // result is a USNG string of the form DDL LL DDDDD DDDDD
             // length of string will be based on the precision variable
-          return result;
+            return result;
         },
 
         /***************** convert latitude, longitude to UTM  *******************

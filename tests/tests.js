@@ -1361,7 +1361,107 @@ describe('Convert Lat/Lon to UTM', function(){
         chai.assert.equal(Math.round(lon * 10000), Math.round(usngToLL.lon * 10000));
       });
     });
+    describe('m-80-n and n-606 junction', function(){
+      it('should return lat -36.0872 lon -72.8078', function(){
+        var lat = -36.0872;
+        var lon = -72.8078;
+        var utmNorthing = 6004156;
+        var utmEasting = 697374;
+        var zoneNum = 18;
+        var usng = "18H XF 97375 04155";
 
+        if (lat < 0) {
+			utmNorthing -= 10000000.0;
+        }
+
+        var coords = [];
+        converter.LLtoUTM(lat, lon, coords);
+
+        chai.assert.equal(utmEasting, parseInt(coords[0]));
+        chai.assert.equal(utmNorthing, parseInt(coords[1]));
+        chai.assert.equal(zoneNum, parseInt(coords[2]));
+
+        var utmToLL = converter.UTMtoLL(utmNorthing, utmEasting, zoneNum);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(utmToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(utmToLL.lon * 10000));
+
+        chai.assert.equal(usng, converter.LLtoUSNG(lat, lon, 6));
+
+        var usngToLL = converter.USNGtoLL(usng, true);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(usngToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(usngToLL.lon * 10000));
+      });
+    });
+
+    describe('cobquecura', function(){
+      it('should return lat -36.1333 lon -72.7833', function(){
+        var lat = -36.1333;
+        var lon = -72.7833;
+        var utmNorthing = 5998991;
+        var utmEasting = 699464;
+        var zoneNum = 18;
+        var usng = "18H XE 99464 98991";
+
+        if (lat < 0) {
+			utmNorthing -= 10000000.0;
+        }
+
+        var coords = [];
+        converter.LLtoUTM(lat, lon, coords);
+
+        chai.assert.equal(utmEasting, parseInt(coords[0]));
+        chai.assert.equal(utmNorthing, parseInt(coords[1]));
+        chai.assert.equal(zoneNum, parseInt(coords[2]));
+
+        var utmToLL = converter.UTMtoLL(utmNorthing, utmEasting, zoneNum);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(utmToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(utmToLL.lon * 10000));
+
+        chai.assert.equal(usng, converter.LLtoUSNG(lat, lon, 6));
+
+        var usngToLL = converter.USNGtoLL(usng, true);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(usngToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(usngToLL.lon * 10000));
+      });
+    });
+
+    describe('aerodromo los morros (scqr)', function(){
+      it('should return lat -36.1222 lon -72.8044', function(){
+        var lat = -36.1222;
+        var lon = -72.8044;
+        var utmNorthing = 6000266;
+        var utmEasting = 697593;
+        var zoneNum = 18;
+        var usng = "18H XF 97593 00265";
+
+        if (lat < 0) {
+			utmNorthing -= 10000000.0;
+        }
+
+        var coords = [];
+        converter.LLtoUTM(lat, lon, coords);
+
+        chai.assert.equal(utmEasting, parseInt(coords[0]));
+        chai.assert.equal(utmNorthing, parseInt(coords[1]));
+        chai.assert.equal(zoneNum, parseInt(coords[2]));
+
+        var utmToLL = converter.UTMtoLL(utmNorthing, utmEasting, zoneNum);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(utmToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(utmToLL.lon * 10000));
+
+        chai.assert.equal(usng, converter.LLtoUSNG(lat, lon, 6));
+
+        var usngToLL = converter.USNGtoLL(usng, true);
+
+        chai.assert.equal(Math.round(lat * 10000), Math.round(usngToLL.lat * 10000));
+        chai.assert.equal(Math.round(lon * 10000), Math.round(usngToLL.lon * 10000));
+      });
+    });
     describe('LLBboxtoUSNG', function(){
       it('should return 18S UJ 23487 06483', function(){
         var usng = "18S UJ 23487 06483";
@@ -1492,8 +1592,7 @@ describe('Convert Lat/Lon to UTM', function(){
         chai.assert.equal(true, essentiallyEqual(east, result.east, 0.0001));
         chai.assert.equal(true, essentiallyEqual(west, result.west, 0.0001));
       });
-
-      it('should return 17S', function(){
+      it('should return 40 -84 32 -78', function(){
         var usng = "17S";
         var north = 40;
         var west = -84;
