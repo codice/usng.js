@@ -426,8 +426,13 @@ describe('Convert Lat/Lon Bounding Box to USNG', function(){
     });
   });
   describe('around Prescott/Chino Valley in Arizona', function(){
-    it('should return 12S UD', function(){
-      chai.assert.equal("12S UD", converter.LLBboxtoUSNG(34.55, 34.45, -112.4, -112.4));
+    it('should return 12S UD 7 1', function(){
+      chai.assert.equal("12S UD", converter.LLBboxtoUSNG(34.55, 34.45, -112.4, -112.3));
+    });
+  });
+  describe('around Prescott/Chino Valley in Arizona', function(){
+    it('should return 12S UD 7 1', function(){
+      chai.assert.equal("12S UD 7 1", converter.LLBboxtoUSNG(34.55, 34.45, -112.4, -112.4));
     });
   });
   describe('immediately around Prescott city in Arizona', function(){
@@ -475,7 +480,12 @@ describe('Convert Lat/Lon Bounding Box to USNG', function(){
   });
   describe('around Toliara city in Madagascar', function(){
     it('should return 38K LA', function(){
-      chai.assert.equal("38K LA", converter.LLBboxtoUSNG(-22, -22, 43.7, 43.6));
+      chai.assert.equal("38K LA", converter.LLBboxtoUSNG(-21.9, -22, 43.7, 43.6));
+    });
+  });
+  describe('around Toliara city in Madagascar', function(){
+    it('should return 38K LA', function(){
+      chai.assert.equal("38K LA 6 6", converter.LLBboxtoUSNG(-22, -22, 43.7, 43.6));
     });
   });
   describe('around Toliara city center in Madagascar', function(){
@@ -1498,7 +1508,7 @@ describe('Convert Lat/Lon to UTM', function(){
         var usng = "18S UJ 2 0";
         var lat = 38.8895;
         var lon = -77.0352;
-        var lon2 = -77.05;
+        var lon2 = -77.06;
         chai.assert.equal(usng, converter.LLBboxtoUSNG(lat, lat, lon, lon2));
       });
 

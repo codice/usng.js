@@ -222,6 +222,9 @@
             var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
             var dist = R*c;
+            // divide distance by square root of two
+            dist = dist/1.41421356237
+
 
             if (lon === 0 && (eastNum > 90 || eastNum < -90) && (westNum > 90 || westNum < -90)) {
                 lon = 180;
