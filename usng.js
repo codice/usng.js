@@ -216,14 +216,15 @@
             var deltaLlamda= (westNum-eastNum)* this.DEG_2_RAD;
 
             // trigonometry calculate distance
-            var a = Math.sin(deltaPhi/2) * Math.sin(deltaPhi/2) +
-                Math.cos(phi1) * Math.cos(phi2) *
-                Math.sin(deltaLlamda/2) * Math.sin(deltaLlamda/2);
-            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
-            var dist = R*c;
+            var height = Math.sin(deltaPhi/2) * Math.sin(deltaPhi/2);
+            height = R * 2 * Math.atan2(Math.sqrt(height), Math.sqrt(1-height));
+            var length = Math.cos(phi1) * Math.cos(phi2) *
+                Math.sin(deltaLlamda/2) * Math.sin(deltaLlamda/2);
+            length = R * 2 * Math.atan2(Math.sqrt(length), Math.sqrt(1-length));
+
+            var dist = Math.max(height, length);
             // divide distance by square root of two
-            dist = dist/1.41421356237
 
 
             if (lon === 0 && (eastNum > 90 || eastNum < -90) && (westNum > 90 || westNum < -90)) {
