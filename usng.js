@@ -166,67 +166,91 @@
             return zoneNumber;
         },
 
+        LLtoKM: function(lat1, lon1, lat2, lon2) {
+          var R = 6371000; // metres
+            var phi1 = lat1* this.DEG_2_RAD;
+            var phi2 = lat2* this.DEG_2_RAD;
+            var deltaPhi = (lat2-lat1)* this.DEG_2_RAD;
+            var deltaLlamda= (lon2-lon1)* this.DEG_2_RAD;
+
+
+            var a = Math.sin(deltaPhi/2) * Math.sin(deltaPhi/2) +
+                Math.cos(phi1) * Math.cos(phi2) *
+                Math.sin(deltaLlamda/2) * Math.sin(deltaLlamda/2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+            return R * c;
+        },
+
         //this function does a very rough "best fit" to the center point
         //this could definitely be improved
         LLBboxtoUSNG: function (north, south, east, west) {
-            var distances = [2,2,3,4,4.5,5,6,6,6,6,6,6,6,6,5,4.5,4,3,2,2];
             var northNum = parseFloat(north);
             var southNum = parseFloat(south);
             var eastNum = parseFloat(east);
             var westNum = parseFloat(west);
 
+            // calculate midpoints for use in USNG string calculation
             var lat = (northNum + southNum) / 2;
             var lon = (eastNum + westNum) / 2;
+
+            // round down edge cases
             if (lon >= 180) {
                 lon = 179.9;
             } else if (lon <= -180) {
                 lon = -179.9;
             }
 
+            // round down edge cases
             if (lat >= 90) {
                 lat = 89.9;
             } else if (lat <= -90) {
                 lat = -89.9;
             }
 
-            //doesn't check vert distance yet
-            var vertDist = northNum + Math.abs(southNum);
-            var horizDist = 0;
-            if ((0 < eastNum && 0 < westNum) || (0 > eastNum && 0 > westNum)) {
-                horizDist = Math.abs(Math.abs(eastNum) - Math.abs(westNum));
-            } else {
-                horizDist = (180 - Math.abs(eastNum)) + (180 - Math.abs(westNum));
-                if (lon === 0 && (eastNum > 90 || eastNum < -90) && (westNum > 90 || westNum < -90)) {
-                    lon = 180;
-                }
-            }
+            // calculate distance between two points (North, West) and (South, East)
+            var R = 6371000; // metres
+            var phi1 = northNum* this.DEG_2_RAD;
+            var phi2 = southNum* this.DEG_2_RAD;
+            var deltaPhi = (southNum-northNum)* this.DEG_2_RAD;
+            var deltaLlamda= (westNum-eastNum)* this.DEG_2_RAD;
 
-            var utmLetter = this.UTMLetterDesignator(lat);
+            // trigonometry calculate distance
 
-            var index = "CDEFGHJKLMNPQRSTUVWX".indexOf(utmLetter);
-            var distance = distances[index];
+            var height = Math.sin(deltaPhi/2) * Math.sin(deltaPhi/2);
+            height = R * 2 * Math.atan2(Math.sqrt(height), Math.sqrt(1-height));
+            var length = Math.cos(phi1) * Math.cos(phi2) *
+                Math.sin(deltaLlamda/2) * Math.sin(deltaLlamda/2);
+            length = R * 2 * Math.atan2(Math.sqrt(length), Math.sqrt(1-length));
 
+            var dist = Math.max(height, length);
+            // divide distance by square root of two
+
+
+            if (lon === 0 && (eastNum > 90 || eastNum < -90) && (westNum > 90 || westNum < -90)) {
+                lon = 180;
+              }
+            // calculate a USNG string with a precision based on distance
+            // precision is defined in LLtoUSNG declaration
             var result;
-            if (horizDist >= distance) {
-                //we are at least the size of a zone, so just snap to the closest zone
-                result = this.LLtoUSNG(lat, lon, 0);
-                var truncate = result.indexOf(' ');
-                result = result.substring(0, truncate);
-            } else if (horizDist >= 1) {
-                result = this.LLtoUSNG(lat, lon, 0);
-                if(result.length > 7) {
-                    result = result.substring(0, result.length - 3);
-                }
-            } else if (horizDist >= 0.1) {
-                result = this.LLtoUSNG(lat, lon, 1);
-            } else if (horizDist >= 0.01) {
-                result = this.LLtoUSNG(lat, lon, 2);
-            } else {
-                result = this.LLtoUSNG(lat, lon, 0);
-                var truncate = result.indexOf(' ');
-                result = result.substring(0, truncate);
+            if (dist > 100000) {
+              result = this.LLtoUSNG(lat, lon, 0);
+            } else if (dist > 10000) {
+              result = this.LLtoUSNG(lat, lon, 1);
+            } else if (dist > 1000) {
+              result = this.LLtoUSNG(lat, lon, 2);
+            } else if (dist > 100) {
+              result = this.LLtoUSNG(lat, lon, 3);
+            } else if (dist > 10) {
+              result = this.LLtoUSNG(lat, lon, 4);
+            } else if (dist > 1) {
+              result = this.LLtoUSNG(lat, lon, 5);
+            } else if (dist >=0) {
+                result = this.LLtoUSNG(lat, lon, 6);
             }
 
+            // result is a USNG string of the form DDL LL DDDDD DDDDD
+            // length of string will be based on the precision variable
             return result;
         },
 
@@ -329,13 +353,21 @@
          "18S UJ 2286 0705" locates Washington Monument in Washington, D.C.
          to a 10-meter precision.
 
+         Precision refers to levels of USNG precision. Ie a precision of
+         0 returns a string in the form DDL
+         1 returns a string in the form DDL LL
+         2 returns a string in the form DDL LL D D
+         etc
+
          ***************************************************************************/
 
         LLtoUSNG: function (lat, lon, precision) {
 
+            // make lon between -180 & 180
             if (lon < -180) { lon += 360;}
             else if (lon > 180) { lon -= 360;}
 
+            // parse lat & long parameters to floats
             lat = parseFloat(lat);
             lon = parseFloat(lon);
 
@@ -355,33 +387,64 @@
 
             var zoneNumber = this.getZoneNumber(lat, lon);
             var USNGLetters  = this.findGridLetters(zoneNumber, UTMNorthing, UTMEasting);
+
+            // UTM northing and easting is the analogue of USNG letters + USNG northing and easting
+            // so remove the component of UTM northing and easting that corresponds with the USNG letters
             var USNGNorthing = Math.round(UTMNorthing) % this.BLOCK_SIZE;
             var USNGEasting  = Math.round(UTMEasting)  % this.BLOCK_SIZE;
 
+            // parse precision to something we understand
             if (typeof precision === 'undefined' || precision < 0) {
                 precision = 0;
             }
-            if (precision > 5) {
-                precision = 5;
+
+            // digitPrecision is to account for just the numerical portion of the USNG string
+            // the last 0-10 characters of the USNG string
+            var digitPrecision = 0;
+
+            // ensure that digitPrecision is between 0-5 because USNG is specified to up to 5 digits
+            if (precision > 0) {
+                digitPrecision = precision-1;
             }
-            // added... truncate digits to achieve specified precision
-            USNGNorthing = Math.floor(USNGNorthing / Math.pow(10,(5-precision)));
-            USNGEasting = Math.floor(USNGEasting / Math.pow(10,(5-precision)));
-            var USNG = zoneNumber +  this.UTMLetterDesignator(lat) + " " + USNGLetters + " ";
+            if (digitPrecision > 5) {
+                digitPrecision = 5;
+            }
+            // truncate USNG string digits to achieve specified precision
+            USNGNorthing = Math.floor(USNGNorthing / Math.pow(10,(5-digitPrecision)));
+            USNGEasting = Math.floor(USNGEasting / Math.pow(10,(5-digitPrecision)));
+
+            // begin building USNG string "DDL"
+            var USNG = zoneNumber + this.UTMLetterDesignator(lat);
+
+            // add 100k meter grid letters to USNG string "DDL LL"
+            if (precision >= 1) {
+             USNG += " " + USNGLetters;
+            }
+
 
             // REVISIT: Modify to incorporate dynamic precision ?
-            for (var i = String(USNGEasting).length; i < precision; i++) {
-                USNG += "0";
+
+            // if requested precision is higher than USNG northing or easting, pad front
+            // with zeros
+
+            // add easting and northing to USNG string "DDL LL D+ D+"
+            if (digitPrecision >= 1) {
+                USNG += " "
+                for (var i = String(USNGEasting).length; i < digitPrecision; i++) {
+                        USNG += "0";
+                }
+                USNG += USNGEasting + " ";
             }
 
-            USNG += USNGEasting + " ";
-
-            for (i = String(USNGNorthing).length; i < precision; i++) {
-                USNG += "0";
+            if (digitPrecision >= 1) {
+                for (i = String(USNGNorthing).length; i < digitPrecision; i++) {
+                        USNG += "0";
+                }
+                USNG += USNGNorthing;
             }
 
-            USNG += USNGNorthing;
-
+            // return USNG string of the form "DDL LL DDDDD DDDDD"
+            // length of string depends on precision specified
             return USNG;
 
         },
@@ -776,93 +839,76 @@
 
          ***********************************************************************************/
 
-        USNGtoUTM: function (zone,letter,sq1,sq2,east,north,ret) {
-            //Starts (southern edge) of N-S zones in millons of meters
+        USNGtoUTM: function(zone,letter,sq1,sq2,east,north,ret)  {
+
+            // easting goes from 100,000 - 800,000 and repeats across zones
+            // A,J,S correspond with 100,000, B,K,T correspond with 200,000 etc
+            var eastingArray = ["","AJS","BKT","CLU","DMV","ENW","FPX","GQY","HRZ"];
+
+            // zoneBase - southern edge of N-S zones of millions of meters
             var zoneBase = [1.1,2.0,2.8,3.7,4.6,5.5,6.4,7.3,8.2,9.1,   0, 0.8, 1.7, 2.6, 3.5, 4.4, 5.3, 6.2, 7.0, 7.9];
-
-            var segBase = [0,2,2,2,4,4,6,6,8,8,   0,0,0,2,2,4,4,6,6,6];  //Starts of 2 million meter segments, indexed by zone
-
-            // convert easting to UTM
-            var eSqrs = this.USNGSqEast.indexOf(sq1);
-            var appxEast = 1+eSqrs%8;
-
-            // convert northing to UTM
-            var letNorth = "CDEFGHJKLMNPQRSTUVWX".indexOf(letter);
-            var oddFlips = 'FHKQSU';
-            var evenFlips = 'CEGKMPRUW';
-            var hasFlip;
-            if (zone % 2) {  //odd number zone
-                hasFlip = oddFlips.indexOf(letter) !== -1;
-            } else { //even number zone
-                hasFlip = evenFlips.indexOf(letter) !== -1;
+            
+            // multiply zone bases by 1 million to get the proper length for each
+            for (var i = 0; i < zoneBase.length; i++) {
+                zoneBase[i] = zoneBase[i] * 1000000;
             }
 
-            var setVal = this.get100kSetForZone(zone);
-            var northingVal = this.getNorthingFromChar(sq2, setVal);
-            var vNorthing = this.getNorthingFromChar('V', setVal);
+            // northing goes from 0 - 1,900,000. A corresponds with 0, B corresponds with 200,000, V corresponds with 1,900,000
+            var northingArrayOdd = "ABCDEFGHJKLMNPQRSTUV";
 
-            if (hasFlip && sq2.charCodeAt(0) <= 'H'.charCodeAt(0)) {
-                if (sq2 === 'A') {
-                    northingVal = vNorthing + 0.1;
-                } else {
-                    var charVal = sq2.charCodeAt(0) - 'A'.charCodeAt(0);
-                    northingVal = vNorthing + 0.1 + (0.1 * charVal);
-                }
-            }
+            // even numbered zones have the northing letters offset from the odd northing. So, F corresponds with 0, G corresponds
+            // with 100,000 and E corresponds with 1,900,000
+            var northingArrayEven = "FGHJKLMNPQRSTUVABCDE";
 
-            var zoneStart = zoneBase[letNorth];
-            var zoneStartPlus1;
-            var zoneStartMinus1;
-            if (letNorth <= zoneBase.length - 1) {
-                zoneStartPlus1 = zoneBase[letNorth + 1];
-            }
-            if (letNorth !== 0) {
-                zoneStartMinus1 = zoneBase[letNorth - 1];
-            }
-            var appxNorth = Number(segBase[letNorth])+northingVal;
-            if (letNorth > 9 && appxNorth < zoneStart) {
-                if (zoneStartPlus1) {
-                    if (appxNorth > 0 && northingVal === 0) {
-                        appxNorth += zoneStart - appxNorth + (zoneStartPlus1 - zoneStart) / 2;
-                    } else if (appxNorth > 0) {
-                        appxNorth += vNorthing;
-                    } else {
-                        appxNorth = zoneStart;
-                        appxNorth += (zoneStartPlus1 - zoneStart) / 2;
+            var easting = -1;
+
+            for (var i = 0; i < eastingArray.length; i++) {
+                
+                // loop through eastingArray until sq1 is found
+                // the index of the string the letter is in will be the base easting, as explained in the declaration
+                // of eastingArray 
+                if ( eastingArray[i].indexOf(sq1) != -1) {
+
+                    // multiply by 100,000 to get the proper base easting
+                    easting = i*100000;
+
+                    // add the east parameter to get the total easting
+                    if (east) {
+                        easting = easting + Number(east)*Math.pow(10,5-east.length);
                     }
-                } else {
-                    appxNorth += 2.5; // this is just for the special case of X
+                    break;
                 }
             }
 
-            if (letNorth < 10 && appxNorth < zoneStart) {
-                if (zoneStartMinus1) {
-                    if(appxNorth > 0 && northingVal === 0) {
-                        appxNorth += zoneStart - appxNorth + (zoneStart - zoneStartMinus1) / 2;
-                    } else if (appxNorth > 0) {
-                        appxNorth += vNorthing;
-                    }
-                } else {
-                    appxNorth += 1.5; // this is just for the special case of C
-                }
-            }
+            var northing = 0;
 
-            var northPrecision = 0;
-            var eastPrecision = 0;
+            // if zone number is even, use northingArrayEven, if odd, use northingArrayOdd
+            // similar to finding easting, the index of sq2 corresponds with the base easting
+            if (zone%2 == 0) {
+                northing = northingArrayEven.indexOf(sq2)*100000;
+                } else if (zone %2 == 1) {
+                northing = northingArrayOdd.indexOf(sq2)*100000;
+                }
+
+            // we can exploit the repeating behavior of northing to find what the total northing should be
+            // iterate through the horizontal zone bands until our northing is greater than the zoneBase of our zone
+            while (northing < zoneBase["CDEFGHJKLMNPQRSTUVWX".indexOf(letter)]) {
+                northing = northing + 2000000;
+                }
+
             if (north) {
-                northPrecision = north.length;
-            } else {
-                north = 0;
+
+                // add the north parameter to get the total northing
+                northing = northing+Number(north)*Math.pow(10,5-north.length);
             }
-            if (east) {
-                eastPrecision = east.length;
-            } else {
-                east = 0;
-            }
-            ret.N=appxNorth*1000000+Number(north)*Math.pow(10,5-northPrecision);
-            ret.E=appxEast*100000+Number(east)*Math.pow(10,5-eastPrecision);
-            ret.zone=zone;
-            ret.letter=letter;
+
+            // set return object
+            ret.N = parseInt(northing);
+            ret.E = parseInt(easting);
+            ret.zone = zone;
+            ret.letter = letter;
+            
+
         },
 
         get100kSetForZone: function(zoneNumber) {
@@ -874,7 +920,6 @@
         },
 
         getNorthingFromChar: function (letter, setVal) {
-
             if (letter === '' || typeof letter === 'undefined') {
                 return 0;
             }
@@ -910,6 +955,7 @@
 
             return northingValue;
         },
+
 
         // parse a USNG string and feed results to USNGtoUTM, then the results of that to UTMtoLL
 
