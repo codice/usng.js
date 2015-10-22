@@ -881,7 +881,8 @@
             }
 
             var northing = 0;
-
+            
+            if (sq2) {
             // if zone number is even, use northingArrayEven, if odd, use northingArrayOdd
             // similar to finding easting, the index of sq2 corresponds with the base easting
             if (zone%2 == 0) {
@@ -892,14 +893,20 @@
 
             // we can exploit the repeating behavior of northing to find what the total northing should be
             // iterate through the horizontal zone bands until our northing is greater than the zoneBase of our zone
-            while (northing < zoneBase["CDEFGHJKLMNPQRSTUVWX".indexOf(letter)]) {
-                northing = northing + 2000000;
+            
+                while (northing < zoneBase["CDEFGHJKLMNPQRSTUVWX".indexOf(letter)]) {
+                    northing = northing + 2000000;
+                    }
+
+                if (north) {
+
+                    // add the north parameter to get the total northing
+                    northing = northing+Number(north)*Math.pow(10,5-north.length);
                 }
-
-            if (north) {
-
-                // add the north parameter to get the total northing
-                northing = northing+Number(north)*Math.pow(10,5-north.length);
+            }
+            else {
+                // add approximately half of the height of one large region to ensure we're in the right zone
+                northing = zoneBase["CDEFGHJKLMNPQRSTUVWX".indexOf(letter)]+499600;
             }
 
             // set return object

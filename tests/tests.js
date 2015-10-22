@@ -1614,6 +1614,19 @@ describe('Convert Lat/Lon to UTM', function(){
         chai.assert.equal(true, essentiallyEqual(east, result.east, 0.0001));
         chai.assert.equal(true, essentiallyEqual(west, result.west, 0.0001));
       });
+      it('should return 32 -102 24 -96', function(){
+        var usng = "14R";
+        var north = 32;
+        var west = -102;
+        var east = -96;
+        var south = 24;
+        var result = converter.USNGtoLL(usng, false);
+        console.log(result.north, result.south, result.east, result.west);
+        chai.assert.equal(true, essentiallyEqual(north, result.north, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(south, result.south, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(east, result.east, 0.0001));
+        chai.assert.equal(true, essentiallyEqual(west, result.west, 0.0001));
+      });
     });
   });
 });
