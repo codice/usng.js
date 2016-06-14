@@ -33,3 +33,14 @@ AMD compatible version of usngs.js with bug fixes, enhancements, and extensive u
 ```
 git clone git://github.com/codice/usng.js.git
 ```
+USNG (U.S. National Grid)
+MGRS (Military Grid Reference System)
+
+## Features
+ * Convert Lat/Lon bounding box to closest USNG
+ * Convert Lat/Lon to UTM
+ * Convert Lat/Lon point to USNG
+ * Convert UTM to Lat/Lon
+ * Convert USNG to UTM
+ * Convert USNG to Lat/Lon
+ * Convert Lat/Lon to MGRS
