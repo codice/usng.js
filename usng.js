@@ -36,23 +36,34 @@
 (function(root, factory) {
 
     if (typeof define === 'function' && define.amd) {
-        define(['underscore', 'exports'], function (_, exports) {
-            root.usngs = factory(root, exports, _);
+        define(['exports'], function (exports) {
+            root.usngs = factory(root, exports);
         });
     } else if (typeof exports !== 'undefined') {
-        var _ = require('underscore');
-        factory(root, exports, _);
+        factory(root, exports);
     } else {
-        root.usngs = factory(root, {}, root._);
+        root.usngs = factory(root, {});
     }
-}(this, function (root, usngs, _) {
+}(this, function (root, usngs) {
+
+    function extend(objToExtend, obj) {
+        var keys = [];
+        for (var key in obj) {
+            keys.push(key);
+        }
+        var length = keys.length;
+        for (var i = 0; i < length; i++) {
+            objToExtend[keys[i]] = obj[keys[i]];
+        }
+        return objToExtend;
+    }
 
     usngs.Converter = function (options) {
         options || (options = {});
         this.initialize.apply(this, [options]);
     };
 
-    _.extend(usngs.Converter.prototype, {
+    extend(usngs.Converter.prototype, {
 
         ngFunctionsPresent: true,
         UNDEFINED_STR: "undefined",
