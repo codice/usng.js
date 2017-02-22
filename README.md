@@ -44,3 +44,15 @@ MGRS (Military Grid Reference System)
  * Convert USNG to UTM
  * Convert USNG to Lat/Lon
  * Convert Lat/Lon to MGRS
+
+## Usage
+ var usng = require('usng.js');
+ var converter = new usng.Converter();
+ 
+ var usngCoord = converter.LLBboxtoUSNG(north, south, east, west);
+ var utmCoord = converter.LLtoUTM(lat, lon, utmcoords, zone);
+ var usngCoord = converter.LLtoUSNG(lat, lon, precision);
+ var llCoord = converter.UTMtoLL(UTMNorthing, UTMEasting, UTMZoneNumber, accuracy);
+ var utmCoord = converter.USNGtoUTM(zone,letter,sq1,sq2,east,north,ret);
+ var llCoord = converter.USNGtoLL(usngStr_input, getCenter);
+ var mgrsCoord = converter.LLtoMGRS(lat, lon, precision);
