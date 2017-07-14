@@ -19,5 +19,15 @@
     "grunt-mocha-test": "^0.12.7",
     "mocha": "^2.1.0",
     "underscore": "^1.7.0"
-  }
+  },
+   "bugs":{  
+      "url":"https://github.com/codice/usng.js/issues"
+   },
+   "main":"Gruntfile.js",
+   "directories":{  
+      "test":"tests"
+   },
+   "scripts":{  
+      "test":"echo \"Error: no test specified\" && exit 1"
+   }
 }
