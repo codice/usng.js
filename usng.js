@@ -350,6 +350,12 @@
             + (61 - 58 * T + T * T + 600 * C - 330 * this.ECC_PRIME_SQUARED )
             * (A * A * A * A * A * A) / 720)));
 
+            //MDCashion 06212018.
+            //Added logic here to adjust Northing for Southern Latitudes.
+            if (UTMNorthing < 0) {
+                UTMNorthing += this.NORTHING_OFFSET;
+            }
+            
             utmcoords[0] = UTMEasting;
             utmcoords[1] = UTMNorthing;
             utmcoords[2] = zoneNumber;
