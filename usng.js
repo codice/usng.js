@@ -499,54 +499,21 @@
 
          ***************************************************************************/
 
-        UTMLetterDesignator: function (lat) {
+        UTMLetterDesignator: function (lat){
             lat = parseFloat(lat);
 
-            var letterDesignator;
-            if ((84 >= lat) && (lat >= 72))
-                letterDesignator = 'X';
-            else if ((72 > lat) && (lat >= 64))
-                letterDesignator = 'W';
-            else if ((64 > lat) && (lat >= 56))
-                letterDesignator = 'V';
-            else if ((56 > lat) && (lat >= 48))
-                letterDesignator = 'U';
-            else if ((48 > lat) && (lat >= 40))
-                letterDesignator = 'T';
-            else if ((40 > lat) && (lat >= 32))
-                letterDesignator = 'S';
-            else if ((32 > lat) && (lat >= 24))
-                letterDesignator = 'R';
-            else if ((24 > lat) && (lat >= 16))
-                letterDesignator = 'Q';
-            else if ((16 > lat) && (lat >= 8))
-                letterDesignator = 'P';
-            else if (( 8 > lat) && (lat >= 0))
-                letterDesignator = 'N';
-            else if (( 0 > lat) && (lat >= -8))
-                letterDesignator = 'M';
-            else if ((-8> lat) && (lat >= -16))
-                letterDesignator = 'L';
-            else if ((-16 > lat) && (lat >= -24))
-                letterDesignator = 'K';
-            else if ((-24 > lat) && (lat >= -32))
-                letterDesignator = 'J';
-            else if ((-32 > lat) && (lat >= -40))
-                letterDesignator = 'H';
-            else if ((-40 > lat) && (lat >= -48))
-                letterDesignator = 'G';
-            else if ((-48 > lat) && (lat >= -56))
-                letterDesignator = 'F';
-            else if ((-56 > lat) && (lat >= -64))
-                letterDesignator = 'E';
-            else if ((-64 > lat) && (lat >= -72))
-                letterDesignator = 'D';
-            else if ((-72 > lat) && (lat >= -80))
-                letterDesignator = 'C';
-            else
-                letterDesignator = 'Z'; // This is here as an error flag to show
-                                        // that the latitude is outside the UTM limits
-            return letterDesignator;
+            if (lat > 84 || lat < -80){
+                return 'Z';
+
+            } else {
+                var index = (lat + 80) / 8;
+
+                if (index >= 6)  index++; // skip 'I'
+                if (index >= 12) index++; // skip 'O'
+                if (index >= 22) index--; // adjust for 80 to 84, which should be 'X'
+
+                return String.fromCharCode(67 /* C */ + index);
+            }
         },
 
 
