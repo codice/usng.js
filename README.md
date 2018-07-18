@@ -46,6 +46,8 @@ MGRS (Military Grid Reference System)
  * Convert Lat/Lon to MGRS
 
 ## Usage
+Example usage of this file with Cesium and OpenLayers can be found within https://github.com/codice/ddf
+
  var usng = require('usng.js');
  
  var converter = new usng.Converter();
