@@ -2,22 +2,46 @@
   "name": "usng.js",
   "description": "AMD compatible script for converting LL, UTM, USNG, and MGRS",
   "licenses": [
-	  {
-		  "type": "MIT"
-	  }
+    {
+      "type": "MIT"
+    }
   ],
   "homepage": "https://github.com/codice/usng.js",
-  "keywords": ["gps", "coordinates", "conversion", "mgrs", "usng", "utm", "latitude", "longitude", "lat/long", "coordinate", "system"],
+  "keywords": [
+    "gps",
+    "coordinates",
+    "conversion",
+    "mgrs",
+    "usng",
+    "utm",
+    "latitude",
+    "longitude",
+    "lat/long",
+    "coordinate",
+    "system"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/codice/usng.js.git"
   },
-  "version": "0.1.2",
+  "version": "0.2.3",
   "devDependencies": {
     "chai": "^1.10.0",
     "grunt": "^0.4.5",
     "grunt-mocha-test": "^0.12.7",
     "mocha": "^2.1.0",
     "underscore": "^1.7.0"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/codice/usng.js/issues"
+  },
+  "main": "usng.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "grunt"
+  },
+  "author": "codice",
+  "license": "MIT"
 }
