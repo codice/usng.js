@@ -355,6 +355,33 @@
             utmcoords[2] = zoneNumber;
         },
 
+        /***************** convert latitude, longitude to UTM  *******************
+        Uses N or S indicator instead of returning a negative Northing value
+        ***************************************************************************/
+        LLtoUTMwithNS: function (lat,lon,utmcoords,zone) {
+            this.LLtoUTM(lat,lon,utmcoords,zone);
+            if (utmcoords[1] < 0) {
+                utmcoords[1] += this.NORTHING_OFFSET;
+                utmcoords[3] = 'S';
+            } else {
+                utmcoords[3] = 'N';
+            }
+        },
+
+        /***************** convert latitude, longitude to UTM  *******************
+        Uses N or S indicator instead of returning a negative Northing value
+        ***************************************************************************/
+        UTMtoLLwithNS: function (UTMNorthing, UTMEasting, UTMZoneNumber, accuracy, NorSIndicator) {
+            var result;
+            if (NorSIndicator === 'S') {
+                result = this.UTMtoLL(UTMNorthing - this.NORTHING_OFFSET, UTMEasting, UTMZoneNumber, accuracy);
+            } else {
+                result = this.UTMtoLL(UTMNorthing, UTMEasting, UTMZoneNumber, accuracy);
+            }
+
+            return result;
+        },
+
 
         /***************** convert latitude, longitude to USNG  *******************
          Converts lat/lng to USNG coordinates.  Calls LLtoUTM first, then
