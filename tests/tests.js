@@ -351,26 +351,26 @@ describe('Convert USNG to UTM', function(){
 });
 describe('Convert UTM to Lat/Lon', function(){
   describe('with single digit zone and specifying accuracy', function(){
-    it('should return north=1; east=-157; south=0; west=-158', function(){
+    it('should return north=1; east=-156; south=0; west=-157', function(){
       var northing = 42785;
-      var easting = 31517;
+      var easting = 131517;
       var zone = 5;
       var accuracy = 100000;
       var latLon = converter.UTMtoLL(northing, easting, zone, accuracy);
       chai.assert.equal(1, Math.floor(latLon.north));
-      chai.assert.equal(-157, Math.floor(latLon.east));
+      chai.assert.equal(-156, Math.floor(latLon.east));
       chai.assert.equal(0, Math.floor(latLon.south));
-      chai.assert.equal(-158, Math.floor(latLon.west));
+      chai.assert.equal(-157, Math.floor(latLon.west));
     });
   });
   describe('with single digit zone and not specifying accuracy', function(){
-    it('should return lat=0; east=-158', function(){
+    it('should return lat=0; east=-157', function(){
       var northing = 42785;
-      var easting = 31517;
+      var easting = 131517;
       var zone = 5;
       var latLon = converter.UTMtoLL(northing, easting, zone);
       chai.assert.equal(0, Math.floor(latLon.lat));
-      chai.assert.equal(-158, Math.floor(latLon.lon));
+      chai.assert.equal(-157, Math.floor(latLon.lon));
     });
   });
   describe('with two digit zone and specifying accuracy', function(){
@@ -396,6 +396,26 @@ describe('Convert UTM to Lat/Lon', function(){
       chai.assert.equal(-116, Math.floor(latLon.lon));
     });
   });
+  describe('around Merlo town in Buenos Aires', function(){
+      it('should return lat=-35; lon=-59', function(){
+        var northing = 6168016;
+        var easting = 341475;
+        var zone = 21;
+        var latLon = converter.UTMtoLL(northing - converter.NORTHING_OFFSET, easting, zone);
+        chai.assert.equal(-35, Math.floor(latLon.lat));
+        chai.assert.equal(-59, Math.floor(latLon.lon));
+      });
+    });
+    describe('around Merlo town in Buenos Aires with N/S', function(){
+      it('should return lat=-35; lon=-59', function(){
+        var northing = 6168016;
+        var easting = 341475;
+        var zone = 21;
+        var latLon = converter.UTMtoLLwithNS(northing, easting, zone, null, 'S');
+        chai.assert.equal(-35, Math.floor(latLon.lat));
+        chai.assert.equal(-59, Math.floor(latLon.lon));
+      });
+    });
 });
 describe('Convert USNG to Lat/Lon', function(){
   describe('with single digit zone', function(){
@@ -861,6 +881,96 @@ describe('Convert Lat/Lon to UTM', function(){
       chai.assert.equal(364050, parseInt(coords[0]));
       chai.assert.equal(-2583444, parseInt(coords[1]));
       chai.assert.equal(38, coords[2]);
+    });
+    describe('around Arizona in the United States with N/S', function(){
+        it('should return easting=500000; northing=3762155; zone=12', function(){
+          var coords = [];
+          converter.LLtoUTMwithNS(34, -111, coords);
+          chai.assert.equal(500000, parseInt(coords[0]));
+          chai.assert.equal(3762155, parseInt(coords[1]));
+          chai.assert.equal(12, coords[2]);
+          chai.assert.equal('N', coords[3]);
+        });
+      });
+      describe('around Prescott/Chino Valley in Arizona with N/S', function(){
+        it('should return easting=362289; northing=3818618; zone=12', function(){
+          var coords = [];
+          converter.LLtoUTMwithNS(34.5, -112.5, coords);
+          chai.assert.equal(362289, parseInt(coords[0]));
+          chai.assert.equal(3818618, parseInt(coords[1]));
+          chai.assert.equal(12, coords[2]);
+          chai.assert.equal('N', coords[3]);
+        });
+      });
+      describe('immediately around Prescott city in Arizona with N/S', function(){
+        it('should return easting=365575; northing=3823561; zone=12', function(){
+          var coords = [];
+          converter.LLtoUTMwithNS(34.545, -112.465, coords);
+          chai.assert.equal(365575, parseInt(coords[0]));
+          chai.assert.equal(3823561, parseInt(coords[1]));
+          chai.assert.equal(12, coords[2]);
+          chai.assert.equal('N', coords[3]);
+        });
+      });
+    describe('around Uruguay with N/S', function(){
+        it('should return easting=640915; northing=6403149; zone=21', function(){
+          var coords = [];
+          converter.LLtoUTMwithNS(-32.5, -55.5, coords);
+          chai.assert.equal(640915, parseInt(coords[0]));
+          chai.assert.equal(6403149, parseInt(coords[1]));
+          chai.assert.equal(21, coords[2]);
+          chai.assert.equal('S', coords[3]);
+        });
+      });
+      describe('around Buenos Aires city in Argentina with N/S', function(){
+        it('should return easting=362289; northing=6181381; zone=21', function(){
+          var coords = [];
+          converter.LLtoUTMwithNS(-34.5, -58.5, coords);
+          chai.assert.equal(362289, parseInt(coords[0]));
+          chai.assert.equal(6181381, parseInt(coords[1]));
+          chai.assert.equal(21, coords[2]);
+          chai.assert.equal('S', coords[3]);
+        });
+      });
+      describe('around Merlo town in Buenos Aires with N/S', function(){
+        it('should return easting=341475; northing=6163299; zone=21', function(){
+          var coords = [];
+          converter.LLtoUTMwithNS(-34.66, -58.73, coords);
+          chai.assert.equal(341475, parseInt(coords[0]));
+          chai.assert.equal(6163299, parseInt(coords[1]));
+          chai.assert.equal(21, coords[2]);
+          chai.assert.equal('S', coords[3]);
+        });
+      });
+      describe('around Madagascar with N/S', function(){
+        it('should return easting=658354; northing=7953837; zone=38', function(){
+          var coords = [];
+          converter.LLtoUTMwithNS(-18.5, 46.5, coords);
+          chai.assert.equal(658354, parseInt(coords[0]));
+          chai.assert.equal(7953837, parseInt(coords[1]));
+          chai.assert.equal(38, coords[2]);
+          chai.assert.equal('S', coords[3]);
+        });
+      });
+      describe('around Toliara city in Madagascar with N/S', function(){
+        it('should return easting=345704; northing=7511055; zone=38', function(){
+          var coords = [];
+          converter.LLtoUTMwithNS(-22.5, 43.5, coords);
+          chai.assert.equal(345704, parseInt(coords[0]));
+          chai.assert.equal(7511055, parseInt(coords[1]));
+          chai.assert.equal(38, coords[2]);
+          chai.assert.equal('S', coords[3]);
+        });
+      });
+      describe('around Toliara city center in Madagascar with N/S', function(){
+        it('should return easting=364050; northing=7416555; zone=38', function(){
+          var coords = [];
+          converter.LLtoUTMwithNS(-23.355, 43.67, coords);
+          chai.assert.equal(364050, parseInt(coords[0]));
+          chai.assert.equal(7416555, parseInt(coords[1]));
+          chai.assert.equal(38, coords[2]);
+          chai.assert.equal('S', coords[3]);
+        });
     });
   });
   describe('around Central Japan', function(){
