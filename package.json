@@ -24,13 +24,13 @@
     "type": "git",
     "url": "git://github.com/codice/usng.js.git"
   },
-  "version": "0.2.3",
+  "version": "0.2.4",
   "devDependencies": {
-    "chai": "^1.10.0",
-    "grunt": "^0.4.5",
-    "grunt-mocha-test": "^0.12.7",
-    "mocha": "^2.1.0",
-    "underscore": "^1.7.0"
+    "chai": "^4.1.2",
+    "grunt": "^1.0.3",
+    "grunt-mocha-test": "^0.13.3",
+    "mocha": "^5.2.0",
+    "underscore": "^1.9.1"
   },
   "bugs": {
     "url": "https://github.com/codice/usng.js/issues"

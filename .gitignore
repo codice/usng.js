@@ -9,3 +9,4 @@
 node/
 node_modules/
 results.txt
+/package-lock.json
