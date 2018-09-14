@@ -46,6 +46,41 @@
     }
 }(this, function (root, usngs) {
 
+    function eatanhe(x) {
+        return this.es * Math.atanh(this.es * x)
+    }
+
+    function taupf(tauValue) {
+        const tau1 = Math.hypot(1.0, tauValue)
+        const sig = Math.sinh(eatanhe.call(this, tauValue / tau1))
+        return Math.hypot(1.0, sig) * tauValue - sig * tau1
+    }
+
+    function tauf(taupValue) {
+        const e2m = 1 - Math.pow(this.es, 2)
+            // To lowest order in e^2, taup = (1 - e^2) * tau = _e2m * tau; so use
+            // tau = taup/_e2m as a starting guess.  (This starting guess is the
+            // geocentric latitude which, to first order in the flattening, is equal
+            // to the conformal latitude.)  Only 1 iteration is needed for |lat| <
+            // 3.35 deg, otherwise 2 iterations are needed.  If, instead, tau = taup
+            // is used the mean number of iterations increases to 1.99 (2 iterations
+            // are needed except near tau = 0).
+        let tau = taupValue/e2m
+        const stol = Math.sqrt(Number.EPSILON) / 10 * Math.max(1, Math.abs(taupValue))
+        // min iterations = 1, max iterations = 2; mean = 1.94; 5 iterations panic
+        for (let i = 0; i < 5; ++i) {
+            const taupa = taupf.call(this, tau)
+            const dtau = (taupValue - taupa) *
+                (1 + e2m * Math.pow(tau, 2)) /
+                ( e2m * Math.hypot(1, tau) * Math.hypot(1, taupa) )
+            tau += dtau
+            if (!(Math.abs(dtau) >= stol)) {
+                break
+            }
+        }
+        return tau
+    }
+
     function extend(objToExtend, obj) {
         var keys = [];
         for (var key in obj) {
@@ -89,6 +124,16 @@
 
         // scale factor of central meridian
         k0: 0.9996,
+
+        // UPS conversion constants re: GeographicLib
+        a: 6378137,
+        es: 0.08181918271,
+        c: 1.00336,
+        rhoAdjusterValue: 12637275.1116,
+        falseUPSNorthing: 2000000,
+        falseUPSEasting: 2000000,
+        SQ_MAX_EPSILON: 4.93038e-32,
+        SQ_MAX_EPSILON_DIV_10: this.SQ_MAX_EPSILON / 10,
 
         EQUATORIAL_RADIUS: undefined,
         ECC_PRIME_SQUARED: undefined,
@@ -265,6 +310,35 @@
             return result;
         },
 
+        serializeUTM({zoneNumber, easting, northing}) {
+            return `${zoneNumber} ${easting}mE ${northing}mN` 
+        },
+
+        deserializeUTM(str) {
+            let zoneNumber, easting, northing
+
+            const processInvalidUTM = () => {
+                throw new Error( `Invalid UPS String: ${str}`)
+            }
+
+            const regExp = /^\s*(\d+)\s+(\d+)[mM][eE]\s+(\d+)[mM][nN]\s*$/
+            try {
+                [, zoneNumber, easting, northing] = regExp.exec(str)
+            } catch(err) {
+                processInvalidUTM()
+            }
+
+            if (zoneNumber < 1 || zoneNumber > 60){
+                processInvalidUTM()
+            }
+
+            return {
+                zoneNumber: Number(zoneNumber),
+                easting: Number(easting),
+                northing: Number(northing)
+            }
+        },
+
         /***************** convert latitude, longitude to UTM  *******************
 
          Converts lat/long to UTM coords.  Equations from USGS Bulletin 1532
@@ -281,19 +355,19 @@
          utmcoords[2] = zone
 
          ***************************************************************************/
-        LLtoUTM: function (lat,lon,utmcoords,zone) {
+        LLtoUTM: function (lat,lon,utmcoords = [],zone) {
             // utmcoords is a 2-D array declared by the calling routine
             // note: input of lon = 180 or -180 with zone 60 not allowed; use 179.9999
 
             lat = parseFloat(lat);
             lon = parseFloat(lon);
 
-        // Constrain reporting USNG coords to the latitude range [80S .. 84N]
-        /////////////////
-            if (lat > 84.0 || lat < -80.0){
-                return this.UNDEFINED_STR;
-            }
-        //////////////////////
+            // Constrain reporting USNG coords to the latitude range [80S .. 84N]  
+            /////////////////
+                if (lat > 84.0 || lat < -80.0){
+                    return this.UNDEFINED_STR;
+                }
+            //////////////////////
 
 
             // sanity check on input - turned off when testing with Generic Viewer
@@ -353,6 +427,12 @@
             utmcoords[0] = UTMEasting;
             utmcoords[1] = UTMNorthing;
             utmcoords[2] = zoneNumber;
+
+            return {
+                easting: UTMEasting,
+                northing: UTMNorthing,
+                zoneNumber: zoneNumber
+            };
         },
 
         /***************** convert latitude, longitude to UTM  *******************
@@ -382,6 +462,166 @@
             return result;
         },
 
+        serializeUPS(upsCoordinates = {}) {
+            //verify that the passed in coords is a valid ups object
+            try { this.UPStoLL(upsCoordinates) } 
+            catch (err) { throw err }
+
+            const {northPole, easting, northing} = upsCoordinates
+            const zoneLetter = northPole ? (easting < 2000000 ? 'Y' : 'Z') 
+                : (easting < 2000000 ? 'A' : 'B')
+            return `${zoneLetter} ${easting}mE ${northing}mN` 
+        },
+        
+        deserializeUPS(str) {
+            let zoneLetter, easting, northing
+
+            const processInvalidUPS = () => {
+                throw new Error( `Invalid UPS String: ${str}`)
+            }
+
+            const processValidUPS = () => {
+                return {
+                    northPole: (["Y", "Z"].includes(zoneLetter.toUpperCase())),
+                    easting: Number(easting),
+                    northing: Number(northing)
+                }
+            }
+
+            const regExp = /^\s*([abyzABYZ])\s+(\d+)[mM][eE]\s+(\d+)[mM][nN]\s*$/
+            try {
+                [, zoneLetter, easting, northing] = regExp.exec(str)
+                this.UPStoLL({
+                    northPole: true, 
+                    easting: Number(easting),
+                    northing: Number(northing)
+                })
+            } catch(err) {
+                processInvalidUPS()
+            }
+            
+            return processValidUPS()
+        },
+
+        /***************** convert latitude, longitude to UPS  *******************
+         Uses "northPole" boolean instead of returning a negative Northing value
+
+         Input latitude is expected to be [-90, 90].
+         Input longitude is expected to be [-180, 180].
+
+         This returns an object describing the UPS coordinates:
+         { northing: number, easting: number, northPole: bool }
+
+         On invalid input throws an error.
+        ***************************************************************************/
+        LLtoUPS: function(lat, lon) {
+            const isLatLonCoordinatesPairInvalid = () => {
+                return !(typeof lat === "number"
+                    && typeof lon === "number"
+                    && lat >= -90 && lat <= 90
+                    && lon >= -180 && lon <= 180)
+            }
+            if (isLatLonCoordinatesPairInvalid()) {
+                throw new Error('Invalid Lat/Lon coordinates: ' + lat + ', ' + lon)
+            }
+            const northPole = lat > 0
+            const tau = Math.tan(Math.abs(lat) * this.DEG_2_RAD)
+            const taup = taupf.call(this, tau)
+            const rhoStep1 = Math.hypot(1, taup) + Math.abs(taup)
+            const rhoStep2 = taup >= 0
+                ? (Math.abs(lat) !== 90
+                    ? 1/rhoStep1
+                    : 0)
+                : rhoStep1
+            const rho = rhoStep2 * this.rhoAdjusterValue
+            const x = Math.sin(lon * this.DEG_2_RAD) * rho
+            const y = Math.cos(lon * this.DEG_2_RAD) * (northPole ? -rho : rho)
+            return {
+                northing: y + this.falseUPSNorthing,
+                easting: x + this.falseUPSEasting,
+                northPole: northPole
+            }
+        },
+
+        /***************** convert latitude, longitude to UPS  *******************
+         Input:  valid UPS coordinates object, example
+           {northPole: true, northing: 1234567, easting:  987654}
+         Returns Lat/Lon object with latitide is expected to be [-90, 90],
+         and longitude is expected to be [-180, 180].
+
+         On invalid input throws an error.
+         ***************************************************************************/
+        UPStoLL: function (upsCoordinates) {
+            const validateUPSCoordinates = () => {
+                const processInvalidUPS = () => {
+                    throw new Error( 'Invalid UPS object: ' + JSON.stringify(upsCoordinates))
+                }
+                const processValidUPS  = () => {
+                    const adjustedUPS = {
+                        northPole: upsCoordinates.northPole,
+                        northing: upsCoordinates.northing - this.falseUPSNorthing,
+                        easting: upsCoordinates.easting - this.falseUPSEasting
+                    }
+                    const rho = Math.hypot(adjustedUPS.easting, adjustedUPS.northing)
+                    const t = rho !== 0.0
+                        ? rho / this.rhoAdjusterValue
+                        : Math.pow(Number.EPSILON, 2)
+                    const taup = (1 / t - t) / 2
+                    const tau = tauf.call(this, taup)
+                    const lat = (adjustedUPS.northPole ? 1 : -1) * Math.atan(tau) * this.RAD_2_DEG
+                    const lon = Math.atan2(
+                        adjustedUPS.easting,
+                        adjustedUPS.northPole ? -adjustedUPS.northing: adjustedUPS.northing) *
+                        this.RAD_2_DEG
+                    return { lat, lon }
+                }
+                const isUPSObjectDefined = typeof upsCoordinates !== "undefined"
+                const isUPSMetricComponentValid = metricValue => isUPSObjectDefined
+                    && typeof metricValue === "number"
+                    && metricValue >= 800000
+                    && metricValue <= 3200000
+                const isUPSEastingValid = isUPSMetricComponentValid(upsCoordinates.easting)
+                const isUPSNorthingValid = isUPSMetricComponentValid(upsCoordinates.northing)
+                const isUPSValid = isUPSEastingValid && isUPSNorthingValid
+            return {
+                    processConversion: isUPSValid
+                        ? processValidUPS
+                        : processInvalidUPS
+                }
+            }
+            return validateUPSCoordinates().processConversion()
+        },
+
+        convertFromUTMUPS(inputUTMUPSstr) {
+            let zone, easting, northing
+
+            const processInvalidUTMUPS = () => {
+                throw new Error( `Invalid UTM/UPS String: ${str}`)
+            }
+
+            const regExp = /^\s*([abyzABYZ]|\d+)\s+(\d+)[mM][eE]\s+(\d+)[mM][nN]\s*$/
+            try {
+                [, zone, easting, northing] = regExp.exec(inputUTMUPSstr)
+
+            } catch(err) {
+                processInvalidUTMUPS()
+            }
+
+            return Number(zone) 
+                ? this.UTMtoLL(northing, easting, zone)
+                : this.UPStoLL(this.deserializeUPS(inputUTMUPSstr)) 
+        },
+        
+        convertToUTMUPS(lat, lon) {
+            // sanity check on input - turned off when testing with Generic Viewer
+            if (lon > 180 || lon < -180 || lat > 90 || lat < -90) {
+                throw new Error(`usng.js, LLtoUTMUPS, invalid input. lat: ${lat.toFixed(4)} lon: ${lon.toFixed(4)}`);
+            }
+             // Constrain reporting UTM coords to the latitude range [80S .. 84N]
+            return (lat > 84.0 || lat < -80.0)
+                ? this.serializeUPS(this.LLtoUPS(lat, lon))
+                : this.serializeUTM(this.LLtoUTM(lat, lon))
+        },
 
         /***************** convert latitude, longitude to USNG  *******************
          Converts lat/lng to USNG coordinates.  Calls LLtoUTM first, then

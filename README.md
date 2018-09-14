@@ -66,3 +66,11 @@ Example usage of this file with Cesium and OpenLayers can be found within https:
  var llCoord = converter.USNGtoLL(usngStr_input, getCenter);
  
  var mgrsCoord = converter.LLtoMGRS(lat, lon, precision);
+
+## CLI Test Tool Usage
+
+*Note: This is not for production use*
+
+Run with: `usng-cli [function] [params]`
+
+In development you will need to run `npm link` first.

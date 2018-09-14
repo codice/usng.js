@@ -801,6 +801,830 @@ describe('Convert Lat/Lon to USNG', function(){
     });
   });
 });
+describe('UPS Conversions', () => {
+  describe('LLtoUPS', () => {
+    const range = 3.5;
+    [{
+      latitude: 90,
+      longitude: 0,
+      easting: 2000000,
+      northing: 2000000,
+      northPole: true
+    }, {
+      latitude: 84.01,
+      longitude: 0,
+      easting: 2000000,
+      northing: 1334385,
+      northPole: true
+    }, {
+      latitude: 84.01,
+      longitude: 15,
+      easting: 2172273,
+      northing: 1357065,
+      northPole: true
+    }, {
+      latitude: 87,
+      longitude: 0,
+      easting: 2000000,
+      northing: 1666855,
+      northPole: true
+    }, {
+      latitude: 87,
+      longitude: 15,
+      easting: 2086224,
+      northing: 1678207,
+      northPole: true
+    }, {
+      latitude: -80.01,
+      longitude: 0,
+      easting: 2000000,
+      northing: 3111832,
+      northPole: false
+    }, {
+      latitude: -80.01,
+      longitude: 15,
+      easting: 2287763,
+      northing: 3073947,
+      northPole: false
+    }, {
+      latitude: -85,
+      longitude: 0,
+      easting: 2000000,
+      northing: 2555457,
+      northPole: false
+    }, {
+      latitude: -85,
+      longitude: 15,
+      easting: 2143762,
+      northing: 2536530,
+      northPole: false
+    }, {
+      latitude: -90,
+      longitude: 0,
+      easting: 2000000,
+      northing: 2000000,
+      northPole: false
+    }, {
+      latitude: -87,
+      longitude: 0,
+      easting: 2000000,
+      northing: 2333144,
+      northPole: false
+    }, {
+      latitude: 87,
+      longitude: 67,
+      easting: 2306661,
+      northing: 1869830,
+      northPole: true
+    }, {
+      latitude: 87,
+      longitude: -67,
+      easting: 1693338,
+      northing: 1869830,
+      northPole: true
+    }, {
+      latitude: 84.1,
+      longitude: -166,
+      easting: 1841396,
+      northing: 2636122,
+      northPole: true
+    }].forEach((testData) => {
+      it(`convert latitude: ${testData.latitude}  longitude: ${testData.longitude} to ups`, () => {
+        const ups = converter.LLtoUPS(testData.latitude, testData.longitude)
+        chai.expect(ups.northing).to.be.closeTo(testData.northing, range)
+        chai.expect(ups.easting).to.be.closeTo(testData.easting, range)
+        chai.expect(ups.northPole).to.equal(testData.northPole)
+      })
+    })
+    describe('test southern longitude increments of 7.5 degrees to test corners of UPS coordinate squares', ()=> {
+      [{
+        longitude: 0,
+        easting: 2000000,
+        northing: 2555457,
+      }, {
+        longitude: 7.5,
+        easting: 2072501,
+        northing: 2550705,
+      }, {
+        longitude: 15,
+        easting: 2143762,
+        northing: 2536530,
+      }, {
+        longitude: 22.5,
+        easting: 2212564,
+        northing: 2513175,
+      }, {
+        longitude: 30,
+        easting: 2277728,
+        northing: 2481040,
+      }, {
+        longitude: 37.5,
+        easting: 2338141,
+        northing: 2440673,
+      }, {
+        longitude: 45,
+        easting: 2392767,
+        northing: 2392767,
+      }, {
+        longitude: 52.5,
+        easting: 2440673,
+        northing: 2338141,
+      }, {
+        longitude: 60,
+        easting: 2481040,
+        northing: 2277728,
+      }, {
+        longitude: 67.5,
+        easting: 2513175,
+        northing: 2212564,
+      }, {
+        longitude: 75,
+        easting: 2536530,
+        northing: 2143762,
+      }, {
+        longitude: 82.5,
+        easting: 2550705,
+        northing: 2072501,
+      }, {
+        longitude: 90,
+        easting: 2555457,
+        northing: 2000000,
+      }, {
+        longitude: 97.5,
+        easting: 2550705,
+        northing: 1927498,
+      }, {
+        longitude: 105,
+        easting: 2536530,
+        northing: 1856237,
+      }, {
+        longitude: 112.5,
+        easting: 2513175,
+        northing: 1787435,
+      }, {
+        longitude: 120,
+        easting: 2481040,
+        northing: 1722271,
+      }, {
+        longitude: 127.5,
+        easting: 2440673,
+        northing: 1661858,
+      }, {
+        longitude: 135,
+        easting: 2392767,
+        northing: 1607232,
+      }, {
+        longitude: 142.5,
+        easting: 2338141,
+        northing: 1559326,
+      }, {
+        longitude: 150,
+        easting: 2277728,
+        northing: 1518959,
+      }, {
+        longitude: 157.5,
+        easting: 2212564,
+        northing: 1486824,
+      }, {
+        longitude: 165,
+        easting: 2143762,
+        northing: 1463469,
+      }, {
+        longitude: 172.5,
+        easting: 2072501,
+        northing: 1449294,
+      }, {
+        longitude: 180,
+        easting: 2000000,
+        northing: 1444542,
+      }, {
+        longitude: -7.5,
+        easting: 1927498,
+        northing: 2550705,
+      }, {
+        longitude: -15,
+        easting: 1856237,
+        northing: 2536530,
+      }, {
+        longitude: -22.5,
+        easting: 1787435,
+        northing: 2513175,
+      }, {
+        longitude: -30,
+        easting: 1722271,
+        northing: 2481040,
+      }, {
+        longitude: -37.5,
+        easting: 1661858,
+        northing: 2440673,
+      }, {
+        longitude: -45,
+        easting: 1607232,
+        northing: 2392767,
+      }, {
+        longitude: -52.5,
+        easting: 1559326,
+        northing: 2338141,
+      }, {
+        longitude: -60,
+        easting: 1518959,
+        northing: 2277728,
+      }, {
+        longitude: -67.5,
+        easting: 1486824,
+        northing: 2212564,
+      }, {
+        longitude: -75,
+        easting: 1463469,
+        northing: 2143762,
+      }, {
+        longitude: -82.5,
+        easting: 1449294,
+        northing: 2072501,
+      }, {
+        longitude: -90,
+        easting: 1444542,
+        northing: 2000000,
+      }, {
+        longitude: -97.5,
+        easting: 1449294,
+        northing: 1927498,
+      }, {
+        longitude: -105,
+        easting: 1463469,
+        northing: 1856237,
+      }, {
+        longitude: -112.5,
+        easting: 1486824,
+        northing: 1787435,
+      }, {
+        longitude: -120,
+        easting: 1518959,
+        northing: 1722271,
+      }, {
+        longitude: -127.5,
+        easting: 1559326,
+        northing: 1661858,
+      }, {
+        longitude: -135,
+        easting: 1607232,
+        northing: 1607232,
+      }, {
+        longitude: -142.5,
+        easting: 1661858,
+        northing: 1559326,
+      }, {
+        longitude: -150,
+        easting: 1722271,
+        northing: 1518959,
+      }, {
+        longitude: -157.5,
+        easting: 1787435,
+        northing: 1486824,
+      }, {
+        longitude: -165,
+        easting: 1856237,
+        northing: 1463469,
+      }, {
+        longitude: -172.5,
+        easting: 1927498,
+        northing: 1449294,
+      }, {
+        longitude: -180,
+        easting: 2000000,
+        northing: 1444542,
+      }].forEach((testData) => {
+        it(`convert longitude: ${testData.longitude} to ups`, () => {
+          const ups = converter.LLtoUPS(-85, testData.longitude)
+          chai.expect(ups.northing).to.be.closeTo(testData.northing, range)
+          chai.expect(ups.easting).to.be.closeTo(testData.easting, range)
+          chai.expect(ups.northPole).to.equal(false)
+        })
+      })
+    })
+    describe('test northern longitude increments of 7.5 degrees to test corners of UPS coordinate squares', ()=> {
+      [{
+        longitude: 0,
+        easting: 2000000,
+        northing: 1444542,
+      }, {
+        longitude: 7.5,
+        easting: 2072501,
+        northing: 1449294,
+      }, {
+        longitude: 15,
+        easting: 2143762,
+        northing: 1463469,
+      }, {
+        longitude: 22.5,
+        easting: 2212564,
+        northing: 1486824,
+      }, {
+        longitude: 30,
+        easting: 2277728,
+        northing: 1518959,
+      }, {
+        longitude: 37.5,
+        easting: 2338141,
+        northing: 1559326,
+      }, {
+        longitude: 45,
+        easting: 2392767,
+        northing: 1607232,
+      }, {
+        longitude: 52.5,
+        easting: 2440673,
+        northing: 1661858,
+      }, {
+        longitude: 60,
+        easting: 2481040,
+        northing: 1722271,
+      }, {
+        longitude: 67.5,
+        easting: 2513175,
+        northing: 1787435,
+      }, {
+        longitude: 75,
+        easting: 2536530,
+        northing: 1856237,
+      }, {
+        longitude: 82.5,
+        easting: 2550705,
+        northing: 1927498,
+      }, {
+        longitude: 90,
+        easting: 2555457,
+        northing: 2000000,
+      }, {
+        longitude: 97.5,
+        easting: 2550705,
+        northing: 2072501,
+      }, {
+        longitude: 105,
+        easting: 2536530,
+        northing: 2143762,
+      }, {
+        longitude: 112.5,
+        easting: 2513175,
+        northing: 2212564,
+      }, {
+        longitude: 120,
+        easting: 2481040,
+        northing: 2277728,
+      }, {
+        longitude: 127.5,
+        easting: 2440673,
+        northing: 2338141,
+      }, {
+        longitude: 135,
+        easting: 2392767,
+        northing: 2392767,
+      }, {
+        longitude: 142.5,
+        easting: 2338141,
+        northing: 2440673,
+      }, {
+        longitude: 150,
+        easting: 2277728,
+        northing: 2481040,
+      }, {
+        longitude: 157.5,
+        easting: 2212564,
+        northing: 2513175,
+      }, {
+        longitude: 165,
+        easting: 2143762,
+        northing: 2536530,
+      }, {
+        longitude: 172.5,
+        easting: 2072501,
+        northing: 2550705,
+      }, {
+        longitude: 180,
+        easting: 2000000,
+        northing: 2555457,
+      }, {
+        longitude: -7.5,
+        easting: 1927498,
+        northing: 1449294,
+      }, {
+        longitude: -15,
+        easting: 1856237,
+        northing: 1463469,
+      }, {
+        longitude: -22.5,
+        easting: 1787435,
+        northing: 1486824,
+      }, {
+        longitude: -30,
+        easting: 1722271,
+        northing: 1518959,
+      }, {
+        longitude: -37.5,
+        easting: 1661858,
+        northing: 1559326,
+      }, {
+        longitude: -45,
+        easting: 1607232,
+        northing: 1607232,
+      }, {
+        longitude: -52.5,
+        easting: 1559326,
+        northing: 1661858,
+      }, {
+        longitude: -60,
+        easting: 1518959,
+        northing: 1722271,
+      }, {
+        longitude: -67.5,
+        easting: 1486824,
+        northing: 1787435,
+      }, {
+        longitude: -75,
+        easting: 1463469,
+        northing: 1856237,
+      }, {
+        longitude: -82.5,
+        easting: 1449294,
+        northing: 1927498,
+      }, {
+        longitude: -90,
+        easting: 1444542,
+        northing: 2000000,
+      }, {
+        longitude: -97.5,
+        easting: 1449294,
+        northing: 2072501,
+      }, {
+        longitude: -105,
+        easting: 1463469,
+        northing: 2143762,
+      }, {
+        longitude: -112.5,
+        easting: 1486824,
+        northing: 2212564,
+      }, {
+        longitude: -120,
+        easting: 1518959,
+        northing: 2277728,
+      }, {
+        longitude: -127.5,
+        easting: 1559326,
+        northing: 2338141,
+      }, {
+        longitude: -135,
+        easting: 1607232,
+        northing: 2392767,
+      }, {
+        longitude: -142.5,
+        easting: 1661858,
+        northing: 2440673,
+      }, {
+        longitude: -150,
+        easting: 1722271,
+        northing: 2481040,
+      }, {
+        longitude: -157.5,
+        easting: 1787435,
+        northing: 2513175,
+      }, {
+        longitude: -165,
+        easting: 1856237,
+        northing: 2536530,
+      }, {
+        longitude: -172.5,
+        easting: 1927498,
+        northing: 2550705,
+      }, {
+        longitude: -180,
+        easting: 2000000,
+        northing: 2555457,
+      }].forEach((testData) => {
+        it(`convert longitude: ${testData.longitude} to ups`, () => {
+          const ups = converter.LLtoUPS(85, testData.longitude)
+          chai.expect(ups.northing).to.be.closeTo(testData.northing, range)
+          chai.expect(ups.easting).to.be.closeTo(testData.easting, range)
+          chai.expect(ups.northPole).to.equal(true)
+        })
+      })
+    })
+  })
+  describe('UPStoLL', () => {
+    const range = 0.5
+    it('convert north pole', ()=> {
+      const { lat, lon } = converter.UPStoLL({
+        northing: 2000000,
+        easting: 2000000,
+        northPole: true
+      });
+      chai.expect(lat).to.be.closeTo(90, range)
+      // Longitude is irrelevant at the poles
+    })
+    it('convert just above 84N', ()=> {
+      const { lat, lon } = converter.UPStoLL({
+        northing: 1334385,
+        easting: 2000000,
+        northPole: true
+      });
+      chai.expect(lat).to.be.closeTo(84.01, range)
+      chai.expect(lon).to.be.closeTo(0, range)
+    })
+    it('convert just above 84N with different longitude', ()=> {
+      const { lat, lon } = converter.UPStoLL({
+        northing: 1357065,
+        easting: 2172273,
+        northPole: true
+      });
+      chai.expect(lat).to.be.closeTo(84.01, range)
+      chai.expect(lon).to.be.closeTo(15, range)
+    })
+    it('convert further above 84N', ()=> {
+      const { lat, lon } = converter.UPStoLL({
+        northing: 1666855,
+        easting: 2000000,
+        northPole: true
+      });
+      chai.expect(lat).to.be.closeTo(87, range)
+      chai.expect(lon).to.be.closeTo(0, range)
+    })
+    it('convert further above 84N with different longitude', ()=> {
+      const { lat, lon } = converter.UPStoLL({
+        northing: 1678207,
+        easting: 2086224,
+        northPole: true
+      });
+      chai.expect(lat).to.be.closeTo(87, range)
+      chai.expect(lon).to.be.closeTo(15, range)
+    })
+    it('convert just below 80S', ()=> {
+      const { lat, lon } = converter.UPStoLL({
+        northing: 3111832,
+        easting: 2000000,
+        northPole: false
+      });
+      chai.expect(lat).to.be.closeTo(-80.01, range)
+      chai.expect(lon).to.be.closeTo(0, range)
+    })
+    it('convert just below 80S with different longitude', ()=> {
+      const { lat, lon } = converter.UPStoLL({
+        northing: 3073947,
+        easting: 2287763,
+        northPole: false
+      });
+      chai.expect(lat).to.be.closeTo(-80, range)
+      chai.expect(lon).to.be.closeTo(15, range)
+    })
+    it('convert further below 80S', ()=> {
+      const { lat, lon } = converter.UPStoLL({
+        northing: 2555457,
+        easting: 2000000,
+        northPole: false
+      });
+      chai.expect(lat).to.be.closeTo(-85, range)
+      chai.expect(lon).to.be.closeTo(0, range)
+    })
+    it('convert further below 80S with a different longitude', ()=> {
+      const { lat, lon } = converter.UPStoLL({
+        northing: 2536530,
+        easting: 2143762,
+        northPole: false
+      });
+      chai.expect(lat).to.be.closeTo(-85, range)
+      chai.expect(lon).to.be.closeTo(15, range)
+    })
+    describe('test four corners in UPS square', ()=> {
+      it('convert Z 2400000mE 2400000mN', ()=>{
+        const { lat, lon } = converter.UPStoLL({
+          northing: 2400000,
+          easting: 2400000,
+          northPole: true
+        });
+        chai.expect(lat).to.be.closeTo(84.91, range)
+        chai.expect(lon).to.be.closeTo(135, range)
+      })
+      it('convert Y 1400000mE 1400000mN', ()=>{
+        const { lat, lon } = converter.UPStoLL({
+          northing: 1400000,
+          easting: 1400000,
+          northPole: true
+        });
+        chai.expect(lat).to.be.closeTo(82.37, range)
+        chai.expect(lon).to.be.closeTo(-45, range)
+      })
+      it('convert Y 1600000mE 2400000mN', ()=>{
+        const { lat, lon } = converter.UPStoLL({
+          northing: 2400000,
+          easting: 1600000,
+          northPole: true
+        });
+        chai.expect(lat).to.be.closeTo(84.91, range)
+        chai.expect(lon).to.be.closeTo(-135, range)
+      })
+      it('convert Z 2400000mE 1600000mN', ()=>{
+        const { lat, lon } = converter.UPStoLL({
+          northing: 1600000,
+          easting: 2400000,
+          northPole: true
+        });
+        chai.expect(lat).to.be.closeTo(84.91, range)
+        chai.expect(lon).to.be.closeTo(45, range)
+      })
+    })
+  })
+  describe('convertToUTMUPS', () => {
+    describe('convert to UTM when necessary', () => {
+      it('80S', ()=> {
+        const utm = converter.convertToUTMUPS(-80, 0)
+        const expected = "31 441"
+        chai.expect(utm.substr(0, expected.length)).to.equal(expected)
+      })
+      it('84N', ()=> {
+        const utm = converter.convertToUTMUPS(84, 0)
+        const expected = "31 465"
+        chai.expect(utm.substr(0, expected.length)).to.equal(expected)
+      })
+      it('0N', ()=> {
+        const utm = converter.convertToUTMUPS(0, 0)
+        const expected = "31 166"
+        chai.expect(utm.substr(0, expected.length)).to.equal(expected)
+      })
+    })
+    describe('convert to UPS when necessary', () => {
+      it('north of 84N', ()=> {
+        const ups = converter.convertToUTMUPS(85.1, 125.13)
+        chai.expect(ups).to.contain("231322")
+        chai.expect(ups).to.contain("244518")
+        chai.expect(ups).to.contain("mE")
+        chai.expect(ups).to.contain("mN")
+      })
+      it('south of 80S', ()=> {
+        const ups = converter.convertToUTMUPS(-85.1, -125.13)
+        chai.expect(ups).to.contain("168677")
+        chai.expect(ups).to.contain("155481")
+        chai.expect(ups).to.contain("mE")
+        chai.expect(ups).to.contain("mN")
+      })
+    })
+  });
+  describe('convertFromUTMUPS', () => {
+    describe('convert from UTM when necessary', () => {
+      const range = 0.0001
+      it('15N', ()=> {
+        const { lat, lon } = converter.convertFromUTMUPS("31 177349mE 1660513mN")
+        chai.expect(lat).to.be.closeTo(15, range)
+        chai.expect(lon).to.be.closeTo(0, range)
+      })
+      it('84N', ()=> {
+        const { lat, lon } = converter.convertFromUTMUPS("31 465005mE 9329005mN")
+        chai.expect(lat).to.be.closeTo(84, range)
+        chai.expect(lon).to.be.closeTo(0, range)
+      })
+      it('0N', ()=> {
+        const { lat, lon } = converter.convertFromUTMUPS("31 166021mE 0mN")
+        // The conversion at this point is less accurate than it is at the others
+        chai.expect(lat).to.be.closeTo(0, 0.001)
+        chai.expect(lon).to.be.closeTo(0, 0.001)
+      })
+    })
+    describe('convert from UPS when necessary', () => {
+      const range = 0.0001
+      it('north of 84N', ()=> {
+        const { lat, lon } = converter.convertFromUTMUPS("Z 2445183mE 2313228mN")
+        chai.expect(lat).to.be.closeTo(85.1, range)
+        chai.expect(lon).to.be.closeTo(125.13, range)
+      })
+      it('south of 80S', ()=> {
+        const { lat, lon } = converter.convertFromUTMUPS("A 1554816mE 1686771mN")
+        chai.expect(lat).to.be.closeTo(-85.1, range)
+        chai.expect(lon).to.be.closeTo(-125.13, range)
+      })
+    })
+  })
+  describe('deserializeUPS', () => {
+    it('zone Z', () => {
+      const ups = converter.deserializeUPS("Z 2445183mE 2313228mN")
+      chai.assert.equal(ups.northPole, true);
+      chai.assert.equal(ups.northing, 2313228);
+      chai.assert.equal(ups.easting, 2445183);
+    })
+    it('zone A', () => {
+      const ups = converter.deserializeUPS("A 1554816mE 1686771mN")
+      chai.assert.equal(ups.northPole, false);
+      chai.assert.equal(ups.northing, 1686771);
+      chai.assert.equal(ups.easting, 1554816);
+    })
+    it('zone Y', () => {
+      const ups = converter.deserializeUPS("Y 1785497mE 1942524mN")
+      chai.assert.equal(ups.northPole, true);
+      chai.assert.equal(ups.northing, 1942524);
+      chai.assert.equal(ups.easting, 1785497);
+    })
+    it('zone B', () => {
+      const ups = converter.deserializeUPS("B 2443997mE 2015504mN")
+      chai.assert.equal(ups.northPole, false);
+      chai.assert.equal(ups.northing, 2015504);
+      chai.assert.equal(ups.easting, 2443997);
+    })
+    describe('test invalid strings', () => {
+      it('random word', () => {
+        chai.expect(() => converter.deserializeUPS("potato")).to.throw()
+      })
+      it('invalid zone', () => {
+        chai.expect(() => converter.deserializeUPS("L 2443997mE 2015504mN")).to.throw()
+      })
+      it('invalid easting', () => {
+        chai.expect(() => converter.deserializeUPS("L 24mE 2015504mN")).to.throw()
+      })
+      it('invalid northing', () => {
+        chai.expect(() => converter.deserializeUPS("L 2443997mE 204mN")).to.throw()
+      })
+    })
+  });
+  describe('serializeUPS', () => {
+    it('zone Z', () => {
+      const ups = converter.serializeUPS({
+        northPole: true,
+        northing: 2313228,
+        easting: 2445183,
+      })
+      chai.expect(ups).to.equal("Z 2445183mE 2313228mN")
+    })
+    it('zone A', () => {
+      const ups = converter.serializeUPS({
+        northPole: false,
+        northing: 1686771,
+        easting: 1554816,
+      })
+      chai.expect(ups).to.equal("A 1554816mE 1686771mN")
+    })
+    it('zone Y', () => {
+      const ups = converter.serializeUPS({
+        northPole: true,
+        northing: 1942524,
+        easting: 1785497,
+      })
+      chai.expect(ups).to.equal("Y 1785497mE 1942524mN")
+    })
+    it('zone B', () => {
+      const ups = converter.serializeUPS({
+        northPole: false,
+        northing: 2015504,
+        easting: 2443997,
+      })
+      chai.expect(ups).to.equal("B 2443997mE 2015504mN")
+    })
+    describe('test invalid numbers', () => {
+      it('invalid easting', () => {
+        chai.expect(() => converter.converter.serializeUPS({
+            northPole: true,
+            northing: 1942524,
+            easting: 17,
+          })).to.throw()
+      })
+      it('invalid northing', () => {
+        chai.expect(() => converter.converter.serializeUPS({
+            northPole: true,
+            northing: 201,
+            easting: 2443997,
+          })).to.throw()
+      })
+    })
+  });
+});
+describe('Serialize/Deserialize UTM', () => {
+  describe('deserializeUTM', () => {
+    it('valid UTM', () => {
+      const UTM = converter.deserializeUTM("31 177349mE 1660513mN")
+      chai.assert.equal(UTM.zoneNumber, 31);
+      chai.assert.equal(UTM.northing, 1660513);
+      chai.assert.equal(UTM.easting, 177349);
+    })
+    describe('test invalid strings', () => {
+      it('random word', () => {
+        chai.expect(() => converter.deserializeUTM("potato")).to.throw()
+      })
+      it('invalid zone', () => {
+        chai.expect(() => converter.deserializeUTM("a 177349mE 1660513mN")).to.throw()
+      })
+      it('invalid easting', () => {
+        chai.expect(() => converter.deserializeUTM("31 cat 1660513mN")).to.throw()
+      })
+      it('invalid northing', () => {
+        chai.expect(() => converter.deserializeUTM("31 177349mE dog")).to.throw()
+      })
+    })
+  })
+  describe('serializeUTM', () => {
+    it('valid UTM', () => {
+      const UTM = converter.serializeUTM({
+        zoneNumber: 31,
+        northing: 1660513,
+        easting: 177349,
+      })
+      chai.expect(UTM).to.equal("31 177349mE 1660513mN")
+    })
+  })
+})
 describe('Convert Lat/Lon to UTM', function(){
   describe('around Arizona in the United States', function(){
     it('should return easting=500000; northing=3762155; zone=12', function(){
@@ -1731,7 +2555,6 @@ describe('Convert Lat/Lon to UTM', function(){
         var east = -96;
         var south = 24;
         var result = converter.USNGtoLL(usng, false);
-        console.log(result.north, result.south, result.east, result.west);
         chai.assert.equal(true, essentiallyEqual(north, result.north, 0.0001));
         chai.assert.equal(true, essentiallyEqual(south, result.south, 0.0001));
         chai.assert.equal(true, essentiallyEqual(east, result.east, 0.0001));

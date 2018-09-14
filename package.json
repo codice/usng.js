@@ -32,6 +32,9 @@
     "mocha": "^5.2.0",
     "underscore": "^1.9.1"
   },
+  "bin": {
+    "usng-cli": "./bin/cli.js"
+  },
   "bugs": {
     "url": "https://github.com/codice/usng.js/issues"
   },
