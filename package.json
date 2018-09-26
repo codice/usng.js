@@ -30,6 +30,7 @@
     "grunt": "^1.0.3",
     "grunt-mocha-test": "^0.13.3",
     "mocha": "^5.2.0",
+    "typescript": "^3.0.3",
     "underscore": "^1.9.1"
   },
   "bin": {
@@ -38,12 +39,15 @@
   "bugs": {
     "url": "https://github.com/codice/usng.js/issues"
   },
-  "main": "usng.js",
+  "main": "dist/usng.js",
+  "types": "dist/usng.d.ts",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "grunt"
+    "build": "tsc",
+    "test": "npm run build && grunt",
+    "prepare": "npm run build"
   },
   "author": "codice",
   "license": "MIT"

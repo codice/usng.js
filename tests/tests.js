@@ -1,5 +1,5 @@
 var chai = require('chai');
-var usngs = require('../usng');
+var usngs = require('../dist/usng');
 var converter = new usngs.Converter();
 
 function essentiallyEqual(/* float */ a, /* float */ b, /* float */ epsilon) {
@@ -1431,56 +1431,50 @@ describe('UPS Conversions', () => {
       })
     })
   })
-  describe('convertToUTMUPS', () => {
+  describe('LLtoUTMUPS', () => {
     describe('convert to UTM when necessary', () => {
       it('80S', ()=> {
-        const utm = converter.convertToUTMUPS(-80, 0)
+        const utm = converter.LLtoUTMUPS(-80, 0)
         const expected = "31 441"
         chai.expect(utm.substr(0, expected.length)).to.equal(expected)
       })
       it('84N', ()=> {
-        const utm = converter.convertToUTMUPS(84, 0)
+        const utm = converter.LLtoUTMUPS(84, 0)
         const expected = "31 465"
         chai.expect(utm.substr(0, expected.length)).to.equal(expected)
       })
       it('0N', ()=> {
-        const utm = converter.convertToUTMUPS(0, 0)
+        const utm = converter.LLtoUTMUPS(0, 0)
         const expected = "31 166"
         chai.expect(utm.substr(0, expected.length)).to.equal(expected)
       })
     })
     describe('convert to UPS when necessary', () => {
       it('north of 84N', ()=> {
-        const ups = converter.convertToUTMUPS(85.1, 125.13)
-        chai.expect(ups).to.contain("231322")
-        chai.expect(ups).to.contain("244518")
-        chai.expect(ups).to.contain("mE")
-        chai.expect(ups).to.contain("mN")
+        const ups = converter.LLtoUTMUPS(85.1, 125.13)
+        chai.expect(ups).to.equal("Z 2445182mE 2313228mN")
       })
       it('south of 80S', ()=> {
-        const ups = converter.convertToUTMUPS(-85.1, -125.13)
-        chai.expect(ups).to.contain("168677")
-        chai.expect(ups).to.contain("155481")
-        chai.expect(ups).to.contain("mE")
-        chai.expect(ups).to.contain("mN")
+        const ups = converter.LLtoUTMUPS(-85.1, -125.13)
+        chai.expect(ups).to.equal("A 1554818mE 1686772mN")
       })
     })
   });
-  describe('convertFromUTMUPS', () => {
+  describe('UTMUPStoLL', () => {
     describe('convert from UTM when necessary', () => {
       const range = 0.0001
       it('15N', ()=> {
-        const { lat, lon } = converter.convertFromUTMUPS("31 177349mE 1660513mN")
+        const { lat, lon } = converter.UTMUPStoLL("31 177349mE 1660513mN")
         chai.expect(lat).to.be.closeTo(15, range)
         chai.expect(lon).to.be.closeTo(0, range)
       })
       it('84N', ()=> {
-        const { lat, lon } = converter.convertFromUTMUPS("31 465005mE 9329005mN")
+        const { lat, lon } = converter.UTMUPStoLL("31 465005mE 9329005mN")
         chai.expect(lat).to.be.closeTo(84, range)
         chai.expect(lon).to.be.closeTo(0, range)
       })
       it('0N', ()=> {
-        const { lat, lon } = converter.convertFromUTMUPS("31 166021mE 0mN")
+        const { lat, lon } = converter.UTMUPStoLL("31 166021mE 0mN")
         // The conversion at this point is less accurate than it is at the others
         chai.expect(lat).to.be.closeTo(0, 0.001)
         chai.expect(lon).to.be.closeTo(0, 0.001)
@@ -1489,12 +1483,12 @@ describe('UPS Conversions', () => {
     describe('convert from UPS when necessary', () => {
       const range = 0.0001
       it('north of 84N', ()=> {
-        const { lat, lon } = converter.convertFromUTMUPS("Z 2445183mE 2313228mN")
+        const { lat, lon } = converter.UTMUPStoLL("Z 2445183mE 2313228mN")
         chai.expect(lat).to.be.closeTo(85.1, range)
         chai.expect(lon).to.be.closeTo(125.13, range)
       })
       it('south of 80S', ()=> {
-        const { lat, lon } = converter.convertFromUTMUPS("A 1554816mE 1686771mN")
+        const { lat, lon } = converter.UTMUPStoLL("A 1554816mE 1686771mN")
         chai.expect(lat).to.be.closeTo(-85.1, range)
         chai.expect(lon).to.be.closeTo(-125.13, range)
       })
@@ -1604,7 +1598,7 @@ describe('Serialize/Deserialize UTM', () => {
         chai.expect(() => converter.deserializeUTM("potato")).to.throw()
       })
       it('invalid zone', () => {
-        chai.expect(() => converter.deserializeUTM("a 177349mE 1660513mN")).to.throw()
+        chai.expect(() => converter.deserializeUTM("k 177349mE 1660513mN")).to.throw()
       })
       it('invalid easting', () => {
         chai.expect(() => converter.deserializeUTM("31 cat 1660513mN")).to.throw()

@@ -74,3 +74,7 @@ Example usage of this file with Cesium and OpenLayers can be found within https:
 Run with: `usng-cli [function] [params]`
 
 In development you will need to run `npm link` first.
+
+## Development
+
+Build with: `npm run build`
