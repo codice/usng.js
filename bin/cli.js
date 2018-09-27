@@ -7,14 +7,14 @@ const converter = new usngs.Converter()
 isParamSafe = (p, i) => {
   if (i === 2) {
     return p.match(/^[a-zA-Z0-9_-]+$/) !== null
-  } else if (i>2) {
+  } else if (i > 2) {
     return p.match(/^[a-z-A-Z0-9 .\u00B0\-\+{}:,"]+$/) !== null
   } else {
     return true
   }
 }
 
-if (process.argv.length<3 ||
+if (process.argv.length < 3 ||
   !process.argv.every(isParamSafe) ||
   typeof converter[process.argv[2]] !== 'function') {
   console.log("run with: usng-cli [function] [params]")
