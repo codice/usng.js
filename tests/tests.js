@@ -1536,7 +1536,7 @@ describe('UPS Conversions', () => {
   });
   describe('serializeUPS', () => {
     it('zone Z', () => {
-      const ups = converter.serializeUPS({
+      const ups = converter.serializeUTMUPS({
         northPole: true,
         northing: 2313228,
         easting: 2445183,
@@ -1544,7 +1544,7 @@ describe('UPS Conversions', () => {
       chai.expect(ups).to.equal("Z 2445183mE 2313228mN")
     })
     it('zone A', () => {
-      const ups = converter.serializeUPS({
+      const ups = converter.serializeUTMUPS({
         northPole: false,
         northing: 1686771,
         easting: 1554816,
@@ -1552,7 +1552,7 @@ describe('UPS Conversions', () => {
       chai.expect(ups).to.equal("A 1554816mE 1686771mN")
     })
     it('zone Y', () => {
-      const ups = converter.serializeUPS({
+      const ups = converter.serializeUTMUPS({
         northPole: true,
         northing: 1942524,
         easting: 1785497,
@@ -1560,7 +1560,7 @@ describe('UPS Conversions', () => {
       chai.expect(ups).to.equal("Y 1785497mE 1942524mN")
     })
     it('zone B', () => {
-      const ups = converter.serializeUPS({
+      const ups = converter.serializeUTMUPS({
         northPole: false,
         northing: 2015504,
         easting: 2443997,
@@ -1581,6 +1581,87 @@ describe('UPS Conversions', () => {
             northing: 201,
             easting: 2443997,
           })).to.throw()
+      })
+      it('invalid Lat provided to LLtoUPS', () => {
+        chai.expect(() => converter.LLtoUPS(400, 15)).to.throw()
+      })
+      it('invalid Lon provided to LLtoUPS', () => {
+        chai.expect(() => converter.LLtoUPS(87, 400)).to.throw()
+      })
+      it('lacking northPole UPS provided to UPStoLL', () => {
+        chai.expect(() => converter.UPStoLL({
+          northing: 2000000,
+          easting: 2000000
+        })).to.throw()
+      })
+      it('lacking northing UPS provided to UPStoLL', () => {
+        chai.expect(() => converter.UPStoLL({
+          northPole: true,
+          easting: 2000000
+        })).to.throw()
+      })
+      it('lacking easting UPS provided to UPStoLL', () => {
+        chai.expect(() => converter.UPStoLL({
+          northing: 2000000,
+          northPole: false
+        })).to.throw()
+      })
+      it('non-boolean northPole UPS provided to UPStoLL', () => {
+        chai.expect(() => converter.UPStoLL({
+          northing: 2000000,
+          easting: 2000000,
+          northPole: 'abc'
+        })).to.throw()
+      })
+    })
+    describe('test rounding of decimal places when serializing to String', () => {
+      it('decimal UPS northing less the .5', () => {
+        const ups = converter.serializeUTMUPS({
+          northPole: true,
+          northing: 2313228.2,
+          easting: 2445183,
+        })
+        chai.expect(ups).to.equal("Z 2445183mE 2313228mN")
+      })
+      it('decimal UPS northing .5', () => {
+        const ups = converter.serializeUTMUPS({
+          northPole: true,
+          northing: 2313228.5,
+          easting: 2445183,
+        })
+        chai.expect(ups).to.equal("Z 2445183mE 2313229mN")
+      })
+      it('decimal UPS northing more the .5', () => {
+        const ups = converter.serializeUTMUPS({
+          northPole: true,
+          northing: 2313228.8,
+          easting: 2445183,
+        })
+        chai.expect(ups).to.equal("Z 2445183mE 2313229mN")
+      })
+      it('decimal UTM northing', () => {
+        const UTM = converter.serializeUTM({
+          zoneNumber: 31,
+          northing: 1660513.6,
+          easting: 177349,
+        })
+        chai.expect(UTM).to.equal("31 177349mE 1660514mN")
+      })
+      it('decimal UTM easting', () => {
+        const UTM = converter.serializeUTM({
+          zoneNumber: 31,
+          northing: 1660513,
+          easting: 177349.1,
+        })
+        chai.expect(UTM).to.equal("31 177349mE 1660513mN")
+      })
+      it('decimal UTM northing and easting', () => {
+        const UTM = converter.serializeUTM({
+          zoneNumber: 31,
+          northing: 1660513.6,
+          easting: 177349.1,
+        })
+        chai.expect(UTM).to.equal("31 177349mE 1660514mN")
       })
     })
   });

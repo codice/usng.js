@@ -347,8 +347,18 @@ extend(Converter.prototype, {
     return result;
   },
 
-  serializeUTM({ zoneNumber, easting, northing }) {
-    return `${zoneNumber} ${Math.round(easting)}mE ${Math.round(northing)}mN`
+  serializeUTMUPS(utmups) {
+    const isUTM = typeof utmups.zoneNumber === "number" && utmups.zoneNumber !== 0
+    const upsZoneLetter = !isUTM
+      && utmups.northPole
+          ? (utmups.easting < 2000000 ? 'Y' : 'Z')
+          : (utmups.northing < 2000000 ? 'A' : 'B')
+    const calculatedZone = isUTM ? utmups.zoneNumber : upsZoneLetter
+    return `${calculatedZone} ${Math.round(utmups.easting)}mE ${Math.round(utmups.northing)}mN`
+  },
+
+  serializeUTM(utm) {
+    return this.serializeUTMUPS(utm)
   },
 
   deserializeUTM(utmString) {
@@ -497,12 +507,6 @@ extend(Converter.prototype, {
     return result;
   },
 
-  serializeUPS({ northPole, easting, northing }) {
-    const zoneLetter = northPole ? (easting < 2000000 ? 'Y' : 'Z')
-      : (easting < 2000000 ? 'A' : 'B')
-    return `${zoneLetter} ${Math.round(easting)}mE ${Math.round(northing)}mN`
-  },
-
   deserializeUPS(upsString) {
     try {
       const [, zoneLetter, easting, northing] = this.UPS_REGEX.exec(upsString)
@@ -519,10 +523,6 @@ extend(Converter.prototype, {
     } catch (err) {
       throw new Error(`Invalid UPS String: ${upsString}`)
     }
-  },
-
-  serializeUTMUPS(utmups) {
-    return (utmups.zoneNumber === 0 ? this.serializeUPS : this.serializeUTM)(utmups);
   },
 
   /***************** convert latitude, longitude to UPS  *******************
@@ -610,16 +610,19 @@ extend(Converter.prototype, {
     return validateUPSCoordinates().processConversion()
   },
 
-  UTMUPStoLL(utmupsString) {
+  UTMUPStoLL(utmupsInput) {
+    const isInputString = typeof utmupsInput === "string"
     try {
-      if (includes(["A", "B", "Y", "Z"], utmupsString.charAt(0).toUpperCase())) {
-        return this.UPStoLL(this.deserializeUPS(utmupsString))
+      const isInputStringUPS = isInputString
+        && includes(["A", "B", "Y", "Z"], utmupsInput.charAt(0).toUpperCase())
+      if (isInputStringUPS) {
+        return this.UPStoLL(isInputString ? this.deserializeUPS(utmupsInput) : utmupsInput)
       } else {
-        const utm = this.deserializeUTM(utmupsString);
+        const utm = isInputString ? this.deserializeUTM(utmupsInput) : utmupsInput;
         return this.UTMtoLL(utm.northing, utm.easting, utm.zoneNumber)
       }
     } catch (err) {
-      throw new Error(`Invalid UTM/UPS String: ${utmupsString}`)
+      throw new Error(`Invalid UTM/UPS input: ${utmupsInput}`)
     }
   },
 
