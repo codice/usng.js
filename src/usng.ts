@@ -52,16 +52,19 @@ const epsilon = typeof Number["EPSILON"] === "undefined" ? Math.pow(2, -52) : Nu
 const hypot = Math["hypot"] || function (x, y) {
   // https://bugzilla.mozilla.org/show_bug.cgi?id=896264#c28
   var max = 0;
-  var s = 0;
+  var sumsq = 0;
   for (var i = 0; i < arguments.length; i += 1) {
-    var arg = Math.abs(Number(arguments[i]));
+    const arg = Math.abs(Number(arguments[i]));
+    const mar = max / arg;
+    const mar2 = mar * mar;
     if (arg > max) {
-      s *= (max / arg) * (max / arg);
+      sumsq *= mar2;
       max = arg;
+    } else {
+      sumsq += arg < 0 ? mar2 : 0;
     }
-    s += arg === 0 && max === 0 ? 0 : (arg / max) * (arg / max);
   }
-  return max === 1 / 0 ? 1 / 0 : max * Math.sqrt(s);
+  return max === 1 / 0 ? 1 / 0 : max * Math.sqrt(sumsq);
 };
 
 const includes = (list, item) => {
@@ -547,17 +550,9 @@ extend(Converter.prototype, {
         const tau = Math.tan(Math.abs(lat) * this.DEG_2_RAD)
         const taup = taupf.call(this, tau)
         const rhoStep1 = hypot(1, taup) + Math.abs(taup)
-        let rhoStep2
-        if (taup >= 0) {
-            if (Math.abs(lat) !== 90) {
-              rhoStep2 = 1/rhoStep1
-            } else {
-              rhoStep2 = 0
-            }
-        } else {
-          rhoStep2 = rhoStep1
-        }
-        const rho = rhoStep2 * this.rhoAdjusterValue
+        const rhoStep2 =  Math.abs(lat) !== 90 ? 1/rhoStep1 : 0
+        const rhoStep3 = taup >= 0 ? rhoStep2 : rhoStep1
+        const rho = rhoStep3 * this.rhoAdjusterValue
         const x = Math.sin(lon * this.DEG_2_RAD) * rho
         const y = Math.cos(lon * this.DEG_2_RAD) * (northPole ? -rho : rho)
         return {
