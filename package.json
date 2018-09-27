@@ -31,6 +31,7 @@
     "grunt-mocha-test": "^0.13.3",
     "mocha": "^5.2.0",
     "typescript": "^3.0.3",
+    "typescript-formatter": "^7.2.2",
     "underscore": "^1.9.1"
   },
   "bin": {
@@ -48,11 +49,8 @@
     "build": "tsc",
     "test": "npm run build && grunt",
     "prepare": "npm run build",
-    "format": "node_modules/typescript-formatter/bin/tsfmt -r"
+    "format": "tsfmt -r"
   },
   "author": "codice",
-  "license": "MIT",
-  "dependencies": {
-    "typescript-formatter": "^7.2.2"
-  }
+  "license": "MIT"
 }
