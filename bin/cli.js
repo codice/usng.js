@@ -20,8 +20,9 @@ if (process.argv.length < 3 ||
   console.log("run with: usng-cli [function] [params]")
 } else {
   const conversionArgs = process.argv.slice(3).map(arg => {
-    if (arg === "true" || arg === "false") {
-      return arg === "true"
+    const argAsBool = arg.toLowerCase() === "true"
+    if (arg.match(/^true|false$/i)) {
+      return argAsBool
     }
     try {
       const argAsJSON = JSON.parse(arg)
