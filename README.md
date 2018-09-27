@@ -78,3 +78,4 @@ In development you will need to run `npm link` first.
 ## Development
 
 Build with: `npm run build`
+Format with: `npm run format`
