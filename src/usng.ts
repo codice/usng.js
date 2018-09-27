@@ -537,13 +537,11 @@ extend(Converter.prototype, {
      On invalid input throws an error.
     ***************************************************************************/
     LLtoUPS: function(lat, lon) {
-        const isLatLonCoordinatesPairInvalid = () => {
-            return !(typeof lat === "number"
+        const isLatLonCoordinatesPairInvalid = !(typeof lat === "number"
                 && typeof lon === "number"
                 && lat >= -90 && lat <= 90
                 && lon >= -180 && lon <= 180)
-        }
-        if (isLatLonCoordinatesPairInvalid()) {
+        if (isLatLonCoordinatesPairInvalid) {
             throw new Error('Invalid Lat/Lon coordinates: ' + lat + ', ' + lon)
         }
         const northPole = lat >= 0
@@ -613,10 +611,6 @@ extend(Converter.prototype, {
     },
 
     UTMUPStoLL(utmupsString) {
-        const processInvalidUTMUPS = () => {
-            throw new Error( `Invalid UTM/UPS String: ${utmupsString}`)
-        }
-
         try {
             if (includes(["A", "B", "Y", "Z"], utmupsString.charAt(0).toUpperCase())) {
                 return this.UPStoLL(this.deserializeUPS(utmupsString))
@@ -625,7 +619,7 @@ extend(Converter.prototype, {
                 return this.UTMtoLL(utm.northing, utm.easting, utm.zoneNumber)
             }
         } catch(err) {
-            processInvalidUTMUPS()
+            throw new Error( `Invalid UTM/UPS String: ${utmupsString}`)
         }
     },
 
