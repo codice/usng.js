@@ -613,12 +613,14 @@ extend(Converter.prototype, {
   UTMUPStoLL(utmupsInput) {
     const isInputString = typeof utmupsInput === "string"
     try {
-      const isInputStringUPS = isInputString
-        && includes(["A", "B", "Y", "Z"], utmupsInput.charAt(0).toUpperCase())
-      if (isInputStringUPS) {
+      const isInputUPSString = isInputString
+          && includes(["A", "B", "Y", "Z"], utmupsInput.charAt(0).toUpperCase())
+      const isInputUPSObect = !isInputString
+          && typeof utmupsInput.northPole === "boolean" ;
+      if (isInputUPSString || isInputUPSObect) {
         return this.UPStoLL(isInputString ? this.deserializeUPS(utmupsInput) : utmupsInput)
       } else {
-        const utm = isInputString ? this.deserializeUTM(utmupsInput) : utmupsInput;
+        const utm = isInputString ? this.deserializeUTM(utmupsInput) : utmupsInput
         return this.UTMtoLL(utm.northing, utm.easting, utm.zoneNumber)
       }
     } catch (err) {
