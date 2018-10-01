@@ -616,7 +616,7 @@ extend(Converter.prototype, {
       const isInputUPSString = isInputString
           && includes(["A", "B", "Y", "Z"], utmupsInput.charAt(0).toUpperCase())
       const isInputUPSObect = !isInputString
-          && typeof utmupsInput.northPole === "boolean" ;
+          && typeof utmupsInput.zoneNumber === "number" && utmupsInput.zoneNumber === 0;
       if (isInputUPSString || isInputUPSObect) {
         return this.UPStoLL(isInputString ? this.deserializeUPS(utmupsInput) : utmupsInput)
       } else {
