@@ -1480,6 +1480,27 @@ describe('UPS Conversions', () => {
         chai.expect(lon).to.be.closeTo(0, 0.001)
       })
     })
+    describe('convert objects', ()=> {
+      const range = 0.5
+      it('UPS object', ()=> {
+          const { lat, lon } = converter.UTMUPStoLL({
+            easting: 1990305,
+            northing: 1444627,
+            northPole: false
+          })
+          chai.expect(lat).to.be.closeTo(-85, range)
+          chai.expect(lon).to.be.closeTo(-179, range)
+      })
+      it('UTM object', ()=> {
+          const { lat, lon } = converter.UTMUPStoLL({
+            easting: 332705,
+            northing: 6655205,
+            zoneNumber: "57V"
+          })
+          chai.expect(lat).to.be.closeTo(60, range)
+          chai.expect(lon).to.be.closeTo(156, range)
+      })
+    })
     describe('convert from UPS when necessary', () => {
       const range = 0.0001
       it('north of 84N', ()=> {
