@@ -1486,7 +1486,8 @@ describe('UPS Conversions', () => {
           const { lat, lon } = converter.UTMUPStoLL({
             easting: 1990305,
             northing: 1444627,
-            northPole: false
+            northPole: false,
+            zoneNumber: 0
           })
           chai.expect(lat).to.be.closeTo(-85, range)
           chai.expect(lon).to.be.closeTo(-179, range)
@@ -1495,7 +1496,7 @@ describe('UPS Conversions', () => {
           const { lat, lon } = converter.UTMUPStoLL({
             easting: 332705,
             northing: 6655205,
-            zoneNumber: "57V"
+            zoneNumber: 57
           })
           chai.expect(lat).to.be.closeTo(60, range)
           chai.expect(lon).to.be.closeTo(156, range)

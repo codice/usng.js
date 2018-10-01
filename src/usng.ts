@@ -351,8 +351,8 @@ extend(Converter.prototype, {
     const isUTM = typeof utmups.zoneNumber === "number" && utmups.zoneNumber !== 0
     const upsZoneLetter = !isUTM
       && utmups.northPole
-          ? (utmups.easting < 2000000 ? 'Y' : 'Z')
-          : (utmups.northing < 2000000 ? 'A' : 'B')
+      ? (utmups.easting < 2000000 ? 'Y' : 'Z')
+      : (utmups.northing < 2000000 ? 'A' : 'B')
     const calculatedZone = isUTM ? utmups.zoneNumber : upsZoneLetter
     return `${calculatedZone} ${Math.round(utmups.easting)}mE ${Math.round(utmups.northing)}mN`
   },
@@ -614,9 +614,9 @@ extend(Converter.prototype, {
     const isInputString = typeof utmupsInput === "string"
     try {
       const isInputUPSString = isInputString
-          && includes(["A", "B", "Y", "Z"], utmupsInput.charAt(0).toUpperCase())
+        && includes(["A", "B", "Y", "Z"], utmupsInput.charAt(0).toUpperCase())
       const isInputUPSObect = !isInputString
-          && typeof utmupsInput.zoneNumber === "number" && utmupsInput.zoneNumber === 0;
+        && typeof utmupsInput.zoneNumber === "number" && utmupsInput.zoneNumber === 0;
       if (isInputUPSString || isInputUPSObect) {
         return this.UPStoLL(isInputString ? this.deserializeUPS(utmupsInput) : utmupsInput)
       } else {
