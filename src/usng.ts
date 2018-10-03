@@ -610,14 +610,24 @@ extend(Converter.prototype, {
     return validateUPSCoordinates().processConversion()
   },
 
+  /***************** convert UTM/UPS to latitude, longitude *******************
+   Input:  UTM/UPS coordinates in either string or object form, examples:
+     {northPole: true, northing: 1234567, easting: 987654 zoneNumber: 0}
+     "32 1234567mE 6543210mN"
+     "A 2222222mE 2222222mN"
+   Returns Lat/Lon object with latitide is expected to be [-90, 90],
+   and longitude is expected to be [-180, 180].
+
+   On invalid input throws an error.
+   ***************************************************************************/
   UTMUPStoLL(utmupsInput) {
     const isInputString = typeof utmupsInput === "string"
     try {
       const isInputUPSString = isInputString
         && includes(["A", "B", "Y", "Z"], utmupsInput.charAt(0).toUpperCase())
-      const isInputUPSObect = !isInputString
+      const isInputUPSObject = !isInputString
         && typeof utmupsInput.zoneNumber === "number" && utmupsInput.zoneNumber === 0;
-      if (isInputUPSString || isInputUPSObect) {
+      if (isInputUPSString || isInputUPSObject) {
         return this.UPStoLL(isInputString ? this.deserializeUPS(utmupsInput) : utmupsInput)
       } else {
         const utm = isInputString ? this.deserializeUTM(utmupsInput) : utmupsInput
