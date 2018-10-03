@@ -38,9 +38,9 @@ MGRS (Military Grid Reference System)
 
 ## Features
  * Convert Lat/Lon bounding box to closest USNG
- * Convert Lat/Lon to UTM
+ * Convert Lat/Lon to UTM/UPS
  * Convert Lat/Lon point to USNG
- * Convert UTM to Lat/Lon
+ * Convert UTM/UPS to Lat/Lon
  * Convert USNG to UTM
  * Convert USNG to Lat/Lon
  * Convert Lat/Lon to MGRS
@@ -56,10 +56,16 @@ Example usage of this file with Cesium and OpenLayers can be found within https:
  var usngCoord = converter.LLBboxtoUSNG(north, south, east, west);
  
  var utmCoord = converter.LLtoUTM(lat, lon, utmcoords, zone);
+
+ var utmUpsCoord = converter.LLtoUTMUPS(lat, lon)
  
  var usngCoord = converter.LLtoUSNG(lat, lon, precision);
  
  var llCoord = converter.UTMtoLL(UTMNorthing, UTMEasting, UTMZoneNumber, accuracy);
+
+ llCoord = converter.UTMUPStoLL("Z 2222222 2222222")
+ llCoord = converter.UTMUPStoLL("10 1234567 6543210")
+ llCoord = converter.UTMUPStoLL({northPole, zoneNumber, easting, northing})
  
  var utmCoord = converter.USNGtoUTM(zone,letter,sq1,sq2,east,north,ret);
  
