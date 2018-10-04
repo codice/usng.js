@@ -351,8 +351,8 @@ extend(Converter.prototype, {
     const isUTM = typeof utmups.zoneNumber === "number" && utmups.zoneNumber !== 0
     const upsZoneLetter = !isUTM
       && utmups.northPole
-          ? (utmups.easting < 2000000 ? 'Y' : 'Z')
-          : (utmups.northing < 2000000 ? 'A' : 'B')
+      ? (utmups.easting < 2000000 ? 'Y' : 'Z')
+      : (utmups.northing < 2000000 ? 'A' : 'B')
     const calculatedZone = isUTM ? utmups.zoneNumber : upsZoneLetter
     return `${calculatedZone} ${Math.round(utmups.easting)}mE ${Math.round(utmups.northing)}mN`
   },
@@ -610,15 +610,27 @@ extend(Converter.prototype, {
     return validateUPSCoordinates().processConversion()
   },
 
+  /***************** convert UTM/UPS to latitude, longitude *******************
+   Input:  UTM/UPS coordinates in either string or object form, examples:
+     {northPole: true, northing: 1234567, easting: 987654 zoneNumber: 0}
+     "32 1234567mE 6543210mN"
+     "A 2222222mE 2222222mN"
+   Returns Lat/Lon object with latitide is expected to be [-90, 90],
+   and longitude is expected to be [-180, 180].
+
+   On invalid input throws an error.
+   ***************************************************************************/
   UTMUPStoLL(utmupsInput) {
     const isInputString = typeof utmupsInput === "string"
     try {
-      const isInputStringUPS = isInputString
+      const isInputUPSString = isInputString
         && includes(["A", "B", "Y", "Z"], utmupsInput.charAt(0).toUpperCase())
-      if (isInputStringUPS) {
+      const isInputUPSObject = !isInputString
+        && typeof utmupsInput.zoneNumber === "number" && utmupsInput.zoneNumber === 0;
+      if (isInputUPSString || isInputUPSObject) {
         return this.UPStoLL(isInputString ? this.deserializeUPS(utmupsInput) : utmupsInput)
       } else {
-        const utm = isInputString ? this.deserializeUTM(utmupsInput) : utmupsInput;
+        const utm = isInputString ? this.deserializeUTM(utmupsInput) : utmupsInput
         return this.UTMtoLL(utm.northing, utm.easting, utm.zoneNumber)
       }
     } catch (err) {
