@@ -249,21 +249,29 @@ describe('Get Zone letter from lat', function(){
     });
   });
 });
-describe('Parse USNG', function(){
-  describe('with single digit zone', function(){
-    it('should return zone=5; letter=Q', function(){
+describe('Parse USNG', function() {
+  describe('with single digit zone', function () {
+    it('should return zone=5; letter=Q', function () {
       var parts = {};
       converter.parseUSNG_str("5Q", parts);
       chai.assert.equal(5, parts.zone);
       chai.assert.equal('Q', parts.let);
     });
   });
-  describe('with two digit zone', function(){
-    it('should return zone=12; letter=S', function(){
+  describe('with two digit zone', function () {
+    it('should return zone=12; letter=S', function () {
       var parts = {};
       converter.parseUSNG_str("12S", parts);
       chai.assert.equal(12, parts.zone);
       chai.assert.equal('S', parts.let);
+    });
+  });
+  describe('with outside of valid range', function () {
+    it('should err when zone is 0', function () {
+      chai.expect(() => converter.parseUSNG_str("0S")).to.throw();
+    });
+    it('with two digit zone outside of valid range', function () {
+      chai.expect(() => converter.parseUSNG_str("61S")).to.throw();
     });
   });
   describe('with single digit zone and squares', function(){

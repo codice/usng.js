@@ -1339,12 +1339,12 @@ extend(Converter.prototype, {
       return 0;
     }
 
-    strregexp = new RegExp("^[0-9]{2}[CDEFGHJKLMNPQRSTUVWX]$");
+    strregexp = new RegExp("^([1-9]|[1-5][0-9]|60)[CDEFGHJKLMNPQRSTUVWX]$");
     if (usngStr.match(strregexp)) {
       return 0;
     }
 
-    strregexp = new RegExp("^[0-9]{2}[CDEFGHJKLMNPQRSTUVWX][ABCDEFGHJKLMNPQRSTUVWXYZ][ABCDEFGHJKLMNPQRSTUV]([0-9][0-9]){0,5}$");
+    strregexp = new RegExp("^([1-9]|[1-5][0-9]|60)[CDEFGHJKLMNPQRSTUVWX][ABCDEFGHJKLMNPQRSTUVWXYZ][ABCDEFGHJKLMNPQRSTUV]([0-9][0-9]){0,5}$");
     if (!usngStr.match(strregexp)) {
       return 0;
     }
