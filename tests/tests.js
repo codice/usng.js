@@ -267,7 +267,7 @@ describe('Parse USNG', function() {
     });
   });
   describe('with outside of valid range', function () {
-    it('should error when zone is 0', function () {
+    it('should err when zone is 0', function () {
       chai.expect(() => converter.parseUSNG_str("0S")).to.throw();
     });
     it('with two digit zone outside of valid range', function () {
