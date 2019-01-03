@@ -810,6 +810,17 @@ describe('Convert Lat/Lon to USNG', function(){
   });
 });
 describe('UPS Conversions', () => {
+  describe('isInUPSSpace', () => {
+    it('North pole', () => {
+      chai.expect(converter.isInUPSSpace(85)).to.equal(true)
+    })
+    it('South pole', () => {
+      chai.expect(converter.isInUPSSpace(-81)).to.equal(true)
+    })
+    it('Not UPS Space', () => {
+      chai.expect(converter.isInUPSSpace(35)).to.equal(false)
+    })
+  })
   describe('LLtoUPS', () => {
     const range = 3.5;
     [{
@@ -1442,19 +1453,25 @@ describe('UPS Conversions', () => {
   describe('LLtoUTMUPS', () => {
     describe('convert to UTM when necessary', () => {
       it('80S', ()=> {
-        const utm = converter.LLtoUTMUPS(-80, 0)
-        const expected = "31 441"
-        chai.expect(utm.substr(0, expected.length)).to.equal(expected)
+        const utm = converter.LLtoUTMUPS(-80, 0).split(" ")
+        const expected = ["31", "441", "111"]
+        expected.forEach((_, i) => {
+          chai.expect(utm[i].substr(0, expected[i].length)).to.equal(expected[i])
+        })
       })
       it('84N', ()=> {
-        const utm = converter.LLtoUTMUPS(84, 0)
-        const expected = "31 465"
-        chai.expect(utm.substr(0, expected.length)).to.equal(expected)
+        const utm = converter.LLtoUTMUPS(84, 0).split(" ")
+        const expected = ["31", "465", "932"]
+        expected.forEach((_, i) => {
+          chai.expect(utm[i].substr(0, expected[i].length)).to.equal(expected[i])
+        })
       })
       it('0N', ()=> {
-        const utm = converter.LLtoUTMUPS(0, 0)
-        const expected = "31 166"
-        chai.expect(utm.substr(0, expected.length)).to.equal(expected)
+        const utm = converter.LLtoUTMUPS(0, 0).split(" ")
+        const expected = ["31", "166", "0"]
+        expected.forEach((_, i) => {
+          chai.expect(utm[i].substr(0, expected[i].length)).to.equal(expected[i])
+        })
       })
     })
     describe('convert to UPS when necessary', () => {
