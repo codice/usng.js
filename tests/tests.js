@@ -1461,17 +1461,17 @@ describe('UPS Conversions', () => {
     describe('convert to UTM when necessary', () => {
       it('80S', ()=> {
         const utm = converter.LLtoUTMUPS(-80, 0)
-        const expected = /^31[C]? 441[0-9]{3,3}mE 1116[0-9]{3,3}mN$/
+        const expected = /^31C? 441\d{3}mE 1116\d{3}mN$/
         chai.expect(utm).to.match(expected)
       })
       it('84N', ()=> {
         const utm = converter.LLtoUTMUPS(84, 0)
-        const expected = /^31[X]? 465[0-9]{3,3}mE 9329[0-9]{3,3}mN$/
+        const expected = /^31X? 465\d{3}mE 9329\d{3}mN$/
         chai.expect(utm).to.match(expected)
       })
       it('0N', ()=> {
         const utm = converter.LLtoUTMUPS(0, 0)
-        const expected = /^31[N]? 166[0-9]{3,3}mE 0mN$/
+        const expected = /^31N? 166\d{3}mE 0mN$/
         chai.expect(utm).to.match(expected)
       })
     })
