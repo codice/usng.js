@@ -53,5 +53,8 @@
     "format": "tsfmt -r"
   },
   "author": "codice",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "chai-match": "^1.1.1"
+  }
 }
