@@ -1,6 +1,7 @@
-var chai = require('chai');
-var usngs = require('../dist/usng');
-var converter = new usngs.Converter();
+const chai = require('chai');
+chai.use(require('chai-match'));
+const usngs = require('../dist/usng');
+const converter = new usngs.Converter();
 
 function essentiallyEqual(/* float */ a, /* float */ b, /* float */ epsilon) {
   var A = Math.abs(a), B = Math.abs(b);
@@ -810,6 +811,23 @@ describe('Convert Lat/Lon to USNG', function(){
   });
 });
 describe('UPS Conversions', () => {
+  describe('isInUPSSpace', () => {
+    it('North pole', () => {
+      chai.expect(converter.isInUPSSpace(85)).to.equal(true)
+      chai.expect(converter.isInUPSSpace(88)).to.equal(true)
+      chai.expect(converter.isInUPSSpace(90)).to.equal(true)
+    })
+    it('South pole', () => {
+      chai.expect(converter.isInUPSSpace(-81)).to.equal(true)
+      chai.expect(converter.isInUPSSpace(-88)).to.equal(true)
+      chai.expect(converter.isInUPSSpace(-90)).to.equal(true)
+    })
+    it('Not UPS Space', () => {
+      chai.expect(converter.isInUPSSpace(35)).to.equal(false)
+      chai.expect(converter.isInUPSSpace(76)).to.equal(false)
+      chai.expect(converter.isInUPSSpace(13)).to.equal(false)
+    })
+  })
   describe('LLtoUPS', () => {
     const range = 3.5;
     [{
@@ -1443,18 +1461,18 @@ describe('UPS Conversions', () => {
     describe('convert to UTM when necessary', () => {
       it('80S', ()=> {
         const utm = converter.LLtoUTMUPS(-80, 0)
-        const expected = "31 441"
-        chai.expect(utm.substr(0, expected.length)).to.equal(expected)
+        const expected = /^31C? 44186[6-8]mE 111691[4-6]mN$/
+        chai.expect(utm).to.match(expected)
       })
       it('84N', ()=> {
         const utm = converter.LLtoUTMUPS(84, 0)
-        const expected = "31 465"
-        chai.expect(utm.substr(0, expected.length)).to.equal(expected)
+        const expected = /^31X? 46500[4-6]mE 932900[4-6]mN$/
+        chai.expect(utm).to.match(expected)
       })
       it('0N', ()=> {
         const utm = converter.LLtoUTMUPS(0, 0)
-        const expected = "31 166"
-        chai.expect(utm.substr(0, expected.length)).to.equal(expected)
+        const expected = /^31N? 16602[0-2]mE 0mN$/
+        chai.expect(utm).to.match(expected)
       })
     })
     describe('convert to UPS when necessary', () => {

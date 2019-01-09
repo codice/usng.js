@@ -409,7 +409,7 @@ extend(Converter.prototype, {
 
     // Constrain reporting USNG coords to the latitude range [80S .. 84N]
     /////////////////
-    if (lat > 84.0 || lat < -80.0) {
+    if (this.isInUPSSpace(lat)) {
       return this.UNDEFINED_STR;
     }
     //////////////////////
@@ -638,15 +638,27 @@ extend(Converter.prototype, {
     }
   },
 
+  isInUPSSpace(lat) {
+    return lat > 84.0 || lat < -80.0
+  },
+
   LLtoUTMUPSObject(lat, lon) {
     // sanity check on input - turned off when testing with Generic Viewer
     if (lon > 180 || lon < -180 || lat > 90 || lat < -90) {
       throw new Error(`usng.js, LLtoUTMUPS, invalid input. lat: ${lat.toFixed(4)} lon: ${lon.toFixed(4)}`);
     }
-    // Constrain reporting UTM coords to the latitude range [80S .. 84N]
-    return (lat > 84.0 || lat < -80.0)
-      ? { ...this.LLtoUPS(lat, lon), zoneNumber: 0 }
-      : { ...this.LLtoUTM(lat, lon), northPole: lat >= 0 };
+    if (this.isInUPSSpace(lat)) {
+      return { ...this.LLtoUPS(lat, lon), zoneNumber: 0 }
+    } else {
+      let utmcoords = [0, 0, 0, 'N']
+      this.LLtoUTMwithNS(lat, lon, utmcoords)
+      return {
+        easting: utmcoords[0],
+        northing: utmcoords[1],
+        zoneNumber: utmcoords[2],
+        northPole: lat >= 0
+      }
+    }
   },
 
   LLtoUTMUPS(lat, lon) {
