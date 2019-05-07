@@ -1,7 +1,9 @@
+const { readFileSync } = require('fs');
 const chai = require('chai');
 chai.use(require('chai-match'));
 const usngs = require('../dist/usng');
 const converter = new usngs.Converter();
+
 
 function essentiallyEqual(/* float */ a, /* float */ b, /* float */ epsilon) {
   var A = Math.abs(a), B = Math.abs(b);
@@ -2686,3 +2688,38 @@ describe('Convert Lat/Lon to UTM', function(){
     });
   });
 });
+
+
+if (process.env.CHECK_GEOTRANS) {
+  describe('Consistency with GEOTRANS', () => {
+    it('Should be consistent with GEOTRANS', () => {
+      const fileText = readFileSync('./tests/testing-data.csv', 'utf8');
+      const lines = fileText.split('\n').filter(Boolean);
+      lines.forEach(line => {
+        const [ mgrsString, expectedLatitude, expectedLongitude ] = line.split('\t');
+
+        /*
+          we use the southwest corner to represent the square because
+          that's the standard for MGRS
+          https://en.wikipedia.org/wiki/Military_Grid_Reference_System
+        */
+        const { south, west } = converter.USNGtoLL(mgrsString, false);
+
+        try {
+          chai.assert.equal(true, essentiallyEqual(expectedLatitude, south, 0.0001));
+        } catch (error) {
+          console.error(`Converted ${mgrsString} and expected a latitude of ${expectedLatitude} not ${south}`);
+          throw error;
+        }
+
+        try {
+          chai.assert.equal(true, essentiallyEqual(expectedLongitude, west, 0.0001));
+        } catch (error) {
+          console.error(`Converted ${mgrsString} and expected a longitude of ${expectedLongitude} not ${west}`);
+          throw error;
+        }
+
+      });
+    });
+  });
+}
