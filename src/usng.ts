@@ -1014,10 +1014,6 @@ extend(Converter.prototype, {
       D * D * D * D / 720);
     lat = lat * this.RAD_2_DEG;
 
-    if (lat === 0) {
-      lat = 0.001;
-    }
-
     // Calculate longitude, in decimal degrees
     var lon = (D - (1 + 2 * T1 + C1) * D * D * D / 6 + (5 - 2 * C1 + 28 * T1 - 3 *
       C1 * C1 + 8 * this.ECC_PRIME_SQUARED + 24 * T1 * T1) * D * D * D * D * D / 120) /
