@@ -2686,3 +2686,22 @@ describe('Convert Lat/Lon to UTM', function(){
     });
   });
 });
+
+describe('Consistency with GEOTRANS', () => {
+  it('Running mgrs test data', () => {
+    const lines = require('./mgrs-test-data.json');
+    lines.forEach(line => {
+      const { mgrs, latitude, longitude } = line;
+      const { south, west } = converter.USNGtoLL(mgrs, false);
+      /*
+        we use the southwest corner to represent the square because
+        that's the standard for MGRS
+        https://en.wikipedia.org/wiki/Military_Grid_Reference_System
+      */
+      chai.assert.equal(true, essentiallyEqual(longitude, west, 0.0001),
+        `Converted ${mgrs} and expected a longitude of ${longitude} not ${west}`);
+      chai.assert.equal(true, essentiallyEqual(latitude, south, 0.0001),
+        `Converted ${mgrs} and expected a latitude of ${latitude} not ${south}`);
+    });
+  })
+});
