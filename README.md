@@ -28,7 +28,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 -->
 
-AMD compatible version of usngs.js with bug fixes, enhancements, and extensive unit tests.
+version of usngs.js with bug fixes, enhancements, and extensive unit tests.
  
 ```
 git clone git://github.com/codice/usng.js.git
