@@ -28,26 +28,28 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 -->
 
-version of usngs.js with bug fixes, enhancements, and extensive unit tests.
- 
-```
-git clone git://github.com/codice/usng.js.git
-```
+A version of usngs.js with bug fixes, enhancements, and extensive unit tests.
+
+[![Build Status](https://travis-ci.org/codice/usng.js.svg?branch=master)](https://travis-ci.org/codice/usng.js)
+
 USNG (U.S. National Grid)
 MGRS (Military Grid Reference System)
 
 ## Features
- * Convert Lat/Lon bounding box to closest USNG
- * Convert Lat/Lon to UTM/UPS
- * Convert Lat/Lon point to USNG
- * Convert UTM/UPS to Lat/Lon
- * Convert USNG to UTM
- * Convert USNG to Lat/Lon
- * Convert Lat/Lon to MGRS
+
+* Convert Lat/Lon bounding box to closest USNG
+* Convert Lat/Lon to UTM/UPS
+* Convert Lat/Lon point to USNG
+* Convert UTM/UPS to Lat/Lon
+* Convert USNG to UTM
+* Convert USNG to Lat/Lon
+* Convert Lat/Lon to MGRS
 
 ## Usage
+
 Example usage of this file with Cesium and OpenLayers can be found within https://github.com/codice/ddf
 
+```javascript
  var usng = require('usng.js');
  
  var converter = new usng.Converter();
@@ -72,6 +74,7 @@ Example usage of this file with Cesium and OpenLayers can be found within https:
  var llCoord = converter.USNGtoLL(usngStr_input, getCenter);
  
  var mgrsCoord = converter.LLtoMGRS(lat, lon, precision);
+ ```
 
 ## CLI Test Tool Usage
 
