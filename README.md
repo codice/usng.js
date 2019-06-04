@@ -28,6 +28,8 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 -->
 
+# usng.js
+
 A version of usngs.js with bug fixes, enhancements, and extensive unit tests.
 
 [![Build Status](https://travis-ci.org/codice/usng.js.svg?branch=master)](https://travis-ci.org/codice/usng.js)
