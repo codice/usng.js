@@ -176,7 +176,6 @@ extend(Converter.prototype, {
   ECC_PRIME_SQUARED: undefined,
   ECC_SQUARED: undefined,
 
-  num100kSets: 6,
   originRowLetters: 'AFAFAF',
   UTMGzdLetters: "NPQRSTUVWX",
   USNGSqEast: "ABCDEFGHJKLMNPQRSTUVWXYZ",
@@ -1203,14 +1202,6 @@ extend(Converter.prototype, {
     ret.letter = letter;
 
 
-  },
-
-  get100kSetForZone: function(zoneNumber) {
-    var setParm = zoneNumber % this.num100kSets;
-    if (setParm == 0)
-      setParm = this.num100kSets;
-
-    return setParm;
   },
 
   getNorthingFromChar: function(letter, setVal) {
