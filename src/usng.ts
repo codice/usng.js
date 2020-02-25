@@ -353,7 +353,8 @@ extend(Converter.prototype, {
       && utmups.northPole
       ? (utmups.easting < 2000000 ? 'Y' : 'Z')
       : (utmups.northing < 2000000 ? 'A' : 'B')
-    const calculatedZone = isUTM ? utmups.zoneNumber : upsZoneLetter
+    const hemisphere = utmups.northPole ? 'N' : 'S'
+    const calculatedZone = isUTM ? utmups.zoneNumber + hemisphere : upsZoneLetter
     return `${calculatedZone} ${Math.round(utmups.easting)}mE ${Math.round(utmups.northing)}mN`
   },
 
