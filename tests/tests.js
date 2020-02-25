@@ -1461,17 +1461,17 @@ describe('UPS Conversions', () => {
     describe('convert to UTM when necessary', () => {
       it('80S', ()=> {
         const utm = converter.LLtoUTMUPS(-80, 0)
-        const expected = /^31C? 44186[6-8]mE 111691[4-6]mN$/
+        const expected = /^31S 44186[6-8]mE 111691[4-6]mN$/
         chai.expect(utm).to.match(expected)
       })
       it('84N', ()=> {
         const utm = converter.LLtoUTMUPS(84, 0)
-        const expected = /^31X? 46500[4-6]mE 932900[4-6]mN$/
+        const expected = /^31N 46500[4-6]mE 932900[4-6]mN$/
         chai.expect(utm).to.match(expected)
       })
       it('0N', ()=> {
         const utm = converter.LLtoUTMUPS(0, 0)
-        const expected = /^31N? 16602[0-2]mE 0mN$/
+        const expected = /^31N 16602[0-2]mE 0mN$/
         chai.expect(utm).to.match(expected)
       })
     })
@@ -1693,7 +1693,7 @@ describe('UPS Conversions', () => {
           northing: 1660513.6,
           easting: 177349,
         })
-        chai.expect(UTM).to.equal("31 177349mE 1660514mN")
+        chai.expect(UTM).to.equal("31S 177349mE 1660514mN")
       })
       it('decimal UTM easting', () => {
         const UTM = converter.serializeUTM({
@@ -1701,7 +1701,7 @@ describe('UPS Conversions', () => {
           northing: 1660513,
           easting: 177349.1,
         })
-        chai.expect(UTM).to.equal("31 177349mE 1660513mN")
+        chai.expect(UTM).to.equal("31S 177349mE 1660513mN")
       })
       it('decimal UTM northing and easting', () => {
         const UTM = converter.serializeUTM({
@@ -1709,7 +1709,7 @@ describe('UPS Conversions', () => {
           northing: 1660513.6,
           easting: 177349.1,
         })
-        chai.expect(UTM).to.equal("31 177349mE 1660514mN")
+        chai.expect(UTM).to.equal("31S 177349mE 1660514mN")
       })
     })
   });
@@ -1717,7 +1717,7 @@ describe('UPS Conversions', () => {
 describe('Serialize/Deserialize UTM', () => {
   describe('deserializeUTM', () => {
     it('valid UTM', () => {
-      const UTM = converter.deserializeUTM("31 177349mE 1660513mN")
+      const UTM = converter.deserializeUTM("31S 177349mE 1660513mN")
       chai.assert.equal(UTM.zoneNumber, 31);
       chai.assert.equal(UTM.northing, 1660513);
       chai.assert.equal(UTM.easting, 177349);
@@ -1744,7 +1744,7 @@ describe('Serialize/Deserialize UTM', () => {
         northing: 1660513,
         easting: 177349,
       })
-      chai.expect(UTM).to.equal("31 177349mE 1660513mN")
+      chai.expect(UTM).to.equal("31S 177349mE 1660513mN")
     })
   })
 })
