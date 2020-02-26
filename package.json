@@ -24,7 +24,7 @@
     "type": "git",
     "url": "git://github.com/codice/usng.js.git"
   },
-  "version": "0.4.2",
+  "version": "0.4.3",
   "devDependencies": {
     "chai": "^4.1.2",
     "chai-match": "^1.1.1",
