@@ -560,6 +560,19 @@ extend(Converter.prototype, {
     }
   },
 
+  LLtoUPSString: function(lat, lon) {
+    if (!this.isInUPSSpace(lat)) {
+      throw new Error(`usng.js, LLtoUPSString, invalid input. lat: ${lat.toFixed(4)} lon: ${lon.toFixed(4)}`);
+    }
+
+    const upsObject = this.LLtoUPS(lat, lon)
+    const upsZoneLetter = upsObject.northPole
+      ? (upsObject.easting < 2000000 ? 'Y' : 'Z')
+      : (upsObject.northing < 2000000 ? 'A' : 'B')
+
+    return `${upsZoneLetter} ${Math.round(upsObject.easting)}mE ${Math.round(upsObject.northing)}mN`
+  },
+
   /***************** convert latitude, longitude to UPS  *******************
    Input:  valid UPS coordinates object, example
      {northPole: true, northing: 1234567, easting:  987654}
@@ -1381,6 +1394,13 @@ extend(Converter.prototype, {
     return mgrs_str;
   },
 
+  LLtoMGRSUPS: function(lat, lon, precision) {
+    if (this.isInUPSSpace(lat)) {
+      return this.LLtoUPSString(lat, lon)
+    } else {
+      return this.LLtoMGRS(lat, lon, precision)
+    }
+  },
 
   // wrapper function specific to Google Maps, to make a converstion to lat/lng return a GLatLon instance.
   // takes a usng string, converts it to lat/lng using a call to USNGtoLL,
