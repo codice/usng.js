@@ -1461,7 +1461,7 @@ describe('UPS Conversions', () => {
     describe('convert to UTM when necessary', () => {
       it('80S', ()=> {
         const utm = converter.LLtoUTMUPS(-80, 0)
-        const expected = /^31S 44186[6-8]mE 111691[4-6]mN$/
+        const expected = /^31S 44186[6-8]mE -888308[3-5]mN$/
         chai.expect(utm).to.match(expected)
       })
       it('84N', ()=> {
@@ -1860,61 +1860,61 @@ describe('Convert Lat/Lon to UTM', function(){
         });
       });
     describe('around Uruguay with N/S', function(){
-        it('should return easting=640915; northing=-3596851; zone=21', function(){
+        it('should return easting=640915; northing=-3596850; zone=21', function(){
           var coords = [];
           converter.LLtoUTMwithNS(-32.5, -55.5, coords);
           chai.assert.equal(640915, parseInt(coords[0]));
-          chai.assert.equal(-3596851, parseInt(coords[1]));
+          chai.assert.equal(-3596850, parseInt(coords[1]));
           chai.assert.equal(21, coords[2]);
           chai.assert.equal('S', coords[3]);
         });
       });
       describe('around Buenos Aires city in Argentina with N/S', function(){
-        it('should return easting=362289; northing=-3818619; zone=21', function(){
+        it('should return easting=362289; northing=-3818618; zone=21', function(){
           var coords = [];
           converter.LLtoUTMwithNS(-34.5, -58.5, coords);
           chai.assert.equal(362289, parseInt(coords[0]));
-          chai.assert.equal(-3818619, parseInt(coords[1]));
+          chai.assert.equal(-3818618, parseInt(coords[1]));
           chai.assert.equal(21, coords[2]);
           chai.assert.equal('S', coords[3]);
         });
       });
       describe('around Merlo town in Buenos Aires with N/S', function(){
-        it('should return easting=341475; northing=-3836701; zone=21', function(){
+        it('should return easting=341475; northing=-3836700; zone=21', function(){
           var coords = [];
           converter.LLtoUTMwithNS(-34.66, -58.73, coords);
           chai.assert.equal(341475, parseInt(coords[0]));
-          chai.assert.equal(-3836701, parseInt(coords[1]));
+          chai.assert.equal(-3836700, parseInt(coords[1]));
           chai.assert.equal(21, coords[2]);
           chai.assert.equal('S', coords[3]);
         });
       });
       describe('around Madagascar with N/S', function(){
-        it('should return easting=658354; northing=-2046163; zone=38', function(){
+        it('should return easting=658354; northing=-2046162; zone=38', function(){
           var coords = [];
           converter.LLtoUTMwithNS(-18.5, 46.5, coords);
           chai.assert.equal(658354, parseInt(coords[0]));
-          chai.assert.equal(-2046163, parseInt(coords[1]));
+          chai.assert.equal(-2046162, parseInt(coords[1]));
           chai.assert.equal(38, coords[2]);
           chai.assert.equal('S', coords[3]);
         });
       });
       describe('around Toliara city in Madagascar with N/S', function(){
-        it('should return easting=345704; northing=-2488945; zone=38', function(){
+        it('should return easting=345704; northing=-2488944; zone=38', function(){
           var coords = [];
           converter.LLtoUTMwithNS(-22.5, 43.5, coords);
           chai.assert.equal(345704, parseInt(coords[0]));
-          chai.assert.equal(-2488945, parseInt(coords[1]));
+          chai.assert.equal(-2488944, parseInt(coords[1]));
           chai.assert.equal(38, coords[2]);
           chai.assert.equal('S', coords[3]);
         });
       });
       describe('around Toliara city center in Madagascar with N/S', function(){
-        it('should return easting=364050; northing=-2583445; zone=38', function(){
+        it('should return easting=364050; northing=-2583444; zone=38', function(){
           var coords = [];
           converter.LLtoUTMwithNS(-23.355, 43.67, coords);
           chai.assert.equal(364050, parseInt(coords[0]));
-          chai.assert.equal(-2583445, parseInt(coords[1]));
+          chai.assert.equal(-2583444, parseInt(coords[1]));
           chai.assert.equal(38, coords[2]);
           chai.assert.equal('S', coords[3]);
         });
