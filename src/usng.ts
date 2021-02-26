@@ -487,6 +487,7 @@ extend(Converter.prototype, {
   LLtoUTMwithNS: function(lat, lon, utmcoords, zone) {
     this.LLtoUTM(lat, lon, utmcoords, zone);
     if (utmcoords[1] < 0) {
+      utmcoords[1] += this.NORTHING_OFFSET;
       utmcoords[3] = 'S';
     } else {
       utmcoords[3] = 'N';
