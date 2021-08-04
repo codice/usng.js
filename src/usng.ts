@@ -1403,6 +1403,35 @@ extend(Converter.prototype, {
     }
   },
 
+  // convert MGRS to USNG by adding the appropriate spaces
+  MGRStoUSNG: function(mgrs){
+    let eastNorthSpace, squareIdEastSpace, gridZoneSquareIdSpace
+    for(let i = mgrs.length - 1; i > -1; i--){
+      // check if we have hit letters yet
+      if(isNaN(mgrs.substr(i,1))){
+          squareIdEastSpace = i + 1
+          break;
+      };
+    }
+    gridZoneSquareIdSpace = squareIdEastSpace - 2
+    let numPartLength = mgrs.substr(squareIdEastSpace).length / 2;
+    
+    eastNorthSpace = squareIdEastSpace + numPartLength;
+    let stringArray = mgrs.split("");
+    
+    stringArray.splice(eastNorthSpace, 0, " ");
+    stringArray.splice(squareIdEastSpace, 0, " ");
+    stringArray.splice(gridZoneSquareIdSpace, 0, " ");
+    
+    let rejoinedArray = stringArray.join("");
+    return rejoinedArray;
+  },
+
+  // convert MGRS to Lat Lon by chaining MGRStoUSNG and USNGtoLL together
+  MGRStoLL: function(mgrs){
+    return mgrs ? this.USNGtoLL(this.MGRStoUSNG(mgrs)) : null;
+  },
+
   // wrapper function specific to Google Maps, to make a converstion to lat/lng return a GLatLon instance.
   // takes a usng string, converts it to lat/lng using a call to USNGtoLL,
   // and returns an instance of GLatLng

@@ -2705,3 +2705,59 @@ describe('Consistency with GEOTRANS', () => {
     });
   })
 });
+
+
+/*
+{
+    "mgrs": "31NFA0000000000",
+    "latitude": 0,
+    "longitude": 3.89864
+  },
+  {
+    "mgrs": "31NGA0000000000",
+    "latitude": 0,
+    "longitude": 4.79705
+  },
+  {
+    "mgrs": "31NHA0000000000",
+    "latitude": 0,
+    "longitude": 5.69502
+  },
+  {
+    "mgrs": "32NKF3200700000",
+    "latitude": 0,
+    "longitude": 6.59233
+  },
+  {
+    "mgrs": "30NYK6593199447",
+    "latitude": 4.5146,
+    "longitude": -0.60345
+  },
+*/
+
+describe('MGRStoUSNG', function(){
+  it('should return 31N FA 00000 00000', function(){
+    chai.assert.equal("31N FA 00000 00000", converter.MGRStoUSNG("31NFA0000000000"));
+  });
+  
+  it('should return 31N GA 00000 00000', function(){
+    chai.assert.equal("31N GA 00000 00000", converter.MGRStoUSNG("31NGA0000000000"));
+  });
+
+  it('should return 32N KF 32007 00000', function(){
+    chai.assert.equal("32N KF 32007 00000", converter.MGRStoUSNG("32NKF3200700000"));
+  });
+
+  it('should return 30N YK 65931 99447', function(){
+    chai.assert.equal("30N YK 65931 99447", converter.MGRStoUSNG("30NYK6593199447"));
+  });
+
+  it('should return 30N YK 6 5', function(){
+    chai.assert.equal("30N YK 6 5", converter.MGRStoUSNG("30NYK65"));
+  });
+
+  it('should return 30N YK 659 319', function(){
+    chai.assert.equal("30N YK 659 319", converter.MGRStoUSNG("30NYK659319"));
+  });
+});
+
