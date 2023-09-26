@@ -385,6 +385,36 @@ extend(Converter.prototype, {
     }
   },
 
+  LLtoDMS: function(lat, lon) {
+    const dmsLat = this.convertDecimalToDegree(lat)
+    const dmsLon = this.convertDecimalToDegree(lon)
+
+    const latDirection = lat < 0 ? 'S' : 'N';
+    const lonDirection = lon < 0 ? 'W' : 'E';
+
+    return {
+      lat: { ...dmsLat, ...{ direction: latDirection } },
+      lon: { ...dmsLon, ...{ direction: lonDirection } },
+    };
+  },
+
+  convertDecimalToDegree(decimal) {
+    let calculation = Math.abs(decimal);
+    const degrees = Math.floor(Math.abs(decimal))
+
+    calculation = (calculation - degrees) * 60;
+    const minutes = Math.floor(Math.abs(calculation))
+
+    calculation = (calculation - minutes) * 60;
+    const seconds = Math.floor(Math.abs(calculation))
+
+    return {
+      degrees,
+      minutes,
+      seconds,
+    }
+  },
+
   /***************** convert latitude, longitude to UTM  *******************
 
    Converts lat/long to UTM coords.  Equations from USGS Bulletin 1532

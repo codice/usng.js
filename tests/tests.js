@@ -2687,6 +2687,45 @@ describe('Convert Lat/Lon to UTM', function(){
   });
 });
 
+describe('LLtoDMS', () => {
+  it('exists', () => {
+    const dms = converter.LLtoDMS;
+    chai.expect(dms).not.to.be.undefined;
+  });
+  it('-80.967, -17.811', () => {
+    const dms = converter.LLtoDMS(-80.967, -17.811)
+    chai.expect(dms.lat).to.deep.equal({
+      degrees: 80,
+      minutes: 58,
+      seconds: 1,
+      direction: 'S',
+    })
+
+    chai.expect(dms.lon).to.deep.equal({
+      degrees: 17,
+      minutes: 48,
+      seconds: 39,
+      direction: 'W',
+    })
+  });
+  it('80.967, 17.811', () => {
+    const dms = converter.LLtoDMS(80.967, 17.811)
+    chai.expect(dms.lat).to.deep.equal({
+      degrees: 80,
+      minutes: 58,
+      seconds: 1,
+      direction: 'N',
+    })
+
+    chai.expect(dms.lon).to.deep.equal({
+      degrees: 17,
+      minutes: 48,
+      seconds: 39,
+      direction: 'E',
+    })
+  });
+})
+
 describe('Consistency with GEOTRANS', () => {
   it('Running mgrs test data', () => {
     const lines = require('./mgrs-test-data.json');
