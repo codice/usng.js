@@ -352,7 +352,7 @@ extend(Converter.prototype, {
     const upsZoneLetter = !isUTM
       && utmups.northPole
       ? (utmups.easting < 2000000 ? 'Y' : 'Z')
-      : (utmups.northing < 2000000 ? 'A' : 'B')
+      : (utmups.easting < 2000000 ? 'A' : 'B')
     const hemisphere = utmups.northPole ? 'N' : 'S'
     const calculatedZone = isUTM ? utmups.zoneNumber + hemisphere : upsZoneLetter
     return `${calculatedZone} ${Math.round(utmups.easting)}mE ${Math.round(utmups.northing)}mN`
@@ -569,7 +569,7 @@ extend(Converter.prototype, {
     const upsObject = this.LLtoUPS(lat, lon)
     const upsZoneLetter = upsObject.northPole
       ? (upsObject.easting < 2000000 ? 'Y' : 'Z')
-      : (upsObject.northing < 2000000 ? 'A' : 'B')
+      : (upsObject.easting < 2000000 ? 'A' : 'B')
 
     return `${upsZoneLetter} ${Math.round(upsObject.easting)}mE ${Math.round(upsObject.northing)}mN`
   },
