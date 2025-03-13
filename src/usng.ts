@@ -1,6 +1,7 @@
 // Copyright (c) 2009 Larry Moore, larmoor@gmail.com
 //               2014 Mike Adair, Richard Greenwood, Didier Richard, Stephen Irons, Olivier Terral and Calvin Metcalf (proj4js)
 //               2014 Codice Foundation
+//               2025 Jakob Klein
 // Released under the MIT License; see
 // http://www.opensource.org/licenses/mit-license.php
 // or http://en.wikipedia.org/wiki/MIT_License
@@ -352,7 +353,7 @@ extend(Converter.prototype, {
     const upsZoneLetter = !isUTM
       && utmups.northPole
       ? (utmups.easting < 2000000 ? 'Y' : 'Z')
-      : (utmups.northing < 2000000 ? 'A' : 'B')
+      : (utmups.easting < 2000000 ? 'A' : 'B')
     const hemisphere = utmups.northPole ? 'N' : 'S'
     const calculatedZone = isUTM ? utmups.zoneNumber + hemisphere : upsZoneLetter
     return `${calculatedZone} ${Math.round(utmups.easting)}mE ${Math.round(utmups.northing)}mN`
@@ -569,7 +570,7 @@ extend(Converter.prototype, {
     const upsObject = this.LLtoUPS(lat, lon)
     const upsZoneLetter = upsObject.northPole
       ? (upsObject.easting < 2000000 ? 'Y' : 'Z')
-      : (upsObject.northing < 2000000 ? 'A' : 'B')
+      : (upsObject.easting < 2000000 ? 'A' : 'B')
 
     return `${upsZoneLetter} ${Math.round(upsObject.easting)}mE ${Math.round(upsObject.northing)}mN`
   },
@@ -1385,22 +1386,41 @@ extend(Converter.prototype, {
   //    with no spaces.  space delimiters are optional but allowed in USNG, but are not allowed
   //    in MGRS notation.  but the numbers are the same.
   LLtoMGRS: function(lat, lon, precision) {
-    var mgrs_str;
-    var usng_str = this.LLtoUSNG(lat, lon, precision);
-
-    // remove space delimiters to conform to mgrs spec
-    var regexp = / /g;
-    mgrs_str = usng_str.replace(regexp, "");
-
-    return mgrs_str;
-  },
-
-  LLtoMGRSUPS: function(lat, lon, precision) {
     if (this.isInUPSSpace(lat)) {
-      return this.LLtoUPSString(lat, lon)
+      var ups_obj = this.LLtoUPS(lat, lon);
+      var mgrs_str = ups_obj.northPole ? (ups_obj.easting < 2e6 ? "Y" : "Z") : (ups_obj.easting < 2e6 ? "A" : "B");
+      if (precision <= 0) {
+        return mgrs_str;
+      }
+      const UPS_N_east_letters = "RSTUXYZABCFGHJ"; // starting from 1300000mE
+      const UPS_N_north_letters = "ABCDEFGHJKLMNP"; // starting from 1300000mN
+      const UPS_S_east_letters = "JKLPQRSTUXYZABCFGHJKLPQR"; // starting from 800000mE
+      const UPS_S_north_letters = "ABCDEFGHJKLMNPQRSTUVWXYZ"; // starting from 800000mN
+      if (ups_obj.northPole) {
+        mgrs_str += UPS_N_east_letters.charAt(Math.floor(ups_obj.easting / 1e5) - 13)
+        mgrs_str += UPS_N_north_letters.charAt(Math.floor(ups_obj.northing / 1e5) - 13)
+      }
+      else {
+        mgrs_str += UPS_S_east_letters.charAt(Math.floor(ups_obj.easting / 1e5) - 8)
+        mgrs_str += UPS_S_north_letters.charAt(Math.floor(ups_obj.northing / 1e5) - 8)
+      }
+      if (precision <= 1) {
+        return mgrs_str;
+      }
+      const MGRS_easting = String(Math.trunc(ups_obj.easting) % 1e5).padStart(5, "0").slice(0, precision - 1);
+      const MGRS_northing = String(Math.trunc(ups_obj.northing) % 1e5).padStart(5, "0").slice(0, precision - 1);
+      mgrs_str += MGRS_easting + MGRS_northing;
+
     } else {
-      return this.LLtoMGRS(lat, lon, precision)
+      var mgrs_str = "";
+      var usng_str = this.LLtoUSNG(lat, lon, precision);
+
+      // remove space delimiters to conform to mgrs spec
+      var regexp = / /g;
+      mgrs_str = usng_str.replace(regexp, "");
+
     }
+    return mgrs_str;
   },
 
   // wrapper function specific to Google Maps, to make a converstion to lat/lng return a GLatLon instance.

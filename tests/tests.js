@@ -1418,7 +1418,7 @@ describe('UPS Conversions', () => {
       chai.expect(lat).to.be.closeTo(-85, range)
       chai.expect(lon).to.be.closeTo(15, range)
     })
-    describe('test four corners in UPS square', ()=> {
+    describe('test four corners in UPS square north', ()=> {
       it('convert Z 2400000mE 2400000mN', ()=>{
         const { lat, lon } = converter.UPStoLL({
           northing: 2400000,
@@ -1454,6 +1454,44 @@ describe('UPS Conversions', () => {
         });
         chai.expect(lat).to.be.closeTo(84.91, range)
         chai.expect(lon).to.be.closeTo(45, range)
+      })
+    })
+    describe('test four corners in UPS square south', ()=> {
+      it('convert B 2400000mE 2400000mN', ()=>{
+        const { lat, lon } = converter.UPStoLL({
+          northing: 2400000,
+          easting: 2400000,
+          northPole: false
+        });
+        chai.expect(lat).to.be.closeTo(-84.91, range)
+        chai.expect(lon).to.be.closeTo(45, range)
+      })
+      it('convert A 1400000mE 1400000mN', ()=>{
+        const { lat, lon } = converter.UPStoLL({
+          northing: 1400000,
+          easting: 1400000,
+          northPole: false
+        });
+        chai.expect(lat).to.be.closeTo(-82.37, range)
+        chai.expect(lon).to.be.closeTo(-135, range)
+      })
+      it('convert A 1600000mE 2400000mN', ()=>{
+        const { lat, lon } = converter.UPStoLL({
+          northing: 2400000,
+          easting: 1600000,
+          northPole: false
+        });
+        chai.expect(lat).to.be.closeTo(-84.91, range)
+        chai.expect(lon).to.be.closeTo(-45, range)
+      })
+      it('convert B 2400000mE 1600000mN', ()=>{
+        const { lat, lon } = converter.UPStoLL({
+          northing: 1600000,
+          easting: 2400000,
+          northPole: false
+        });
+        chai.expect(lat).to.be.closeTo(-84.91, range)
+        chai.expect(lon).to.be.closeTo(135, range)
       })
     })
   })
@@ -1550,9 +1588,9 @@ describe('UPS Conversions', () => {
       chai.assert.equal(ups.easting, 2445183);
     })
     it('zone A', () => {
-      const ups = converter.deserializeUPS("A 1554816mE 1686771mN")
+      const ups = converter.deserializeUPS("A 1554816mE 2015504mN")
       chai.assert.equal(ups.northPole, false);
-      chai.assert.equal(ups.northing, 1686771);
+      chai.assert.equal(ups.northing, 2015504);
       chai.assert.equal(ups.easting, 1554816);
     })
     it('zone Y', () => {
@@ -1562,9 +1600,9 @@ describe('UPS Conversions', () => {
       chai.assert.equal(ups.easting, 1785497);
     })
     it('zone B', () => {
-      const ups = converter.deserializeUPS("B 2443997mE 2015504mN")
+      const ups = converter.deserializeUPS("B 2443997mE 1686771mN")
       chai.assert.equal(ups.northPole, false);
-      chai.assert.equal(ups.northing, 2015504);
+      chai.assert.equal(ups.northing, 1686771);
       chai.assert.equal(ups.easting, 2443997);
     })
     describe('test invalid strings', () => {
@@ -1594,10 +1632,10 @@ describe('UPS Conversions', () => {
     it('zone A', () => {
       const ups = converter.serializeUTMUPS({
         northPole: false,
-        northing: 1686771,
+        northing: 2486771,
         easting: 1554816,
       })
-      chai.expect(ups).to.equal("A 1554816mE 1686771mN")
+      chai.expect(ups).to.equal("A 1554816mE 2486771mN")
     })
     it('zone Y', () => {
       const ups = converter.serializeUTMUPS({
@@ -1610,10 +1648,10 @@ describe('UPS Conversions', () => {
     it('zone B', () => {
       const ups = converter.serializeUTMUPS({
         northPole: false,
-        northing: 2015504,
+        northing: 1915504,
         easting: 2443997,
       })
-      chai.expect(ups).to.equal("B 2443997mE 2015504mN")
+      chai.expect(ups).to.equal("B 2443997mE 1915504mN")
     })
     describe('test invalid numbers', () => {
       it('invalid easting', () => {
